@@ -6,15 +6,16 @@ from typing import Dict, Any, List
 
 DB_FILE = os.path.join(os.path.dirname(__file__), "rightsguard.db")
 
+from cloud_sql import get_db_connection, init_cloud_sql_tables
+
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode('utf-8')).hexdigest()
 
 def get_db():
-    conn = sqlite3.connect(DB_FILE)
-    conn.row_factory = sqlite3.Row
-    return conn
+    return get_db_connection()
 
 def init_db():
+    init_cloud_sql_tables()
     conn = get_db()
     cursor = conn.cursor()
 
