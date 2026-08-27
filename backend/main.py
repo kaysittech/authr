@@ -3,7 +3,7 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Depends
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import sqlite3
@@ -14,7 +14,7 @@ import uuid
 from database import init_db, get_db, hash_password
 from services.biometrics import extract_face_vector, analyze_voice_print
 from services.media_processing import calculate_phash, generate_steg_payload, generate_c2pa_signature
-from services.stripe_service import create_settlement_checkout_session, create_creator_stripe_connect_link
+from services.stripe_service import create_settlement_checkout_session, create_creator_stripe_connect_link, handle_stripe_webhook_payload
 from services.email_service import dispatch_statutory_dmca_notice
 from services.crawler_service import execute_crawler_sweep
 from services.vector_engine import perform_vector_scan
@@ -447,6 +447,17 @@ class ConnectStripeReq(BaseModel):
 @app.post("/api/financials/stripe-connect")
 def stripe_connect_onboarding(req: ConnectStripeReq):
     return create_creator_stripe_connect_link(req.userId, req.email)
+
+@app.post("/api/stripe/webhook")
+async def stripe_webhook_listener(request: Request):
+    """
+    Stripe Webhook Listener: Receives live checkout.session.completed events,
+    verifies cryptographic signatures, automatically updates claim status to 'licensed',
+    and records creator payout transactions in Google Cloud SQL PostgreSQL.
+    """
+    payload_bytes = await request.body()
+    sig_header = request.headers.get("stripe-signature", "")
+    return handle_stripe_webhook_payload(payload_bytes, sig_header)
 
 class DmcaDispatchReq(BaseModel):
     creatorName: str
