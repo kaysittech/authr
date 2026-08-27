@@ -1,4 +1,10 @@
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+const PRODUCTION_CLOUD_RUN_URL = 'https://authr-backend-service-902184-uc.a.run.app/api';
+
+export const API_BASE_URL = 
+  ((import.meta as any).env && (import.meta as any).env.VITE_API_BASE_URL) || 
+  (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://127.0.0.1:8000/api' 
+    : PRODUCTION_CLOUD_RUN_URL);
 
 export async function loginApi(email: string, password: string) {
   const response = await fetch(`${API_BASE_URL}/auth/login`, {
