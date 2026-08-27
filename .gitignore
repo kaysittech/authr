@@ -1,0 +1,29 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production build output
+dist/
+build/
+
+# Python Virtual Environment & Cache
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Databases & Environment Secrets
+*.db
+.env
+.env.local
+.env.production
+
+# IDE & OS files
+.DS_Store
+.vscode/
+.idea/
