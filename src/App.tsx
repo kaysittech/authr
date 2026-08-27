@@ -52,28 +52,11 @@ export function App() {
   // Authentication State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<UserSession | null>(() => {
-    const isLoggedOut = localStorage.getItem('rg_logged_out');
-    if (isLoggedOut === 'true') {
-      return null;
-    }
     const saved = localStorage.getItem('rg_user_session');
     if (saved) {
       try { return JSON.parse(saved); } catch (e) {}
     }
-    const demoUser: UserSession = {
-      id: 'usr_892314',
-      email: 'alex@authr.id',
-      fullName: 'Alex Rivera',
-      handle: '@arivera_official',
-      discipline: 'Musicians & Composers',
-      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-      token: 'token_demo_init',
-      kycStatus: 'verified',
-      idDocumentType: 'drivers_license',
-      idMatchScore: 98.7
-    };
-    localStorage.setItem('rg_user_session', JSON.stringify(demoUser));
-    return demoUser;
+    return null;
   });
 
   // Persist digitalTwin changes locally
