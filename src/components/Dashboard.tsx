@@ -175,6 +175,65 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
       </div>
 
+      {/* Quick Creator Action Strip */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <button
+          onClick={() => setActiveTab('assets')}
+          className="p-3.5 rounded-2xl bg-white hover:bg-amber-50/50 border border-slate-200/80 hover:border-amber-300 text-left transition-all shadow-xs group"
+        >
+          <div className="flex items-center justify-between text-amber-600 mb-1">
+            <div className="flex items-center space-x-2">
+              <ShieldCheck className="w-4 h-4" />
+              <span className="text-xs font-extrabold text-slate-900">Protect Work</span>
+            </div>
+            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+          </div>
+          <p className="text-[11px] text-slate-500 line-clamp-1">Add media, pHash & C2PA watermark</p>
+        </button>
+
+        <button
+          onClick={onSimulateScan}
+          className="p-3.5 rounded-2xl bg-white hover:bg-indigo-50/50 border border-slate-200/80 hover:border-indigo-300 text-left transition-all shadow-xs group"
+        >
+          <div className="flex items-center justify-between text-indigo-600 mb-1">
+            <div className="flex items-center space-x-2">
+              <Radar className="w-4 h-4" />
+              <span className="text-xs font-extrabold text-slate-900">Scan Networks</span>
+            </div>
+            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+          </div>
+          <p className="text-[11px] text-slate-500 line-clamp-1">Trigger 1,420-node crawler sweep</p>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('settlement')}
+          className="p-3.5 rounded-2xl bg-white hover:bg-emerald-50/50 border border-slate-200/80 hover:border-emerald-300 text-left transition-all shadow-xs group"
+        >
+          <div className="flex items-center justify-between text-emerald-600 mb-1">
+            <div className="flex items-center space-x-2">
+              <Scale className="w-4 h-4" />
+              <span className="text-xs font-extrabold text-slate-900">Settle Claims</span>
+            </div>
+            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+          </div>
+          <p className="text-[11px] text-slate-500 line-clamp-1">Settle & license flagged uses</p>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('financials')}
+          className="p-3.5 rounded-2xl bg-white hover:bg-purple-50/50 border border-slate-200/80 hover:border-purple-300 text-left transition-all shadow-xs group"
+        >
+          <div className="flex items-center justify-between text-purple-600 mb-1">
+            <div className="flex items-center space-x-2">
+              <DollarSign className="w-4 h-4" />
+              <span className="text-xs font-extrabold text-slate-900">Stripe Payouts</span>
+            </div>
+            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+          </div>
+          <p className="text-[11px] text-slate-500 line-clamp-1">Connect bank account for payouts</p>
+        </button>
+      </div>
+
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
