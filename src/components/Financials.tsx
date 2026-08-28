@@ -15,6 +15,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { FinancialTransaction } from '../types';
+import { Web3WalletConnect } from './Web3WalletConnect';
 
 interface FinancialsProps {
   transactions: FinancialTransaction[];
@@ -40,7 +41,7 @@ export const Financials: React.FC<FinancialsProps> = ({ transactions }) => {
     setIsWithdrawing(true);
     setTimeout(() => {
       setIsWithdrawing(false);
-      setWithdrawMessage(`Payout of $${netTotal.toFixed(2)} transferred to your connected Stripe account!`);
+      setWithdrawMessage(`Payout of $${netTotal.toFixed(2)} transferred to your connected account!`);
     }, 1200);
   };
 
@@ -66,7 +67,7 @@ export const Financials: React.FC<FinancialsProps> = ({ transactions }) => {
             className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center space-x-2 disabled:opacity-50"
           >
             <Sparkles className={`w-4 h-4 ${isWithdrawing ? 'animate-spin' : ''}`} />
-            <span>{isWithdrawing ? 'Initiating Bank Payout...' : `Withdraw $${netTotal.toFixed(2)} to Stripe`}</span>
+            <span>{isWithdrawing ? 'Initiating Payout...' : `Withdraw $${netTotal.toFixed(2)} to Payout Account`}</span>
           </button>
         </div>
       </div>
@@ -80,6 +81,9 @@ export const Financials: React.FC<FinancialsProps> = ({ transactions }) => {
           <button onClick={() => setWithdrawMessage(null)} className="text-emerald-800 hover:text-emerald-950">✕</button>
         </div>
       )}
+
+      {/* Web3 Polygon L2 Wallet Connection */}
+      <Web3WalletConnect />
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">

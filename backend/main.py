@@ -18,6 +18,7 @@ from services.stripe_service import create_settlement_checkout_session, create_c
 from services.email_service import dispatch_statutory_dmca_notice, parse_sendgrid_inbound_dmca_email
 from services.crawler_service import execute_crawler_sweep
 from services.vector_engine import perform_vector_scan
+from services.blockchain_service import anchor_asset_provenance_on_chain, verify_on_chain_provenance, execute_smart_contract_licensing_split
 
 
 app = FastAPI(
@@ -495,6 +496,42 @@ def parse_inbound_dmca_webhook(req: InboundDmcaReq):
         sender=req.from_email,
         subject=req.subject,
         body_text=req.text
+    )
+
+class AnchorAssetReq(BaseModel):
+    assetId: str
+    pHash: str
+    stegPayload: str
+    c2paSignature: str
+    creatorWallet: str = "0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+
+@app.post("/api/blockchain/anchor-asset")
+def anchor_asset(req: AnchorAssetReq):
+    return anchor_asset_provenance_on_chain(
+        asset_id=req.assetId,
+        phash=req.pHash,
+        steg_payload_hash=req.stegPayload,
+        c2pa_signature=req.c2paSignature,
+        creator_wallet=req.creatorWallet
+    )
+
+@app.get("/api/blockchain/verify-anchor/{asset_id}")
+def verify_anchor(asset_id: str):
+    return verify_on_chain_provenance(asset_id)
+
+class SmartContractSettleReq(BaseModel):
+    claimId: str
+    assetTitle: str
+    amountUsd: float
+    creatorWallet: str = "0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+
+@app.post("/api/blockchain/settle-contract")
+def smart_contract_settle(req: SmartContractSettleReq):
+    return execute_smart_contract_licensing_split(
+        claim_id=req.claimId,
+        asset_title=req.assetTitle,
+        gross_fee_usd=req.amountUsd,
+        creator_wallet=req.creatorWallet
     )
 
 @app.post("/api/scans/trigger-sweep")

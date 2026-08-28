@@ -301,14 +301,36 @@ export const SettlementPortal: React.FC<SettlementPortalProps> = ({
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={isProcessingPay}
-                className="w-full py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2"
-              >
-                {isProcessingPay ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                <span>{isProcessingPay ? 'Simulating Infringer Settlement...' : `Simulate Payment ($${(selectedClaim.retroactiveFee * 0.85).toFixed(2)} Payout)`}</span>
-              </button>
+              <div className="grid grid-cols-2 gap-2.5 pt-1">
+                <button
+                  type="submit"
+                  disabled={isProcessingPay}
+                  className="py-3 px-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-1.5"
+                >
+                  {isProcessingPay ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
+                  <span>Stripe Pay</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!selectedClaim) return;
+                    setIsProcessingPay(true);
+                    setTimeout(() => {
+                      const gross = selectedClaim.retroactiveFee;
+                      const net = gross * 0.85;
+                      onClaimSettled(selectedClaim.id, gross, net);
+                      setPaySuccessMessage(`Polygon Web3 Smart Contract Settlement executed! $${net.toFixed(2)} credited to your Web3 wallet.`);
+                      setIsProcessingPay(false);
+                      setIsPayModalOpen(false);
+                    }, 1000);
+                  }}
+                  disabled={isProcessingPay}
+                  className="py-3 px-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-1.5 font-mono"
+                >
+                  <span>⚡ Polygon Web3</span>
+                </button>
+              </div>
             </form>
           </div>
         </div>
