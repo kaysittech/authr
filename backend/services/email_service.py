@@ -107,3 +107,59 @@ On behalf of {creator_name}
         "dispatchedAt": timestamp,
         "takedownType": "17 U.S.C. § 512(c) + BIPA Takedown"
     }
+
+def parse_sendgrid_inbound_dmca_email(
+    sender: str,
+    subject: str,
+    body_text: str,
+    headers: str = ""
+) -> dict:
+    """
+    Parses SendGrid Inbound Parse HTTP POST Webhook payloads when hosting platform abuse desks
+    (e.g., YouTube, TikTok, Cloudflare, Meta) reply to DMCA & BIPA takedown notices.
+    Automatically updates match/claim database status to 'takedown_acknowledged' or 'content_disabled'.
+    """
+    import re
+    timestamp = time.strftime("%Y-%m-%dT%H:%M:%SZ")
+    text_lower = (subject + " " + body_text).lower()
+
+    # Extract Notice / Claim ID (e.g., dmca_req_17863129 or clm_8921)
+    notice_id_match = re.search(r'(dmca_req_\d+|clm_\d+|match_live_\d+|case_#?\d+|ticket_#?\d+)', text_lower)
+    extracted_id = notice_id_match.group(1) if notice_id_match else "dmca_req_generic"
+
+    # Keywords detection
+    is_confirmed = any(kw in text_lower for kw in ["receipt confirmed", "takedown executed", "content disabled", "removed", "access disabled", "processed"])
+    is_rejected = any(kw in text_lower for kw in ["counter-notice", "rejected", "insufficient information", "denied"])
+
+    new_status = "takedown_acknowledged"
+    if "content disabled" in text_lower or "removed" in text_lower:
+        new_status = "content_disabled"
+    elif is_rejected:
+        new_status = "counter_notice_filed"
+
+    # Update database record
+    try:
+        from database import get_db
+        conn = get_db()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "UPDATE detection_matches SET status = ? WHERE id = ? OR asset_title LIKE ?",
+            (new_status, extracted_id, f"%{extracted_id}%")
+        )
+        conn.commit()
+        conn.close()
+        print(f"[SendGrid Inbound Parse] DMCA Notice {extracted_id} updated to status: {new_status}")
+    except Exception as db_err:
+        print(f"[SendGrid Inbound Parse DB Warning] {db_err}")
+
+    return {
+        "status": "success",
+        "sender": sender,
+        "subject": subject,
+        "extractedNoticeId": extracted_id,
+        "actionExecuted": new_status,
+        "receivedAt": timestamp,
+        "parsedBy": "SendGrid Inbound Parse Engine"
+    }
+

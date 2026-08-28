@@ -15,7 +15,7 @@ from database import init_db, get_db, hash_password
 from services.biometrics import extract_face_vector, analyze_voice_print
 from services.media_processing import calculate_phash, generate_steg_payload, generate_c2pa_signature
 from services.stripe_service import create_settlement_checkout_session, create_creator_stripe_connect_link, handle_stripe_webhook_payload
-from services.email_service import dispatch_statutory_dmca_notice
+from services.email_service import dispatch_statutory_dmca_notice, parse_sendgrid_inbound_dmca_email
 from services.crawler_service import execute_crawler_sweep
 from services.vector_engine import perform_vector_scan
 
@@ -478,6 +478,23 @@ def dispatch_dmca(req: DmcaDispatchReq):
         target_platform=req.targetPlatform,
         statutory_rights=req.statutoryRights,
         recipient_email=req.recipientEmail
+    )
+
+class InboundDmcaReq(BaseModel):
+    from_email: str = "abuse@hostingprovider.com"
+    subject: str = "RE: DMCA Takedown Notice [dmca_req_17863129]"
+    text: str = "This is to confirm receipt of your DMCA takedown notice. The requested content has been removed and disabled."
+
+@app.post("/api/legal/inbound-dmca-webhook")
+def parse_inbound_dmca_webhook(req: InboundDmcaReq):
+    """
+    SendGrid Inbound Parse Webhook: Receives incoming emails from hosting provider abuse desks,
+    extracts case numbers, and automatically updates match status to 'takedown_acknowledged' or 'content_disabled'.
+    """
+    return parse_sendgrid_inbound_dmca_email(
+        sender=req.from_email,
+        subject=req.subject,
+        body_text=req.text
     )
 
 @app.post("/api/scans/trigger-sweep")
