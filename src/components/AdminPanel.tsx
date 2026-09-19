@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { WebServicesDashboard } from './WebServicesDashboard';
 import { 
   ShieldCheck, 
@@ -25,9 +25,16 @@ import {
   CheckCircle,
   XCircle,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  MessageSquare,
+  Edit3,
+  Plus,
+  RotateCcw,
+  Quote,
+  X
 } from 'lucide-react';
-import { DetectionMatch, SettlementClaim } from '../types';
+import { DetectionMatch, SettlementClaim, CustomerReview } from '../types';
+import { INITIAL_TESTIMONIALS } from '../services/mockData';
 
 interface AdminPanelProps {
   matches: DetectionMatch[];
@@ -44,10 +51,58 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   onSimulateScan = () => {},
   onSwitchDemoUser
 }) => {
-  const [activeAdminTab, setActiveAdminTab] = useState<'overview' | 'pricing' | 'users' | 'matches' | 'system' | 'webservices' | 'audit'>('overview');
+  const [activeAdminTab, setActiveAdminTab] = useState<'overview' | 'pricing' | 'users' | 'matches' | 'system' | 'webservices' | 'audit' | 'reviews'>('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedKycFilter, setSelectedKycFilter] = useState<string>('all');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Customer Reviews State
+  const [testimonialsList, setTestimonialsList] = useState<CustomerReview[]>(() => {
+    const saved = localStorage.getItem('rg_testimonials');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return INITIAL_TESTIMONIALS;
+  });
+
+  const [editingReviewModal, setEditingReviewModal] = useState<CustomerReview | null>(null);
+
+  const saveTestimonialsList = (newList: CustomerReview[]) => {
+    setTestimonialsList(newList);
+    localStorage.setItem('rg_testimonials', JSON.stringify(newList));
+    window.dispatchEvent(new Event('rg_testimonials_updated'));
+  };
+
+  const handleSaveReview = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingReviewModal) return;
+    if (!editingReviewModal.author.trim() || !editingReviewModal.quote.trim()) {
+      alert('Please provide an author name and review quote');
+      return;
+    }
+
+    const exists = testimonialsList.some(r => r.id === editingReviewModal.id);
+    let updated: CustomerReview[];
+    if (exists) {
+      updated = testimonialsList.map(r => r.id === editingReviewModal.id ? editingReviewModal : r);
+    } else {
+      updated = [...testimonialsList, editingReviewModal];
+    }
+    saveTestimonialsList(updated);
+    setEditingReviewModal(null);
+    showToast(exists ? `Updated review for "${editingReviewModal.author}"` : `Added new review for "${editingReviewModal.author}"`);
+  };
+
+  const handleDeleteReview = (id: string) => {
+    const updated = testimonialsList.filter(r => r.id !== id);
+    saveTestimonialsList(updated);
+    showToast('Review deleted successfully');
+  };
+
+  const handleResetReviews = () => {
+    saveTestimonialsList(INITIAL_TESTIMONIALS);
+    showToast('Customer reviews reset to initial default testimonials');
+  };
 
   // Admin Pricing & Commission Take-Rate State
   const [platformTakeRate, setPlatformTakeRate] = useState<number>(15.0);
@@ -252,13 +307,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
       </div>
 
-      {/* Admin Operations 6-Tab Sub-Navigation */}
+      {/* Admin Operations Sub-Navigation */}
       <div className="flex items-center space-x-2 border-b border-slate-200 pb-3 overflow-x-auto">
         {[
           { id: 'overview', label: 'Platform Overview & Ops', icon: Activity },
           { id: 'pricing', label: 'Discipline Rates & App Commission', icon: DollarSign },
           { id: 'users', label: 'Creator Vault & KYC Directory', icon: Users },
           { id: 'matches', label: 'Infringement Clearinghouse Queue', icon: Scale },
+          { id: 'reviews', label: 'Customer Reviews & Testimonials', icon: MessageSquare },
           { id: 'system', label: 'Crawler Swarms & Node Infrastructure', icon: Server },
           { id: 'webservices', label: 'Web Services Telemetry', icon: Server },
           { id: 'audit', label: 'BIPA & Security Audit Log', icon: Lock }
@@ -962,6 +1018,218 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       {/* ---------------- ADMIN TAB: WEB SERVICES & DAEMON HEALTH ---------------- */}
       {activeAdminTab === 'webservices' && (
         <WebServicesDashboard />
+      )}
+
+      {/* ---------------- ADMIN TAB: CUSTOMER REVIEWS & TESTIMONIALS MANAGER ---------------- */}
+      {activeAdminTab === 'reviews' && (
+        <div className="space-y-6 animate-fadeIn">
+          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="px-3 py-1 text-xs font-black uppercase tracking-widest bg-blue-100 text-[#0144e4] rounded-full font-mono">
+                  LANDING PAGE TESTIMONIALS
+                </span>
+                <span className="text-xs text-slate-500 font-mono">{testimonialsList.length} Active Reviews</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-2 font-display">
+                Customer Reviews &amp; Testimonials Manager
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
+                Add, edit, or remove customer quotes, author names, professional roles, and profile avatars displayed on the landing page carousel.
+              </p>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={handleResetReviews}
+                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-all flex items-center space-x-2 shadow-2xs"
+              >
+                <RotateCcw className="w-4 h-4 text-slate-500" />
+                <span>Reset to Defaults</span>
+              </button>
+
+              <button
+                onClick={() => setEditingReviewModal({
+                  id: `rev_${Date.now()}`,
+                  author: '',
+                  title: '',
+                  quote: '',
+                  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
+                })}
+                className="px-5 py-2.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-md transition-all flex items-center space-x-2"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add New Review</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Testimonials Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {testimonialsList.map((item) => (
+              <div key={item.id} className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4 flex flex-col justify-between relative group hover:border-blue-200 transition-all">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Quote className="w-8 h-8 text-[#0144e4]/30" />
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => setEditingReviewModal(item)}
+                        className="p-2 rounded-lg bg-blue-50 text-[#0144e4] hover:bg-blue-100 transition-colors"
+                        title="Edit Review"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteReview(item.id)}
+                        className="p-2 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition-colors"
+                        title="Delete Review"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-slate-700 italic font-medium leading-relaxed">
+                    "{item.quote}"
+                  </p>
+                </div>
+
+                <div className="flex items-center space-x-3 pt-4 border-t border-slate-100">
+                  <img
+                    src={item.avatar}
+                    alt={item.author}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-[#0144e4] shrink-0 shadow-2xs"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-sm font-extrabold text-slate-900 font-display truncate">
+                      {item.author}
+                    </h4>
+                    <p className="text-xs text-slate-500 font-mono truncate">
+                      {item.title}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Customer Review Edit/Create Modal */}
+      {editingReviewModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fadeIn">
+          <div className="relative w-full max-w-lg bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <div className="flex items-center space-x-2.5">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0144e4] flex items-center justify-center font-bold border border-blue-100">
+                  <MessageSquare className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-extrabold text-slate-900">
+                  {testimonialsList.some(r => r.id === editingReviewModal.id) ? 'Edit Customer Review' : 'Add New Customer Review'}
+                </h3>
+              </div>
+              <button onClick={() => setEditingReviewModal(null)} className="text-slate-400 hover:text-slate-700 p-1">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveReview} className="space-y-4">
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Author Name</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Sarah Conner"
+                  value={editingReviewModal.author}
+                  onChange={(e) => setEditingReviewModal({ ...editingReviewModal, author: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:border-[#0144e4] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Title / Profession</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Voice Actor & Podcast Host"
+                  value={editingReviewModal.title}
+                  onChange={(e) => setEditingReviewModal({ ...editingReviewModal, title: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-slate-900 focus:border-[#0144e4] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Avatar Image URL</label>
+                <div className="flex items-center space-x-3 mb-2">
+                  <img
+                    src={editingReviewModal.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"}
+                    alt="Preview"
+                    className="w-10 h-10 rounded-full object-cover border-2 border-[#0144e4]"
+                  />
+                  <input
+                    type="url"
+                    required
+                    placeholder="https://images.unsplash.com/..."
+                    value={editingReviewModal.avatar}
+                    onChange={(e) => setEditingReviewModal({ ...editingReviewModal, avatar: e.target.value })}
+                    className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-xs font-mono text-slate-900 focus:border-[#0144e4] focus:outline-none"
+                  />
+                </div>
+                {/* Preset Avatar Selection */}
+                <div className="flex items-center space-x-2 pt-1">
+                  <span className="text-[10px] text-slate-400 font-mono">Quick Pick Avatar:</span>
+                  {[
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+                    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+                    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+                    "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
+                    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80"
+                  ].map((url, idx) => (
+                    <button
+                      type="button"
+                      key={idx}
+                      onClick={() => setEditingReviewModal({ ...editingReviewModal, avatar: url })}
+                      className={`w-7 h-7 rounded-full overflow-hidden border-2 transition-all ${
+                        editingReviewModal.avatar === url ? 'border-[#0144e4] scale-110 ring-2 ring-blue-200' : 'border-slate-200 hover:border-slate-400'
+                      }`}
+                    >
+                      <img src={url} alt="Preset" className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Customer Quote / Review Text</label>
+                <textarea
+                  rows={4}
+                  required
+                  placeholder="Enter customer feedback or testimonial quote..."
+                  value={editingReviewModal.quote}
+                  onChange={(e) => setEditingReviewModal({ ...editingReviewModal, quote: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900 focus:border-[#0144e4] focus:outline-none"
+                />
+              </div>
+
+              <div className="flex items-center space-x-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingReviewModal(null)}
+                  className="flex-1 py-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-all"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="flex-1 py-3 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-md transition-all"
+                >
+                  Save Review
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
 
       {/* Government ID Document Inspection Modal */}

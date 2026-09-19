@@ -1,4 +1,42 @@
-import { DigitalTwin, ProtectedAsset, DetectionMatch, SettlementClaim, FinancialTransaction } from '../types';
+import { DigitalTwin, ProtectedAsset, DetectionMatch, SettlementClaim, FinancialTransaction, CustomerReview } from '../types';
+
+export const INITIAL_TESTIMONIALS: CustomerReview[] = [
+  {
+    id: 'rev_1',
+    quote: "Authr revolutionized how we manage creator licensing and biometric identity protection. The automated legal notices and instant settlement checkout gates work flawlessly.",
+    author: "Alex Rivera",
+    title: "Independent Recording Artist & Producer",
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
+  },
+  {
+    id: 'rev_2',
+    quote: "The C2PA cryptographic watermarking and web scrape radar saved our studio over $140,000 in stolen voice actor and artwork royalties within the first 60 days.",
+    author: "Sarah Conner",
+    title: "Voice Actor & Podcast Host",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
+  },
+  {
+    id: 'rev_3',
+    quote: "Integrating BIPA biometric verification and Stripe Connect payouts gave our commercial brand agency complete legal standing across 54 global markets.",
+    author: "Marcus Vance",
+    title: "Creative Brand & IP Director",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
+  },
+  {
+    id: 'rev_4',
+    quote: "Authr's Web Scrape Radar detected 12 unauthorized AI training sets using my portfolio within hours. The automated DMCA notices pulled them down immediately.",
+    author: "Elena Rostova",
+    title: "Digital Illustrator & Concept Artist",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80"
+  },
+  {
+    id: 'rev_5',
+    quote: "The C2PA cryptographic provenance standard integrated into Authr gives our enterprise model training data full legal verification and automated royalty routing.",
+    author: "David Chen",
+    title: "Software Architect & AI Researcher",
+    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80"
+  }
+];
 
 export const INITIAL_DIGITAL_TWIN: DigitalTwin = {
   userId: 'usr_892314',

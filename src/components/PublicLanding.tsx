@@ -33,6 +33,9 @@ import {
 import { PublicHeader } from './PublicHeader';
 import { Footer } from './Footer';
 
+import { CustomerReview } from '../types';
+import { INITIAL_TESTIMONIALS } from '../services/mockData';
+
 interface PublicLandingProps {
   onOpenRegister: () => void;
   onOpenLogin: () => void;
@@ -49,38 +52,31 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isTestimonialHovered, setIsTestimonialHovered] = useState(false);
 
-  const testimonials = [
-    {
-      quote: "Authr revolutionized how we manage creator licensing and biometric identity protection. The automated legal notices and instant settlement checkout gates work flawlessly.",
-      author: "Alex Rivera",
-      title: "Independent Recording Artist & Producer",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
-    },
-    {
-      quote: "The C2PA cryptographic watermarking and web scrape radar saved our studio over $140,000 in stolen voice actor and artwork royalties within the first 60 days.",
-      author: "Sarah Conner",
-      title: "Voice Actor & Podcast Host",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
-    },
-    {
-      quote: "Integrating BIPA biometric verification and Stripe Connect payouts gave our commercial brand agency complete legal standing across 54 global markets.",
-      author: "Marcus Vance",
-      title: "Creative Brand & IP Director",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
-    },
-    {
-      quote: "Authr's Web Scrape Radar detected 12 unauthorized AI training sets using my portfolio within hours. The automated DMCA notices pulled them down immediately.",
-      author: "Elena Rostova",
-      title: "Digital Illustrator & Concept Artist",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80"
-    },
-    {
-      quote: "The C2PA cryptographic provenance standard integrated into Authr gives our enterprise model training data full legal verification and automated royalty routing.",
-      author: "David Chen",
-      title: "Software Architect & AI Researcher",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80"
+  const [testimonials, setTestimonials] = useState<CustomerReview[]>(() => {
+    const saved = localStorage.getItem('rg_testimonials');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
     }
-  ];
+    return INITIAL_TESTIMONIALS;
+  });
+
+  useEffect(() => {
+    const syncTestimonials = () => {
+      const saved = localStorage.getItem('rg_testimonials');
+      if (saved) {
+        try { setTestimonials(JSON.parse(saved)); } catch (e) {}
+      } else {
+        setTestimonials(INITIAL_TESTIMONIALS);
+      }
+    };
+
+    window.addEventListener('storage', syncTestimonials);
+    window.addEventListener('rg_testimonials_updated', syncTestimonials);
+    return () => {
+      window.removeEventListener('storage', syncTestimonials);
+      window.removeEventListener('rg_testimonials_updated', syncTestimonials);
+    };
+  }, []);
 
   // Auto-scroll testimonials to the left every 4 seconds (pauses on hover)
   useEffect(() => {

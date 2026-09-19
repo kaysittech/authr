@@ -90,3 +90,12 @@ export interface FinancialTransaction {
   netPayout: number;
   status: 'completed' | 'processing' | 'pending';
 }
+
+export interface CustomerReview {
+  id: string;
+  quote: string;
+  author: string;
+  title: string;
+  avatar: string;
+}
+
