@@ -64,9 +64,22 @@ export const Navbar: React.FC<NavbarProps> = ({
   const isAuthor = disc.includes('Authors');
   const isBrand = disc.includes('Brands');
 
-  const appSubmenus: { id: string; label: string; icon: any; badge?: number; desc: string }[] = [
-    { id: 'dashboard', label: 'Overview & Royalties', icon: Zap, desc: 'Real-time telemetry and revenue' }
-  ];
+  const isAdminUser = currentUser && (
+    currentUser.role === 'admin' ||
+    currentUser.email === 'admin@authr.id' ||
+    currentUser.email === 'christiana.obafunwa@gmail.com' ||
+    currentUser.email === 'kaysitsolutions@gmail.com' ||
+    currentUser.handle === '@site_admin' ||
+    Boolean(currentUser.token && currentUser.token.includes('admin'))
+  );
+
+  const appSubmenus: { id: string; label: string; icon: any; badge?: number; desc: string }[] = [];
+
+  if (isAdminUser) {
+    appSubmenus.push({ id: 'admin', label: 'Admin Ops Portal', icon: ShieldCheck, desc: 'Master admin controls & user management' });
+  }
+
+  appSubmenus.push({ id: 'dashboard', label: 'Overview & Royalties', icon: Zap, desc: 'Real-time telemetry and revenue' });
 
   if (isLikenessAndVoice) {
     appSubmenus.push({ id: 'biometrics', label: 'Likeness & Voice Registry', icon: UserCheck, desc: '128-node face & voice vectors' });
@@ -121,6 +134,22 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Right-aligned Navigation Links (Pushed right next to Get Started button) */}
           <nav className="hidden lg:flex items-center space-x-7 text-[15px] font-medium text-slate-800 ml-auto mr-7">
             
+            {/* Admin Portal Tab (for Admin Users) */}
+            {isAdminUser && (
+              <button 
+                onClick={() => setActiveTab('admin')}
+                className={`relative py-2 transition-colors flex items-center space-x-1 font-extrabold ${
+                  activeTab === 'admin' ? 'text-amber-500' : 'text-slate-900 hover:text-amber-600'
+                }`}
+              >
+                <ShieldCheck className="w-4 h-4 text-amber-500 stroke-[2.5]" />
+                <span>Admin Portal</span>
+                {activeTab === 'admin' && (
+                  <span className="absolute bottom-[-4px] left-0 right-0 h-[2.5px] bg-amber-500 rounded-full" />
+                )}
+              </button>
+            )}
+
             {/* Home */}
             <button 
               onClick={() => setActiveTab('dashboard')}
@@ -328,6 +357,21 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Primary 'Get Started' Blue Button (Exact match: rounded-[6px], vibrant royal blue) */}
             {currentUser ? (
               <div className="flex items-center space-x-2">
+                {isAdminUser && (
+                  <button
+                    onClick={() => setActiveTab('admin')}
+                    className={`px-3.5 py-2.5 rounded-[6px] font-extrabold text-xs transition-all flex items-center space-x-1.5 border shadow-2xs ${
+                      activeTab === 'admin'
+                        ? 'bg-amber-400 text-slate-950 border-amber-300 ring-2 ring-amber-400/50'
+                        : 'bg-slate-900 hover:bg-slate-800 text-amber-400 border-amber-400/40'
+                    }`}
+                    title="Open Master Site Admin Portal"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-amber-400" />
+                    <span>Admin Portal</span>
+                  </button>
+                )}
+
                 <button
                   onClick={() => setActiveTab('dashboard')}
                   className="px-6 py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-semibold text-[15px] transition-all flex items-center space-x-2"
