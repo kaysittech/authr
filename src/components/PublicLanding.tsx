@@ -271,30 +271,30 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
             <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3">
               <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-700 pb-2 border-b border-slate-200">
                 <span>BIOMETRIC IDENTITY VAULT</span>
-                <span className="text-[#0144e4]">BIPA VERIFIED</span>
+                <span className="text-[#0144e4]">ACTIVE &amp; PROTECTED</span>
               </div>
               <div className="space-y-2 text-xs font-mono text-slate-600">
                 <div className="flex justify-between">
-                  <span>Facial Mesh Hashing:</span>
-                  <span className="font-bold text-slate-900">SHA-256 128-Node Vector</span>
+                  <span>Face &amp; Likeness Protection:</span>
+                  <span className="font-bold text-slate-900">Secured &amp; Fingerprinted</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Voice Spectral FFT:</span>
-                  <span className="font-bold text-slate-900">44.1kHz Multi-Band Spectrum</span>
+                  <span>Voice &amp; Audio Protection:</span>
+                  <span className="font-bold text-slate-900">Unique Voice Print Active</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Government ID Match:</span>
-                  <span className="font-bold text-emerald-600">Driver's License / Passport OK</span>
+                  <span>Creator Identity Verification:</span>
+                  <span className="font-bold text-emerald-600">Verified Creator Profile</span>
                 </div>
               </div>
             </div>
           </div>
           <div className="lg:col-span-6 space-y-5 text-left">
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-display">
-              Biometric &amp; Government ID Protection
+              Your Face, Voice &amp; Identity — Fully Protected
             </h3>
             <p className="text-sm text-slate-600 leading-relaxed font-medium">
-              Register your facial geometry vector mesh and acoustic spectral voice vector. All biometric fingerprints are linked to official driver’s license or passport credentials, providing 100% legal standing under statutory copyright litigation.
+              Secure your unique face, likeness, and voice print in your personal digital vault. Authr confirms your creator identity to protect you from unauthorized AI deepfakes, voice cloning, and content theft.
             </p>
             <button 
               onClick={onOpenRegister}
@@ -309,10 +309,10 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center bg-white p-8 sm:p-12 rounded-2xl border border-[#e9eaf0] shadow-2xs">
           <div className="lg:col-span-6 space-y-5 text-left order-2 lg:order-1">
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-display">
-              Automated Web Scrape &amp; AI Radar
+              Automated AI &amp; Web Scrape Radar
             </h3>
             <p className="text-sm text-slate-600 leading-relaxed font-medium">
-              Continuous monitoring across YouTube Data API v3, TikTok Research API, and Meta Graph API for unauthorized voice cloning, face swaps, or stolen media assets. Automatically issues 17 U.S.C. § 512(c) statutory notices.
+              Continuous 24/7 monitoring across YouTube, TikTok, Meta, and major web platforms for unauthorized voice clones, face swaps, or stolen media assets. Automatically flags violations and protects your rights.
             </p>
             <button 
               onClick={onOpenRegister}
@@ -324,21 +324,21 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
           <div className="lg:col-span-6 order-1 lg:order-2">
             <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3 text-left">
               <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-700 pb-2 border-b border-slate-200">
-                <span>ENTERPRISE SCRAPE TELEMETRY</span>
-                <span className="text-emerald-600">LIVE SCAN ACTIVE</span>
+                <span>AI &amp; SOCIAL MEDIA SCANNER</span>
+                <span className="text-emerald-600">LIVE MONITORING</span>
               </div>
               <div className="space-y-2 text-xs font-mono text-slate-600">
                 <div className="flex justify-between">
-                  <span>YouTube Data API v3:</span>
-                  <span className="font-bold text-slate-900">10,000 Units / Day Scan</span>
+                  <span>YouTube &amp; Video Sites:</span>
+                  <span className="font-bold text-slate-900">24/7 Automated Scanning</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>TikTok Research API:</span>
-                  <span className="font-bold text-slate-900">Jitter Backoff Active</span>
+                  <span>TikTok &amp; Reels Monitoring:</span>
+                  <span className="font-bold text-slate-900">Active Radar Online</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Meta Graph API v18.0:</span>
-                  <span className="font-bold text-emerald-600">Real-Time Hash Match</span>
+                  <span>Social Media &amp; Web Platforms:</span>
+                  <span className="font-bold text-emerald-600">Real-Time Protection</span>
                 </div>
               </div>
             </div>
