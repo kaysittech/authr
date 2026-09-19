@@ -438,14 +438,14 @@ export const INITIAL_MANAGED_PAGES: ManagedPage[] = [
     id: 'get_started',
     title: 'Get Started with Authr',
     category: 'COMPANY',
-    badge: 'Onboarding & Sovereign Vault',
+    badge: 'Onboarding & Account',
     summary: 'Join the world\'s leading biometric identity, C2PA watermarking, and statutory royalty clearing platform for independent creators.',
     actionButtonText: 'Create Your Free Account',
     lastUpdated: '2026-09-19',
     sections: [
       {
         id: 'sec_1',
-        title: '1. Create Your Sovereign Vault',
+        title: '1. Create Your Account',
         content: 'Register your creator identity in under 2 minutes with instant 128-landmark biometric facial mesh hashing and private key generation.'
       },
       {
@@ -595,7 +595,7 @@ export const INITIAL_MANAGED_PAGES: ManagedPage[] = [
       },
       {
         id: 'sec_3',
-        title: 'Sovereign Vault Governance',
+        title: 'Account & Rights Governance',
         content: 'Revoke or update your biometric hashes at any time directly through your private security vault.'
       }
     ]

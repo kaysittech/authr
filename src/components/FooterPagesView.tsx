@@ -49,6 +49,15 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
       if (page.actionButtonText === 'Create Your Free Sovereign Vault') {
         page.actionButtonText = 'Create Your Free Account';
       }
+      if (page.badge === 'Onboarding & Sovereign Vault') {
+        page.badge = 'Onboarding & Account';
+      }
+      if (page.sections) {
+        page.sections = page.sections.map(sec => ({
+          ...sec,
+          title: sec.title.replace('1. Create Your Sovereign Vault', '1. Create Your Account').replace('Sovereign Vault Governance', 'Account & Rights Governance')
+        }));
+      }
       return page;
     });
   };
