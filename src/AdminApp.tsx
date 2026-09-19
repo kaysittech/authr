@@ -45,15 +45,15 @@ export const AdminApp: React.FC = () => {
             
             {/* Brand Logo & Subdomain Badge */}
             <div className="flex items-center space-x-3 cursor-pointer" onClick={() => window.location.href = '/'}>
-              <div className="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold shadow-md">
+              <div className="w-10 h-10 rounded-xl bg-[#0144e4] text-white flex items-center justify-center font-bold shadow-md">
                 <ShieldCheck className="w-6 h-6 stroke-[2.5]" />
               </div>
               <div>
                 <div className="flex items-center space-x-2">
                   <span className="text-xl font-extrabold tracking-tight text-white font-display">
-                    Authr <span className="text-amber-400">Admin Ops</span>
+                    Authr <span className="text-blue-400">Admin Ops</span>
                   </span>
-                  <span className="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest bg-amber-400/20 text-amber-400 border border-amber-400/30 rounded-md font-mono">
+                  <span className="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-widest bg-blue-500/20 text-blue-400 border border-blue-400/30 rounded-md font-mono">
                     admin.authr.id
                   </span>
                 </div>
@@ -70,7 +70,7 @@ export const AdminApp: React.FC = () => {
                 className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition-all flex items-center space-x-1.5 shadow-xs"
               >
                 <span>Switch to Creator App (app.authr.id)</span>
-                <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+                <ExternalLink className="w-3.5 h-3.5 text-[#0144e4]" />
               </a>
 
               {isAdminAuthenticated && (
@@ -102,7 +102,7 @@ export const AdminApp: React.FC = () => {
           /* Dedicated Admin Login Gateway */
           <div className="max-w-md mx-auto my-12 bg-white p-8 rounded-3xl border border-slate-200 shadow-2xl space-y-6">
             <div className="text-center space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center mx-auto shadow-md">
+              <div className="w-12 h-12 rounded-2xl bg-[#0144e4] text-white flex items-center justify-center mx-auto shadow-md">
                 <ShieldCheck className="w-7 h-7 stroke-[2.5]" />
               </div>
               <h2 className="text-2xl font-extrabold text-slate-900 font-display">Superuser Admin Security Gate</h2>
@@ -116,7 +116,7 @@ export const AdminApp: React.FC = () => {
                   type="email"
                   value={adminEmail}
                   onChange={(e) => setAdminEmail(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-slate-900 focus:border-amber-400 focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-slate-900 focus:border-[#0144e4] focus:outline-none"
                 />
               </div>
 
@@ -126,20 +126,20 @@ export const AdminApp: React.FC = () => {
                   type="password"
                   value={adminPassword}
                   onChange={(e) => setAdminPassword(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-slate-900 focus:border-amber-400 focus:outline-none"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-mono text-slate-900 focus:border-[#0144e4] focus:outline-none"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center space-x-2"
+                className="w-full py-3 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center space-x-2"
               >
-                <Lock className="w-4 h-4 text-amber-400" />
+                <Lock className="w-4 h-4 text-white" />
                 <span>Authenticate Admin Session</span>
               </button>
             </form>
 
-            <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-mono text-center">
+            <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-[#0144e4] text-xs font-mono text-center">
               ✓ Hardware Key YubiKey 2FA Verified • SSL TLS 1.3 Active
             </div>
           </div>
@@ -156,7 +156,7 @@ export const AdminApp: React.FC = () => {
 
       {toastMsg && (
         <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-slate-900 text-white shadow-2xl font-bold text-xs flex items-center space-x-3 border border-slate-700 animate-fadeIn">
-          <CheckCircle2 className="w-5 h-5 text-amber-400" />
+          <CheckCircle2 className="w-5 h-5 text-[#0144e4]" />
           <span>{toastMsg}</span>
         </div>
       )}

@@ -72,7 +72,7 @@ export const DisciplineUpgradeModal: React.FC<DisciplineUpgradeModalProps> = ({
               <span className="text-xl sm:text-2xl font-extrabold text-slate-900 font-display">
                 Unlock {strat.shortLabel}
               </span>
-              <span className="px-2 py-0.5 text-[9px] font-extrabold uppercase bg-amber-100 text-amber-900 border border-amber-300 rounded font-mono">
+              <span className="px-2 py-0.5 text-[9px] font-extrabold uppercase bg-blue-100 text-[#0144e4] border border-blue-300 rounded font-mono">
                 Add-On Module
               </span>
             </div>
@@ -86,7 +86,7 @@ export const DisciplineUpgradeModal: React.FC<DisciplineUpgradeModalProps> = ({
         <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-900">{strat.primaryMonetization}</span>
-            <span className="text-[10px] font-mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+            <span className="text-[10px] font-mono font-bold text-[#0144e4] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
               ${strat.defaultAiRate}/query • ${strat.defaultLicenseRate}/ad
             </span>
           </div>
@@ -115,7 +115,7 @@ export const DisciplineUpgradeModal: React.FC<DisciplineUpgradeModalProps> = ({
             onClick={() => setSelectedTier('module')}
             className={`p-4 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
               selectedTier === 'module'
-                ? 'bg-amber-50/80 border-amber-400 ring-2 ring-amber-400/20'
+                ? 'bg-blue-50/80 border-[#0144e4] ring-2 ring-[#0144e4]/20'
                 : 'bg-white border-slate-200 hover:bg-slate-50'
             }`}
           >
@@ -136,7 +136,7 @@ export const DisciplineUpgradeModal: React.FC<DisciplineUpgradeModalProps> = ({
             onClick={() => setSelectedTier('all_access')}
             className={`p-4 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
               selectedTier === 'all_access'
-                ? 'bg-amber-50/80 border-amber-400 ring-2 ring-amber-400/20'
+                ? 'bg-blue-50/80 border-[#0144e4] ring-2 ring-[#0144e4]/20'
                 : 'bg-white border-slate-200 hover:bg-slate-50'
             }`}
           >
@@ -148,7 +148,7 @@ export const DisciplineUpgradeModal: React.FC<DisciplineUpgradeModalProps> = ({
               <p className="text-[11px] text-slate-500 mt-0.5">Unlocks all 4 creative disciplines (Music, Visual, Video & Corporate IP).</p>
             </div>
             <div className="text-right">
-              <span className="text-base font-black text-amber-700 font-mono">$79</span>
+              <span className="text-base font-black text-[#0144e4] font-mono">$79</span>
               <span className="text-[10px] text-slate-500 font-mono">/mo</span>
             </div>
           </div>

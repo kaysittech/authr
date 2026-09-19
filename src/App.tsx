@@ -218,7 +218,7 @@ export function App() {
         {currentUser && currentUser.token?.includes('jwt_demo_switch_') && (
           <div className="mb-4 p-3.5 rounded-2xl bg-slate-900 text-white border border-slate-800 flex items-center justify-between text-xs font-bold shadow-sm animate-fadeIn">
             <div className="flex items-center space-x-2.5">
-              <span className="px-2.5 py-1 rounded-full bg-amber-400 text-slate-950 font-mono text-[10px] font-black uppercase">
+              <span className="px-2.5 py-1 rounded-full bg-[#0144e4] text-white font-mono text-[10px] font-black uppercase">
                 ⚡ ADMIN DEMO MODE ACTIVE
               </span>
               <span className="text-slate-200">Testing Vault Profile: <strong className="text-white">{currentUser.fullName}</strong> ({currentUser.handle})</span>

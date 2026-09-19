@@ -117,18 +117,18 @@ export const Dashboard: React.FC<DashboardProps> = ({
     <div className="space-y-6">
       
       {toastMessage && (
-        <div className="p-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 text-xs font-bold flex items-center justify-between shadow-xs animate-fadeIn">
+        <div className="p-4 rounded-2xl bg-blue-50 border border-blue-300 text-blue-950 text-xs font-bold flex items-center justify-between shadow-xs animate-fadeIn">
           <div className="flex items-center space-x-2">
-            <Sparkles className="w-4 h-4 text-amber-700" />
+            <Sparkles className="w-4 h-4 text-[#0144e4]" />
             <span>{toastMessage}</span>
           </div>
-          <button onClick={() => setToastMessage(null)} className="text-amber-800 hover:text-amber-950 font-bold">✕</button>
+          <button onClick={() => setToastMessage(null)} className="text-[#0144e4] hover:text-blue-950 font-bold">✕</button>
         </div>
       )}
 
       {/* Hero Welcome Banner */}
       <div className="relative overflow-hidden rounded-3xl bg-white p-6 sm:p-10 border border-slate-200/80 shadow-sm">
-        <div className="absolute top-0 right-0 -mt-16 -mr-16 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute top-0 right-0 -mt-16 -mr-16 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-0 left-1/3 -mb-16 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="relative z-10 space-y-4 max-w-3xl">
@@ -155,8 +155,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
           ) : (
             <>
               <div className="flex items-center space-x-3 flex-wrap gap-y-2">
-                <span className="px-3.5 py-1 text-xs font-bold uppercase tracking-wider bg-amber-50 text-amber-900 border border-amber-300 rounded-full flex items-center gap-2 font-mono">
-                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+                <span className="px-3.5 py-1 text-xs font-bold uppercase tracking-wider bg-blue-50 text-[#0144e4] border border-blue-300 rounded-full flex items-center gap-2 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-[#0144e4] animate-ping"></span>
                   Independent Rights & Royalty Network Active
                 </span>
                 <span className="text-xs text-slate-500 font-mono">
@@ -165,7 +165,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               </div>
               
               <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight font-display">
-                Protect Your Work. Claim Your <span className="text-amber-600 font-black">Royalties</span>.
+                Protect Your Work. Claim Your <span className="text-[#0144e4] font-black">Royalties</span>.
               </h1>
               <p className="text-sm sm:text-base text-slate-600 font-medium leading-relaxed">
                 Automated identity, voice, face, text manuscript, and digital artwork clearinghouse. Built for musicians, fine artists, authors, short-form creators, and commercial media licensees.
@@ -179,9 +179,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <button
           onClick={() => setActiveTab('assets')}
-          className="p-3.5 rounded-2xl bg-white hover:bg-amber-50/50 border border-slate-200/80 hover:border-amber-300 text-left transition-all shadow-xs group"
+          className="p-3.5 rounded-2xl bg-white hover:bg-blue-50/50 border border-slate-200/80 hover:border-[#0144e4] text-left transition-all shadow-xs group"
         >
-          <div className="flex items-center justify-between text-amber-600 mb-1">
+          <div className="flex items-center justify-between text-[#0144e4] mb-1">
             <div className="flex items-center space-x-2">
               <ShieldCheck className="w-4 h-4" />
               <span className="text-xs font-extrabold text-slate-900">Protect Work</span>
@@ -237,10 +237,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-400/50 transition-all">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-[#0144e4]/50 transition-all">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Protected Catalog</span>
-            <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-700">
+            <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-[#0144e4]">
               <ShieldCheck className="w-5 h-5" />
             </div>
           </div>
@@ -253,7 +253,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-400/50 transition-all">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-[#0144e4]/50 transition-all">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Detection Nodes</span>
             <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700">
@@ -272,7 +272,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-400/50 transition-all">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-[#0144e4]/50 transition-all">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Licensing Claims</span>
             <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700">
@@ -284,25 +284,25 @@ export const Dashboard: React.FC<DashboardProps> = ({
               {pendingClaims.length} <span className="text-xs font-sans font-normal text-slate-500">Claim(s)</span>
             </div>
             <p className="text-[11px] text-slate-600 mt-1.5 flex items-center space-x-1.5">
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+              <AlertTriangle className="w-3.5 h-3.5 text-[#0144e4]" />
               <span>Settlement Gates Active</span>
             </p>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-400/50 transition-all">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-[#0144e4]/50 transition-all">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Collected Royalties</span>
-            <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-700">
+            <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-[#0144e4]">
               <DollarSign className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-black text-amber-600 font-mono">
+            <div className="text-2xl font-black text-[#0144e4] font-mono">
               ${totalRecovered.toFixed(2)}
             </div>
             <p className="text-[11px] text-slate-600 mt-1.5 flex items-center space-x-1.5">
-              <TrendingUp className="w-3.5 h-3.5 text-amber-600" />
+              <TrendingUp className="w-3.5 h-3.5 text-[#0144e4]" />
               <span>+18.4% via Stripe Connect</span>
             </p>
           </div>
@@ -316,7 +316,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">
               Active Discipline Workspace:
             </span>
-            <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold rounded-md bg-amber-100 text-amber-900 border border-amber-300">
+            <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold rounded-md bg-blue-100 text-[#0144e4] border border-blue-300">
               {activeDisciplineName} (Registered Vault)
             </span>
           </div>
@@ -378,7 +378,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           const strategy = getDisciplineStrategy(fullDisciplineName);
 
           return (
-            <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200 space-y-2 animate-fadeIn font-mono">
+            <div className="p-4 rounded-xl bg-blue-50/60 border border-blue-200 space-y-2 animate-fadeIn font-mono">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center space-x-2">
                   <span className={`px-2.5 py-0.5 text-[10px] font-extrabold uppercase rounded-md ${strategy.badgeColor}`}>
@@ -387,7 +387,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   <span className="text-xs font-bold text-slate-900">{strategy.primaryMonetization}</span>
                 </div>
                 <div className="text-[11px] font-bold text-slate-700">
-                  Default Rate: <span className="text-amber-900 font-extrabold">${strategy.defaultAiRate}/query</span> • <span className="text-amber-900 font-extrabold">${strategy.defaultLicenseRate}/ad</span>
+                  Default Rate: <span className="text-[#0144e4] font-extrabold">${strategy.defaultAiRate}/query</span> • <span className="text-[#0144e4] font-extrabold">${strategy.defaultLicenseRate}/ad</span>
                 </div>
               </div>
               
@@ -411,12 +411,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <Radar className="w-5 h-5 text-amber-600 animate-pulse" />
+              <Radar className="w-5 h-5 text-[#0144e4] animate-pulse" />
               <h2 className="text-lg font-bold text-slate-900">Live Infringement & Royalty Licensing Feed</h2>
             </div>
             <button
               onClick={() => setActiveTab('detection')}
-              className="text-xs text-amber-700 hover:underline flex items-center space-x-1.5 font-bold"
+              className="text-xs text-[#0144e4] hover:underline flex items-center space-x-1.5 font-bold"
             >
               <span>View All Matches</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -427,12 +427,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
             {filteredMatches.map((match) => (
               <div 
                 key={match.id} 
-                className="bg-white p-5 sm:px-6 sm:py-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-400/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5"
+                className="bg-white p-5 sm:px-6 sm:py-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-[#0144e4]/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5"
               >
                 <div className="flex items-start space-x-4">
                   <div className={`p-3 rounded-xl border mt-0.5 flex-shrink-0 ${
                     match.matchCategory === 'brand_commercial'
-                      ? 'bg-amber-50 border-amber-200 text-amber-700'
+                      ? 'bg-blue-50 border-blue-200 text-[#0144e4]'
                       : match.matchCategory === 'ai_training_scraping'
                       ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
                       : 'bg-rose-50 border-rose-200 text-rose-700'
@@ -453,7 +453,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <p className="text-xs text-slate-600 mt-1.5 flex items-center space-x-2">
                       <span>Uploader / Brand: <strong className="text-slate-900 font-mono">{match.uploaderName}</strong></span>
                       <span>•</span>
-                      <span>Similarity: <strong className="text-amber-700">{match.visualSimilarity > 0 ? match.visualSimilarity : match.audioSimilarity}%</strong></span>
+                      <span>Similarity: <strong className="text-[#0144e4]">{match.visualSimilarity > 0 ? match.visualSimilarity : match.audioSimilarity}%</strong></span>
                     </p>
                   </div>
                 </div>
@@ -463,7 +463,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     <div className="text-[11px] font-bold text-slate-500 font-mono uppercase tracking-wider">
                       {policyMode === 'strict_privacy' ? 'Enforcement Action' : 'Calculated License Fee'}
                     </div>
-                    <div className={`text-sm font-black font-mono ${policyMode === 'strict_privacy' ? 'text-rose-600' : 'text-amber-700'}`}>
+                    <div className={`text-sm font-black font-mono ${policyMode === 'strict_privacy' ? 'text-rose-600' : 'text-[#0144e4]'}`}>
                       {policyMode === 'strict_privacy' ? 'DMCA TAKEDOWN' : `$${match.estimatedLostRevenue.toFixed(2)}`}
                     </div>
                   </div>
@@ -493,11 +493,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
 
           <div className="bg-white p-6 rounded-2xl space-y-4 border border-slate-200/80 shadow-sm">
-            <div className="flex items-center space-x-4 pb-4 border-b border-slate-200">
+            <div className="flex items-center space-x-4 pb-4 border-slate-200 border-b">
               <img 
                 src={digitalTwin.faceVector?.sampleImageUrl} 
                 alt="Alex Rivera"
-                className="w-14 h-14 rounded-2xl object-cover ring-2 ring-amber-400/40" 
+                className="w-14 h-14 rounded-2xl object-cover ring-2 ring-blue-400/40" 
               />
               <div>
                 <h3 className="text-base font-bold text-slate-900">{digitalTwin.userName}</h3>
@@ -510,7 +510,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 <span className="text-xs font-bold text-slate-700">Licensing Policy:</span>
                 <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded ${
                   policyMode === 'micro_monetization'
-                    ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                    ? 'bg-blue-100 text-[#0144e4] border border-blue-300'
                     : 'bg-rose-100 text-rose-900 border border-rose-300'
                 }`}>
                   {policyMode === 'micro_monetization' ? 'Royalty Monetization' : 'Strict Privacy'}
@@ -529,7 +529,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 className="w-full p-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-900 text-xs font-semibold flex items-center justify-between border border-slate-200 transition-all"
               >
                 <div className="flex items-center space-x-3">
-                  <Sparkles className="w-4 h-4 text-amber-600" />
+                  <Sparkles className="w-4 h-4 text-[#0144e4]" />
                   <span>{updateButtonLabel}</span>
                 </div>
                 <ArrowRight className="w-3.5 h-3.5 text-slate-400" />

@@ -1220,30 +1220,30 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   key={plan.id}
                   className={`p-6 rounded-2xl border flex flex-col justify-between space-y-5 transition-all ${
                     plan.popular
-                      ? 'border-2 border-amber-400 bg-amber-50/20 shadow-md relative'
+                      ? 'border-2 border-[#0144e4] bg-blue-50/20 shadow-md relative'
                       : 'border-slate-200 bg-white shadow-xs'
                   }`}
                 >
                   {plan.popular && (
-                    <span className="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 font-black text-[9px] uppercase tracking-widest font-mono">
+                    <span className="absolute -top-3 right-4 px-2.5 py-0.5 rounded-full bg-[#0144e4] text-white font-black text-[9px] uppercase tracking-widest font-mono shadow-xs">
                       {plan.popularBadgeText || 'Most Popular'}
                     </span>
                   )}
 
                   <div className="space-y-3">
                     <div className="flex items-baseline space-x-1">
-                      <span className="text-xs font-bold text-amber-600">$</span>
+                      <span className="text-xs font-bold text-[#0144e4]">$</span>
                       <span className="text-2xl font-black text-slate-900 font-mono">{plan.price}</span>
                       <span className="text-[11px] text-slate-400 font-mono">{plan.period}</span>
                     </div>
 
                     <h3 className="text-lg font-bold text-slate-900 font-display">{plan.name}</h3>
-                    <div className="h-0.5 w-8 bg-amber-400"></div>
+                    <div className="h-0.5 w-8 bg-[#0144e4]"></div>
 
                     <ul className="space-y-2 text-xs text-slate-600 pt-1 font-medium">
                       {plan.features.map((f, idx) => (
                         <li key={idx} className="flex items-start space-x-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-amber-500 mt-0.5 flex-shrink-0" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#0144e4] mt-0.5 flex-shrink-0" />
                           <span className="leading-snug">{f}</span>
                         </li>
                       ))}
