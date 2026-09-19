@@ -373,6 +373,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
+            {/* Admin Menu Item (Visible when logged in as Admin) */}
+            {isAdminUser && (
+              <button 
+                onClick={() => setActiveTab('admin')}
+                className={`relative py-2 transition-colors hover:text-[#0144e4] ${
+                  activeTab === 'admin' ? 'text-[#0144e4] font-semibold' : ''
+                }`}
+              >
+                <span>Admin</span>
+                {activeTab === 'admin' && (
+                  <span className="absolute bottom-[-4px] left-0 right-0 h-[2.5px] bg-[#0144e4] rounded-full" />
+                )}
+              </button>
+            )}
+
           </nav>
 
           {/* Right Header Actions (Exact Krazy Button & Search Icon Layout) */}
@@ -408,24 +423,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             )}
 
-            {/* Primary 'Get Started' Blue Button (Exact match: rounded-[6px], vibrant royal blue) */}
+            {/* Primary Blue User Profile Button */}
             {currentUser ? (
               <div className="flex items-center space-x-2">
-                {isAdminUser && (
-                  <button
-                    onClick={() => setActiveTab('admin')}
-                    className={`px-3.5 py-2.5 rounded-[6px] font-extrabold text-xs transition-all flex items-center space-x-1.5 border shadow-2xs ${
-                      activeTab === 'admin'
-                        ? 'bg-amber-400 text-slate-950 border-amber-300 ring-2 ring-amber-400/50'
-                        : 'bg-slate-900 hover:bg-slate-800 text-amber-400 border-amber-400/40'
-                    }`}
-                    title="Open Master Site Admin Portal"
-                  >
-                    <ShieldCheck className="w-4 h-4 text-amber-400" />
-                    <span>Admin Portal</span>
-                  </button>
-                )}
-
                 <button
                   onClick={() => setActiveTab('dashboard')}
                   className="px-5 py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-semibold text-[15px] transition-all flex items-center space-x-2"
