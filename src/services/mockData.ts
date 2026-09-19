@@ -440,7 +440,7 @@ export const INITIAL_MANAGED_PAGES: ManagedPage[] = [
     category: 'COMPANY',
     badge: 'Onboarding & Sovereign Vault',
     summary: 'Join the world\'s leading biometric identity, C2PA watermarking, and statutory royalty clearing platform for independent creators.',
-    actionButtonText: 'Create Your Free Sovereign Vault',
+    actionButtonText: 'Create Your Free Account',
     lastUpdated: '2026-09-19',
     sections: [
       {
@@ -466,7 +466,7 @@ export const INITIAL_MANAGED_PAGES: ManagedPage[] = [
     category: 'COMPANY',
     badge: 'About Authr Platform',
     summary: 'Authr was founded to bridge the critical gap between rapid generative AI advancements and creator intellectual property enforcement.',
-    actionButtonText: 'Create Your Free Sovereign Vault',
+    actionButtonText: 'Create Your Free Account',
     lastUpdated: '2026-09-19',
     sections: [
       {

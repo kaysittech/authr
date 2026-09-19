@@ -40,13 +40,26 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
   onNavigateHome,
   onOpenRegister
 }) => {
+  const sanitizePages = (pages: ManagedPage[]): ManagedPage[] => {
+    return pages.map(p => {
+      let page = { ...p };
+      if (page.id === 'careers' && page.title.includes('Sovereign Creator Rights')) {
+        page.title = page.title.replace('Sovereign Creator Rights', 'Creator Rights');
+      }
+      if (page.actionButtonText === 'Create Your Free Sovereign Vault') {
+        page.actionButtonText = 'Create Your Free Account';
+      }
+      return page;
+    });
+  };
+
   // Managed Pages State (Admin CMS Sync)
   const [managedPages, setManagedPages] = useState<ManagedPage[]>(() => {
     const saved = localStorage.getItem('rg_managed_pages');
     if (saved) {
       try {
         const parsed: ManagedPage[] = JSON.parse(saved);
-        return parsed.map(p => p.id === 'careers' && p.title.includes('Sovereign Creator Rights') ? { ...p, title: p.title.replace('Sovereign Creator Rights', 'Creator Rights') } : p);
+        return sanitizePages(parsed);
       } catch (e) {}
     }
     return INITIAL_MANAGED_PAGES;
@@ -58,7 +71,7 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
       if (saved) {
         try {
           const parsed: ManagedPage[] = JSON.parse(saved);
-          setManagedPages(parsed.map(p => p.id === 'careers' && p.title.includes('Sovereign Creator Rights') ? { ...p, title: p.title.replace('Sovereign Creator Rights', 'Creator Rights') } : p));
+          setManagedPages(sanitizePages(parsed));
         } catch (e) {}
       }
     };

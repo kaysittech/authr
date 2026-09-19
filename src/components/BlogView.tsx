@@ -350,7 +350,7 @@ export const BlogView: React.FC<BlogViewProps> = ({ onOpenRegister }) => {
                 onClick={onOpenRegister}
                 className="px-6 py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all"
               >
-                Register Your Sovereign Vault
+                Create Your Free Account
               </button>
             </div>
 
