@@ -393,61 +393,156 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Right Header Actions (Exact Krazy Button & Search Icon Layout) */}
           <div className="flex items-center space-x-6 flex-shrink-0">
             
-            {/* Policy Toggle Pill (Authenticated) */}
-            {currentUser && (
-              <div className="hidden xl:flex items-center p-1 bg-slate-100 border border-[#e9eaf0] rounded-lg space-x-1">
-                <button
-                  onClick={() => setPolicyMode('strict_privacy')}
-                  className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
-                    policyMode === 'strict_privacy'
-                      ? 'bg-rose-500 text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                  title="Strict Privacy Mode"
-                >
-                  <Lock className="w-3 h-3" />
-                  <span>Strict</span>
-                </button>
-                <button
-                  onClick={() => setPolicyMode('micro_monetization')}
-                  className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
-                    policyMode === 'micro_monetization'
-                      ? 'bg-[#0144e4] text-white shadow-2xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                  title="Royalty Licensing Mode"
-                >
-                  <Coins className="w-3 h-3" />
-                  <span>Royalty</span>
-                </button>
-              </div>
-            )}
-
-            {/* Primary Blue User Profile Button */}
+            {/* User Profile Button with Dropdown Menu */}
             {currentUser ? (
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => setActiveTab('dashboard')}
-                  className="px-5 py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-semibold text-[15px] transition-all flex items-center space-x-2"
-                >
-                  <img 
-                    src={currentUser.avatarUrl} 
-                    alt={currentUser.fullName} 
-                    className="w-5 h-5 rounded-full object-cover ring-1 ring-white" 
-                  />
-                  <span>{
-                    currentUser.email === 'christiana.obafunwa@gmail.com' ? 'Christiana' :
-                    currentUser.email === 'kaysitsolutions@gmail.com' ? 'Kays' :
-                    (currentUser.fullName.startsWith('Authr') && currentUser.email ? currentUser.email.split('@')[0].split('.')[0].replace(/[^a-zA-Z]/g, '').replace(/^./, str => str.toUpperCase()) : currentUser.fullName.split(' ')[0])
-                  }</span>
-                </button>
-                <button
-                  onClick={onLogout}
-                  className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                  title="Sign Out"
-                >
-                  <LogOut className="w-4.5 h-4.5" />
-                </button>
+              <div 
+                className="relative py-2"
+                onMouseEnter={() => setActiveDropdown('user_menu')}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => setActiveDropdown(activeDropdown === 'user_menu' ? null : 'user_menu')}
+                    className="px-5 py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-semibold text-[15px] transition-all flex items-center space-x-2 shadow-2xs"
+                  >
+                    <img 
+                      src={currentUser.avatarUrl} 
+                      alt={currentUser.fullName} 
+                      className="w-5 h-5 rounded-full object-cover ring-1 ring-white" 
+                    />
+                    <span>{
+                      currentUser.email === 'christiana.obafunwa@gmail.com' ? 'Christiana' :
+                      currentUser.email === 'kaysitsolutions@gmail.com' ? 'Kays' :
+                      (currentUser.fullName.startsWith('Authr') && currentUser.email ? currentUser.email.split('@')[0].split('.')[0].replace(/[^a-zA-Z]/g, '').replace(/^./, str => str.toUpperCase()) : currentUser.fullName.split(' ')[0])
+                    }</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-white/90 stroke-[2.5]" />
+                  </button>
+
+                  <button
+                    onClick={onLogout}
+                    className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                    title="Sign Out"
+                  >
+                    <LogOut className="w-4.5 h-4.5" />
+                  </button>
+                </div>
+
+                {/* User Profile & Licensing Policy Options Dropdown */}
+                {activeDropdown === 'user_menu' && (
+                  <div className="absolute top-full right-0 w-72 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-3 space-y-3 z-50 animate-fadeIn text-left mt-1">
+                    
+                    {/* User Profile Brief */}
+                    <div className="flex items-center space-x-3 pb-2.5 border-b border-[#e9eaf0]">
+                      <img 
+                        src={currentUser.avatarUrl} 
+                        alt={currentUser.fullName} 
+                        className="w-10 h-10 rounded-full object-cover ring-2 ring-[#0144e4]/30" 
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-extrabold text-slate-900 truncate">{currentUser.fullName}</p>
+                        <p className="text-[10px] text-slate-400 font-mono truncate">{currentUser.handle}</p>
+                      </div>
+                      {isAdminUser && (
+                        <span className="px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-mono text-[9px] font-black uppercase flex-shrink-0">
+                          ADMIN
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Licensing Policy Options (Moved under Profile Menu) */}
+                    <div className="space-y-1.5">
+                      <div className="px-1 text-[9px] font-extrabold uppercase tracking-wider text-slate-400 font-mono">
+                        Licensing Policy Mode
+                      </div>
+
+                      {/* Strict Privacy Option */}
+                      <button
+                        onClick={() => setPolicyMode('strict_privacy')}
+                        className={`w-full p-2.5 rounded-lg text-left transition-all border ${
+                          policyMode === 'strict_privacy'
+                            ? 'bg-rose-50 border-rose-300 text-rose-950 shadow-2xs'
+                            : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2 font-bold text-xs">
+                            <Lock className={`w-3.5 h-3.5 ${policyMode === 'strict_privacy' ? 'text-rose-600' : 'text-slate-400'}`} />
+                            <span>Strict Privacy Mode</span>
+                          </div>
+                          {policyMode === 'strict_privacy' && (
+                            <Check className="w-3.5 h-3.5 text-rose-600 stroke-[3]" />
+                          )}
+                        </div>
+                        <p className="text-[10px] text-slate-500 mt-1 leading-tight font-medium">
+                          Zero-tolerance DMCA takedowns for all unauthorized uses.
+                        </p>
+                      </button>
+
+                      {/* Royalty Licensing Option */}
+                      <button
+                        onClick={() => setPolicyMode('micro_monetization')}
+                        className={`w-full p-2.5 rounded-lg text-left transition-all border ${
+                          policyMode === 'micro_monetization'
+                            ? 'bg-blue-50 border-blue-300 text-blue-950 shadow-2xs'
+                            : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2 font-bold text-xs">
+                            <Coins className={`w-3.5 h-3.5 ${policyMode === 'micro_monetization' ? 'text-[#0144e4]' : 'text-slate-400'}`} />
+                            <span>Royalty Monetization</span>
+                          </div>
+                          {policyMode === 'micro_monetization' && (
+                            <Check className="w-3.5 h-3.5 text-[#0144e4] stroke-[3]" />
+                          )}
+                        </div>
+                        <p className="text-[10px] text-slate-500 mt-1 leading-tight font-medium">
+                          Commercial micro-licensing ($0.08/query, $250/ad).
+                        </p>
+                      </button>
+                    </div>
+
+                    <div className="border-t border-[#e9eaf0] pt-1 space-y-1">
+                      <button
+                        onClick={() => {
+                          setActiveTab('dashboard');
+                          setActiveDropdown(null);
+                        }}
+                        className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-between"
+                      >
+                        <span>Vault Dashboard</span>
+                        <Zap className="w-3.5 h-3.5 text-slate-400" />
+                      </button>
+
+                      {isAdminUser && (
+                        <button
+                          onClick={() => {
+                            setActiveTab('admin');
+                            setActiveDropdown(null);
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-amber-700 hover:bg-amber-50 transition-colors flex items-center justify-between"
+                        >
+                          <span>Admin Portal</span>
+                          <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="border-t border-[#e9eaf0] pt-1">
+                      <button
+                        onClick={() => {
+                          onLogout();
+                          setActiveDropdown(null);
+                        }}
+                        className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors flex items-center justify-between"
+                      >
+                        <span>Sign Out</span>
+                        <LogOut className="w-3.5 h-3.5 text-rose-500" />
+                      </button>
+                    </div>
+
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center space-x-2.5">
