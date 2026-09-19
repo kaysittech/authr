@@ -24,7 +24,9 @@ import {
   Sliders,
   BarChart3,
   BookOpen,
-  X
+  X,
+  ArrowLeft,
+  Settings
 } from 'lucide-react';
 import { PolicyMode } from '../types';
 import { UserSession } from './AuthModal';
@@ -110,6 +112,74 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'webservices', label: 'Web Services Telemetry', icon: Server, desc: 'Cloud Run API diagnostics' },
     { id: 'blog', label: 'Blog & IP Journal', icon: BookOpen, desc: 'BIPA & C2PA legal insights' }
   );
+
+  // DEDICATED ADMIN HEADER (Hides main site menu, shows Back to Site button + Admin logo)
+  if (activeTab === 'admin') {
+    const adminFirstName = currentUser ? (
+      currentUser.email === 'christiana.obafunwa@gmail.com' ? 'Christiana' :
+      currentUser.email === 'kaysitsolutions@gmail.com' ? 'Kays' :
+      (currentUser.fullName.startsWith('Authr') && currentUser.email 
+        ? currentUser.email.split('@')[0].split('.')[0].replace(/[^a-zA-Z]/g, '').replace(/^./, str => str.toUpperCase()) 
+        : currentUser.fullName.split(' ')[0])
+    ) : 'Admin';
+
+    return (
+      <header className="sticky top-0 z-50 bg-white border-b border-[#e9eaf0] shadow-2xs font-sans">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            
+            {/* Left: Back to Site Pill Button & Admin Title */}
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setActiveTab('dashboard')}
+                className="px-4 py-2.5 rounded-full border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs transition-all flex items-center space-x-2 shadow-2xs group"
+              >
+                <ArrowLeft className="w-4 h-4 text-slate-700 group-hover:-translate-x-0.5 transition-transform" />
+                <span>Back to Site</span>
+              </button>
+
+              <div className="h-6 w-[1px] bg-slate-200" />
+
+              <div className="flex items-center space-x-2.5">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0144e4] flex items-center justify-center border border-blue-100 shadow-2xs">
+                  <Settings className="w-5 h-5" />
+                </div>
+                <span className="text-xl font-extrabold text-slate-900 tracking-tight font-display">
+                  Admin
+                </span>
+              </div>
+            </div>
+
+            {/* Right: Logged In Admin Profile & Sign Out */}
+            {currentUser && (
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2.5 bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-xl">
+                  <img
+                    src={currentUser.avatarUrl}
+                    alt={currentUser.fullName}
+                    className="w-5 h-5 rounded-full object-cover ring-1 ring-slate-300"
+                  />
+                  <span className="text-xs font-bold text-slate-800">{adminFirstName}</span>
+                  <span className="px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-mono text-[9px] font-black uppercase">
+                    SUPERUSER
+                  </span>
+                </div>
+
+                <button
+                  onClick={onLogout}
+                  className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                  title="Sign Out"
+                >
+                  <LogOut className="w-4.5 h-4.5" />
+                </button>
+              </div>
+            )}
+
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[#e9eaf0] shadow-2xs font-sans">
