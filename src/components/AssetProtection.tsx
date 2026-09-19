@@ -198,9 +198,6 @@ export const AssetProtection: React.FC<AssetProtectionProps> = ({
                       <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-50 text-amber-800 border border-amber-300">
                         {asset.platform}
                       </span>
-                      <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-50 text-indigo-800 border border-indigo-300">
-                        C2PA Signed
-                      </span>
                     </div>
 
                     <h3 className="text-sm font-bold text-slate-900 mt-1">{asset.title}</h3>

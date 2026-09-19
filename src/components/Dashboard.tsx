@@ -160,7 +160,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   Independent Rights & Royalty Network Active
                 </span>
                 <span className="text-xs text-slate-500 font-mono">
-                  Commercial Micro-Monetization • C2PA Signed • BIPA Protected
+                  Commercial Micro-Monetization Network
                 </span>
               </div>
               
@@ -502,14 +502,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <div>
                 <h3 className="text-base font-bold text-slate-900">{digitalTwin.userName}</h3>
                 <p className="text-xs text-slate-500 font-mono">{digitalTwin.handle}</p>
-                <div className="mt-1 flex items-center space-x-2">
-                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-md bg-amber-50 text-amber-800 border border-amber-300">
-                    BIPA Protected
-                  </span>
-                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-md bg-indigo-50 text-indigo-800 border border-indigo-300">
-                    C2PA Signed
-                  </span>
-                </div>
               </div>
             </div>
 
