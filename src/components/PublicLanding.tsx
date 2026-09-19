@@ -68,9 +68,6 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
   return (
     <div className="bg-white text-slate-900 font-sans min-h-screen">
       
-      {/* KRAZY HEADER NAVBAR */}
-      <PublicHeader onOpenRegister={onOpenRegister} onOpenLogin={onOpenLogin} />
-
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-20">
         
         {/* SECTION 1: HERO (kz-hero-1) */}
