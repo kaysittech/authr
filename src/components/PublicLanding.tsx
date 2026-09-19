@@ -63,6 +63,18 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
       author: "Marcus Vance",
       title: "Creative Brand & IP Director",
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
+    },
+    {
+      quote: "Authr's Web Scrape Radar detected 12 unauthorized AI training sets using my portfolio within hours. The automated DMCA notices pulled them down immediately.",
+      author: "Elena Rostova",
+      title: "Digital Illustrator & Concept Artist",
+      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80"
+    },
+    {
+      quote: "The C2PA cryptographic provenance standard integrated into Authr gives our enterprise model training data full legal verification and automated royalty routing.",
+      author: "David Chen",
+      title: "Software Architect & AI Researcher",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80"
     }
   ];
 
@@ -510,9 +522,9 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
 
         </section>
 
-        {/* SECTION 8: TESTIMONIAL CAROUSEL (kz-testimonial) */}
-        <section className="bg-[#eeeeee] rounded-2xl p-8 sm:p-14 text-center space-y-8">
-          <div className="space-y-2 max-w-2xl mx-auto">
+        {/* SECTION 8: TESTIMONIAL CAROUSEL (kz-testimonial continuous auto-scroll) */}
+        <section className="bg-[#eeeeee] rounded-2xl py-10 px-4 sm:p-14 text-center space-y-8 overflow-hidden">
+          <div className="space-y-2 max-w-2xl mx-auto px-4">
             <div className="text-[#0144e4] font-bold text-xs uppercase tracking-widest font-mono">
               Customer reviews
             </div>
@@ -521,77 +533,65 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
             </h2>
           </div>
 
-          {/* Testimonial Track Container with Controls */}
-          <div 
-            className="max-w-3xl mx-auto relative px-2 sm:px-12"
-            onMouseEnter={() => setIsTestimonialHovered(true)}
-            onMouseLeave={() => setIsTestimonialHovered(false)}
-          >
-            {/* Left Chevron Control */}
-            <button
-              onClick={() => setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white border border-[#e9eaf0] text-slate-700 hover:text-[#0144e4] hover:border-[#0144e4] shadow-md flex items-center justify-center transition-all"
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-
-            {/* Testimonial Sliding Track */}
-            <div className="overflow-hidden rounded-xl">
-              <div 
-                className="flex transition-transform duration-500 ease-out"
-                style={{ transform: `translateX(-${activeTestimonial * 100}%)` }}
-              >
+          {/* Continuous Infinite Left Auto-Scrolling Ticker */}
+          <div className="relative group overflow-hidden py-2">
+            <div className="flex animate-marquee-slow items-center group-hover:[animation-play-state:paused]">
+              
+              {/* Track 1 */}
+              <div className="flex items-center gap-6 shrink-0 pr-6">
                 {testimonials.map((t, idx) => (
-                  <div key={idx} className="w-full shrink-0 px-1">
-                    <div className="bg-white p-8 sm:p-10 rounded-xl border border-[#e9eaf0] shadow-sm space-y-6 text-center min-h-[230px] flex flex-col justify-between">
-                      <p className="text-base sm:text-lg text-slate-700 italic leading-relaxed font-medium">
-                        "{t.quote}"
-                      </p>
+                  <div key={idx} className="w-[300px] sm:w-[420px] shrink-0 text-left bg-white p-6 sm:p-8 rounded-xl border border-[#e9eaf0] shadow-sm space-y-4 flex flex-col justify-between min-h-[220px]">
+                    <p className="text-sm sm:text-base text-slate-700 italic leading-relaxed font-medium">
+                      "{t.quote}"
+                    </p>
 
-                      <div className="flex flex-col items-center space-y-2 pt-2">
-                        <img 
-                          src={t.avatar} 
-                          alt={t.author} 
-                          className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-[#0144e4] shadow-xs"
-                        />
-                        <div>
-                          <h4 className="text-sm font-extrabold text-slate-900 font-display">
-                            {t.author}
-                          </h4>
-                          <p className="text-xs text-slate-500 font-mono">
-                            {t.title}
-                          </p>
-                        </div>
+                    <div className="flex items-center space-x-3 pt-3 border-t border-slate-100">
+                      <img 
+                        src={t.avatar} 
+                        alt={t.author} 
+                        className="w-12 h-12 rounded-full object-cover border-2 border-[#0144e4] shrink-0 shadow-xs"
+                      />
+                      <div>
+                        <h4 className="text-sm font-extrabold text-slate-900 font-display">
+                          {t.author}
+                        </h4>
+                        <p className="text-xs text-slate-500 font-mono">
+                          {t.title}
+                        </p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
+
+              {/* Track 2 (Duplicate set for 100% seamless infinite left scroll loop) */}
+              <div className="flex items-center gap-6 shrink-0 pr-6" aria-hidden="true">
+                {testimonials.map((t, idx) => (
+                  <div key={`dup-${idx}`} className="w-[300px] sm:w-[420px] shrink-0 text-left bg-white p-6 sm:p-8 rounded-xl border border-[#e9eaf0] shadow-sm space-y-4 flex flex-col justify-between min-h-[220px]">
+                    <p className="text-sm sm:text-base text-slate-700 italic leading-relaxed font-medium">
+                      "{t.quote}"
+                    </p>
+
+                    <div className="flex items-center space-x-3 pt-3 border-t border-slate-100">
+                      <img 
+                        src={t.avatar} 
+                        alt={t.author} 
+                        className="w-12 h-12 rounded-full object-cover border-2 border-[#0144e4] shrink-0 shadow-xs"
+                      />
+                      <div>
+                        <h4 className="text-sm font-extrabold text-slate-900 font-display">
+                          {t.author}
+                        </h4>
+                        <p className="text-xs text-slate-500 font-mono">
+                          {t.title}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
             </div>
-
-            {/* Right Chevron Control */}
-            <button
-              onClick={() => setActiveTestimonial((prev) => (prev + 1) % testimonials.length)}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white border border-[#e9eaf0] text-slate-700 hover:text-[#0144e4] hover:border-[#0144e4] shadow-md flex items-center justify-center transition-all"
-              aria-label="Next testimonial"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Carousel Dots Navigation */}
-          <div className="flex justify-center items-center space-x-2 pt-2">
-            {testimonials.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setActiveTestimonial(idx)}
-                className={`h-3 rounded-full transition-all duration-300 ${
-                  activeTestimonial === idx ? 'bg-[#0144e4] w-6' : 'bg-slate-300 w-3 hover:bg-slate-500'
-                }`}
-                aria-label={`Go to testimonial ${idx + 1}`}
-              />
-            ))}
           </div>
         </section>
 

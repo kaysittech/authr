@@ -52,7 +52,7 @@
   background: #0144e4;
 }
 
-/* Infinite Left Scrolling Ticker (Krazy Logo Slider) */
+/* Infinite Left Scrolling Ticker (Krazy Logo Slider & Testimonials) */
 @keyframes marqueeLeft {
   0% {
     transform: translateX(0%);
@@ -69,6 +69,14 @@
   animation: marqueeLeft 25s linear infinite;
 }
 
-.animate-marquee-left:hover {
+.animate-marquee-slow {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marqueeLeft 35s linear infinite;
+}
+
+.animate-marquee-left:hover,
+.animate-marquee-slow:hover {
   animation-play-state: paused;
 }
