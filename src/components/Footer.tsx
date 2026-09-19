@@ -13,21 +13,21 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 text-left">
           
           {/* Column 1: Brand Logo & Info */}
-          <div className="lg:col-span-4 space-y-4">
+          <div className="lg:col-span-3 space-y-4">
             <div className="flex items-center space-x-2.5 cursor-pointer" onClick={() => onSelectTab('dashboard')}>
               <div className="w-9 h-9 rounded-xl bg-[#0144e4] text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20">
                 <ShieldCheck className="w-5.5 h-5.5 stroke-[2.5]" />
               </div>
               <span className="text-2xl font-extrabold tracking-tight text-slate-900 font-display">Authr</span>
             </div>
-            <p className="text-xs text-slate-500 leading-relaxed font-medium max-w-sm">
+            <p className="text-xs text-slate-500 leading-relaxed font-medium">
               Sovereign creator identity registration, C2PA cryptographic watermarking, AI model scrape radar, and automated statutory royalty clearing.
             </p>
           </div>
 
-          {/* Column 2: Company & Legal */}
-          <div className="lg:col-span-4 space-y-3">
-            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Company &amp; Legal</h4>
+          {/* Column 2: Company (4 items) */}
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Company</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
                 <button onClick={onOpenRegister} className="hover:text-[#0144e4] transition-colors text-left">
@@ -49,22 +49,12 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
                   Careers &amp; Open Roles
                 </button>
               </li>
-              <li>
-                <button onClick={() => onSelectTab('privacy')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Privacy Policy &amp; BIPA
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onSelectTab('terms')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Terms of Service
-                </button>
-              </li>
             </ul>
           </div>
 
-          {/* Column 3: Platform Features */}
-          <div className="lg:col-span-4 space-y-3">
-            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Platform Features</h4>
+          {/* Column 3: Features (4 items) */}
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Features</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
                 <button onClick={() => onSelectTab('detection')} className="hover:text-[#0144e4] transition-colors text-left">
@@ -82,18 +72,35 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
                 </button>
               </li>
               <li>
+                <button onClick={() => onSelectTab('settlement')} className="hover:text-[#0144e4] transition-colors text-left">
+                  Royalty Settlement Portal
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Legal & Security (4 items) */}
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Legal &amp; Security</h4>
+            <ul className="space-y-2 text-xs text-slate-600 font-medium">
+              <li>
                 <button onClick={() => onSelectTab('legal')} className="hover:text-[#0144e4] transition-colors text-left">
                   DMCA &amp; Takedown Studio
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('settlement')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Royalty Settlement Portal
+                <button onClick={() => onSelectTab('financials')} className="hover:text-[#0144e4] transition-colors text-left">
+                  Statutory Earnings Ledger
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('financials')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Statutory Earnings Ledger
+                <button onClick={() => onSelectTab('privacy')} className="hover:text-[#0144e4] transition-colors text-left">
+                  Privacy Policy &amp; BIPA
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onSelectTab('terms')} className="hover:text-[#0144e4] transition-colors text-left">
+                  Terms of Service
                 </button>
               </li>
             </ul>
