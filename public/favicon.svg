@@ -1,5 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="140" fill="#0144e4"/>
-  <path d="M 256 112 C 295 142 345 156 380 156 V 288 C 380 360 325 415 256 440 C 187 415 132 360 132 288 V 156 C 167 156 217 142 256 112 Z" fill="none" stroke="#ffffff" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M 205 270 L 245 310 L 310 225" fill="none" stroke="#ffffff" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0144e4"/>
+      <stop offset="100%" stop-color="#002bb8"/>
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+  <path d="M 256 100 C 300 132 355 148 396 148 V 284 C 396 364 336 424 256 452 C 176 424 116 364 116 284 V 148 C 157 148 212 132 256 100 Z" fill="none" stroke="#ffffff" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 200 270 L 244 314 L 316 220" fill="none" stroke="url(#shieldGrad)" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
