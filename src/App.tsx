@@ -12,6 +12,7 @@ import { PublicLanding } from './components/PublicLanding';
 import { AuthGuard } from './components/AuthGuard';
 import { AdminPanel } from './components/AdminPanel';
 import { WebServicesDashboard } from './components/WebServicesDashboard';
+import { BlogView } from './components/BlogView';
 
 import { 
   DigitalTwin, 
@@ -340,6 +341,10 @@ export function App() {
                   setMatches(matches.map(m => m.id === id ? { ...m, status: 'resolved' } : m));
                 }}
               />
+            )}
+
+            {activeTab === 'blog' && (
+              <BlogView onOpenRegister={() => setIsAuthModalOpen(true)} />
             )}
           </>
         )}

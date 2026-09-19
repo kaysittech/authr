@@ -22,7 +22,8 @@ import {
   Server,
   Layers,
   Sliders,
-  BarChart3
+  BarChart3,
+  BookOpen
 } from 'lucide-react';
 import { PolicyMode } from '../types';
 import { UserSession } from './AuthModal';
@@ -92,7 +93,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'settlement', label: 'Licensing Gate', icon: Scale, badge: pendingClaimsCount, desc: 'Automated settlement invoicing' },
     { id: 'legal', label: 'Legal & DMCA Notices', icon: FileText, desc: '17 U.S.C. § 512 statutory filings' },
     { id: 'financials', label: 'Royalty Ledger', icon: DollarSign, desc: 'Stripe payouts & Polygon L2' },
-    { id: 'webservices', label: 'Web Services Telemetry', icon: Server, desc: 'Cloud Run API diagnostics' }
+    { id: 'webservices', label: 'Web Services Telemetry', icon: Server, desc: 'Cloud Run API diagnostics' },
+    { id: 'blog', label: 'Blog & IP Journal', icon: BookOpen, desc: 'BIPA & C2PA legal insights' }
   );
 
   return (
@@ -223,7 +225,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             <a href="#pricing" onClick={() => setActiveTab('dashboard')} className="hover:text-[#0144e4] transition-colors py-2">Pricing</a>
-            <a href="#blog" onClick={() => setActiveTab('dashboard')} className="hover:text-[#0144e4] transition-colors py-2">Resource Center</a>
+            <button 
+              onClick={() => setActiveTab('blog')} 
+              className={`hover:text-[#0144e4] transition-colors py-2 ${activeTab === 'blog' ? 'text-[#0144e4] font-extrabold' : ''}`}
+            >
+              Blog
+            </button>
 
             {/* About Dropdown */}
             <div 
