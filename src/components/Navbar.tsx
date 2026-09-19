@@ -207,14 +207,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Home */}
             <button 
               onClick={() => setActiveTab('dashboard')}
-              className={`relative py-2 transition-colors hover:text-[#0144e4] ${
-                activeTab === 'dashboard' ? 'text-[#0144e4] font-semibold' : ''
-              }`}
+              className="hover:text-[#0144e4] transition-colors py-2"
             >
               <span>Home</span>
-              {activeTab === 'dashboard' && (
-                <span className="absolute bottom-[-4px] left-0 right-0 h-[2.5px] bg-[#0144e4] rounded-full" />
-              )}
             </button>
 
             {/* Features Dropdown */}
@@ -258,9 +253,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onMouseEnter={() => setActiveDropdown('vault_menu')}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <button className={`relative flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors ${
-                appSubmenus.some(sub => sub.id === activeTab) ? 'text-[#0144e4] font-semibold' : ''
-              }`}>
+              <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors">
                 <Layers className="w-4 h-4" />
                 <span>Modules</span>
                 <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
@@ -268,9 +261,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <span className="px-1.5 py-0.2 text-[10px] font-extrabold bg-rose-500 text-white rounded-full">
                     {pendingClaimsCount}
                   </span>
-                )}
-                {appSubmenus.some(sub => sub.id === activeTab) && (
-                  <span className="absolute bottom-[-4px] left-0 right-0 h-[2.5px] bg-[#0144e4] rounded-full" />
                 )}
               </button>
 
@@ -328,14 +318,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Blog */}
             <button 
               onClick={() => setActiveTab('blog')} 
-              className={`relative py-2 transition-colors hover:text-[#0144e4] ${
-                activeTab === 'blog' ? 'text-[#0144e4] font-semibold' : ''
-              }`}
+              className="hover:text-[#0144e4] transition-colors py-2"
             >
               <span>Blog</span>
-              {activeTab === 'blog' && (
-                <span className="absolute bottom-[-4px] left-0 right-0 h-[2.5px] bg-[#0144e4] rounded-full" />
-              )}
             </button>
 
             {/* About Dropdown */}
