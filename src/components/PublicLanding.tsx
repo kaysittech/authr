@@ -33,8 +33,8 @@ import {
 import { PublicHeader } from './PublicHeader';
 import { Footer } from './Footer';
 
-import { CustomerReview, PricingPlan, TrialConfig } from '../types';
-import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG } from '../services/mockData';
+import { CustomerReview, PricingPlan, TrialConfig, HeroStatRow } from '../types';
+import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_HERO_STAT_ROWS } from '../services/mockData';
 
 interface PublicLandingProps {
   onOpenRegister: () => void;
@@ -76,6 +76,14 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
     return INITIAL_TRIAL_CONFIG;
   });
 
+  const [heroStats, setHeroStats] = useState<HeroStatRow[]>(() => {
+    const saved = localStorage.getItem('rg_hero_stat_rows');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return INITIAL_HERO_STAT_ROWS;
+  });
+
   useEffect(() => {
     const syncTestimonials = () => {
       const saved = localStorage.getItem('rg_testimonials');
@@ -101,15 +109,28 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
       }
     };
 
+    const syncHeroStats = () => {
+      const saved = localStorage.getItem('rg_hero_stat_rows');
+      if (saved) {
+        try { setHeroStats(JSON.parse(saved)); } catch (e) {}
+      } else {
+        setHeroStats(INITIAL_HERO_STAT_ROWS);
+      }
+    };
+
     window.addEventListener('storage', syncTestimonials);
     window.addEventListener('rg_testimonials_updated', syncTestimonials);
     window.addEventListener('storage', syncPricing);
     window.addEventListener('rg_pricing_updated', syncPricing);
+    window.addEventListener('storage', syncHeroStats);
+    window.addEventListener('rg_hero_stats_updated', syncHeroStats);
     return () => {
       window.removeEventListener('storage', syncTestimonials);
       window.removeEventListener('rg_testimonials_updated', syncTestimonials);
       window.removeEventListener('storage', syncPricing);
       window.removeEventListener('rg_pricing_updated', syncPricing);
+      window.removeEventListener('storage', syncHeroStats);
+      window.removeEventListener('rg_hero_stats_updated', syncHeroStats);
     };
   }, []);
 
@@ -206,29 +227,39 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
 
                 {/* Stat Rows */}
                 <div className="space-y-3">
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
-                    <div className="flex items-center space-x-2.5">
-                      <Fingerprint className="w-4 h-4 text-[#0144e4]" />
-                      <span className="text-xs font-bold text-slate-700">Facial Geometry Vector</span>
-                    </div>
-                    <span className="text-xs font-mono font-bold text-slate-900">128 Nodes Hashed</span>
-                  </div>
+                  {heroStats.map((st) => {
+                    const renderIcon = () => {
+                      switch (st.iconType) {
+                        case 'radio':
+                          return <Radio className="w-4 h-4 text-purple-600" />;
+                        case 'dollar':
+                          return <DollarSign className="w-4 h-4 text-emerald-600" />;
+                        case 'shield':
+                          return <ShieldCheck className="w-4 h-4 text-amber-600" />;
+                        case 'zap':
+                          return <Zap className="w-4 h-4 text-indigo-600" />;
+                        case 'check':
+                          return <CheckCircle2 className="w-4 h-4 text-blue-600" />;
+                        case 'fingerprint':
+                        default:
+                          return <Fingerprint className="w-4 h-4 text-[#0144e4]" />;
+                      }
+                    };
 
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
-                    <div className="flex items-center space-x-2.5">
-                      <Radio className="w-4 h-4 text-purple-600" />
-                      <span className="text-xs font-bold text-slate-700">Acoustic Voice Spectrum</span>
-                    </div>
-                    <span className="text-xs font-mono font-bold text-slate-900">44.1kHz FFT Matched</span>
-                  </div>
+                    const isMoney = st.value.trim().startsWith('$') || st.iconType === 'dollar';
 
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
-                    <div className="flex items-center space-x-2.5">
-                      <DollarSign className="w-4 h-4 text-emerald-600" />
-                      <span className="text-xs font-bold text-slate-700">Royalties Cleared</span>
-                    </div>
-                    <span className="text-sm font-black font-display text-emerald-600">$1,248,500.00</span>
-                  </div>
+                    return (
+                      <div key={st.id} className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between gap-3">
+                        <div className="flex items-center space-x-2.5">
+                          {renderIcon()}
+                          <span className="text-xs font-bold text-slate-700">{st.label}</span>
+                        </div>
+                        <span className={isMoney ? "text-sm font-black font-display text-emerald-600" : "text-xs font-mono font-bold text-slate-900"}>
+                          {st.value}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 <div className="pt-2 flex items-center justify-between text-[11px] text-slate-400 font-mono border-t border-slate-100">

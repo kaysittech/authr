@@ -32,10 +32,12 @@ import {
   RotateCcw,
   Quote,
   X,
-  BookOpen
+  BookOpen,
+  Fingerprint,
+  Radio
 } from 'lucide-react';
-import { DetectionMatch, SettlementClaim, CustomerReview, PricingPlan, TrialConfig, UserAccount } from '../types';
-import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_USERS } from '../services/mockData';
+import { DetectionMatch, SettlementClaim, CustomerReview, PricingPlan, TrialConfig, UserAccount, HeroStatRow } from '../types';
+import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_USERS, INITIAL_HERO_STAT_ROWS } from '../services/mockData';
 import { Article, BLOG_ARTICLES } from './BlogView';
 
 interface AdminPanelProps {
@@ -221,6 +223,49 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     e.preventDefault();
     savePricingData(adminPricingPlans, adminTrialConfig);
     showToast('30-Day Free Trial & Header settings saved');
+  };
+
+  // Hero Stat Cards & Badge Metrics State
+  const [adminHeroStats, setAdminHeroStats] = useState<HeroStatRow[]>(() => {
+    const saved = localStorage.getItem('rg_hero_stat_rows');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return INITIAL_HERO_STAT_ROWS;
+  });
+
+  const saveHeroStats = (newList: HeroStatRow[]) => {
+    setAdminHeroStats(newList);
+    localStorage.setItem('rg_hero_stat_rows', JSON.stringify(newList));
+    window.dispatchEvent(new Event('rg_hero_stats_updated'));
+  };
+
+  const handleSaveHeroStats = () => {
+    saveHeroStats(adminHeroStats);
+    showToast('Hero Stat Cards & Badge Metrics saved successfully');
+  };
+
+  const handleAddHeroStat = () => {
+    const newStat: HeroStatRow = {
+      id: `stat_${Date.now()}`,
+      label: 'New Protection Metric',
+      value: '100% Verified',
+      iconType: 'shield'
+    };
+    const updated = [...adminHeroStats, newStat];
+    saveHeroStats(updated);
+    showToast('Added new Hero Stat Card');
+  };
+
+  const handleDeleteHeroStat = (id: string) => {
+    const updated = adminHeroStats.filter(s => s.id !== id);
+    saveHeroStats(updated);
+    showToast('Deleted Hero Stat Card');
+  };
+
+  const handleResetHeroStats = () => {
+    saveHeroStats(INITIAL_HERO_STAT_ROWS);
+    showToast('Hero Stat Cards reset to defaults');
   };
 
   // Admin Pricing & Commission Take-Rate State
@@ -643,10 +688,120 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       </div>
     )}
 
-      {/* ---------------- ADMIN TAB: PLANS, PRICING & 30-DAY TRIAL MANAGER ---------------- */}
+      {/* ---------------- ADMIN TAB: PLANS, PRICING & HERO METRICS MANAGER ---------------- */}
       {activeAdminTab === 'pricing' && (
         <div className="space-y-6 animate-fadeIn">
-          
+
+          {/* Section 0: Hero Graphic Stat Cards & Badge Metrics Manager */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div className="flex items-center space-x-3">
+                <div className="p-3 rounded-2xl bg-blue-50 text-[#0144e4] border border-blue-200">
+                  <Fingerprint className="w-5 h-5 text-[#0144e4]" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-extrabold text-slate-900">Hero Graphic Stat Cards & Metric Badges ({adminHeroStats.length})</h2>
+                  <p className="text-xs text-slate-500 mt-0.5">Edit the name/label, values, numbers, and icons rendered in the public hero mockup card (e.g. Facial Geometry Vector, Acoustic Voice Spectrum, Royalties Cleared).</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={handleResetHeroStats}
+                  className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 transition-all flex items-center space-x-1.5"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Reset Stat Cards</span>
+                </button>
+
+                <button
+                  onClick={handleAddHeroStat}
+                  className="px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-sm transition-all flex items-center space-x-1.5"
+                >
+                  <Plus className="w-4 h-4 text-amber-400" />
+                  <span>Add Metric Card</span>
+                </button>
+
+                <button
+                  onClick={handleSaveHeroStats}
+                  className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center space-x-2 whitespace-nowrap"
+                >
+                  <Sparkles className="w-4 h-4 text-slate-950" />
+                  <span>Save Stat Cards</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {adminHeroStats.map((stat, idx) => (
+                <div key={stat.id} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4 relative">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold text-slate-400">Card #{idx + 1}</span>
+                    <button
+                      onClick={() => handleDeleteHeroStat(stat.id)}
+                      className="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 transition-all border border-rose-200"
+                      title="Delete Stat Card"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-700 block">Data Name / Label</label>
+                      <input
+                        type="text"
+                        value={stat.label}
+                        onChange={(e) => {
+                          const updated = [...adminHeroStats];
+                          updated[idx].label = e.target.value;
+                          setAdminHeroStats(updated);
+                        }}
+                        placeholder="e.g. Facial Geometry Vector"
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-sans"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-700 block">Value / Number</label>
+                      <input
+                        type="text"
+                        value={stat.value}
+                        onChange={(e) => {
+                          const updated = [...adminHeroStats];
+                          updated[idx].value = e.target.value;
+                          setAdminHeroStats(updated);
+                        }}
+                        placeholder="e.g. 128 Nodes Hashed or $1,248,500.00"
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-700 block">Metric Icon</label>
+                      <select
+                        value={stat.iconType}
+                        onChange={(e) => {
+                          const updated = [...adminHeroStats];
+                          updated[idx].iconType = e.target.value as any;
+                          setAdminHeroStats(updated);
+                        }}
+                        className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-sans"
+                      >
+                        <option value="fingerprint">Fingerprint Vector (Blue)</option>
+                        <option value="radio">Radio Acoustic (Purple)</option>
+                        <option value="dollar">Dollar Cleared (Green)</option>
+                        <option value="shield">Shield Security (Amber)</option>
+                        <option value="zap">Zap Crawler (Indigo)</option>
+                        <option value="check">Check Verified (Blue)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Section 1: 30-Day Free Trial & Offer Settings */}
           <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">

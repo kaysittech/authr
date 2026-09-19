@@ -1,4 +1,25 @@
-import { DigitalTwin, ProtectedAsset, DetectionMatch, SettlementClaim, FinancialTransaction, CustomerReview, PricingPlan, TrialConfig, UserAccount } from '../types';
+import { DigitalTwin, ProtectedAsset, DetectionMatch, SettlementClaim, FinancialTransaction, CustomerReview, PricingPlan, TrialConfig, UserAccount, HeroStatRow } from '../types';
+
+export const INITIAL_HERO_STAT_ROWS: HeroStatRow[] = [
+  {
+    id: 'stat_1',
+    label: 'Facial Geometry Vector',
+    value: '128 Nodes Hashed',
+    iconType: 'fingerprint'
+  },
+  {
+    id: 'stat_2',
+    label: 'Acoustic Voice Spectrum',
+    value: '44.1kHz FFT Matched',
+    iconType: 'radio'
+  },
+  {
+    id: 'stat_3',
+    label: 'Royalties Cleared',
+    value: '$1,248,500.00',
+    iconType: 'dollar'
+  }
+];
 
 export const INITIAL_USERS: UserAccount[] = [
   {

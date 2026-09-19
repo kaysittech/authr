@@ -136,3 +136,10 @@ export interface UserAccount {
   bipaHash: string;
 }
 
+export interface HeroStatRow {
+  id: string;
+  label: string;
+  value: string;
+  iconType: 'fingerprint' | 'radio' | 'dollar' | 'shield' | 'zap' | 'check';
+}
+
