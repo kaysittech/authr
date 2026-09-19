@@ -108,7 +108,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15] font-display">
-                Claim Sovereign Rights Over Your <span className="text-[#0144e4]">Voice, Likeness</span> & Digital Media.
+                Manage Rights Over Your <span className="text-[#0144e4]">Voice, Likeness</span> & Digital Media.
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed">
