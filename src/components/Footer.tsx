@@ -21,7 +21,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
               <span className="text-2xl font-extrabold tracking-tight text-slate-900 font-display">Authr</span>
             </div>
             <p className="text-xs text-slate-500 leading-relaxed font-medium">
-              Sovereign creator identity registration, C2PA cryptographic watermarking, AI model scrape radar, and automated statutory royalty clearing.
+              The independent creator rights & royalty network providing identity registration, C2PA cryptographic watermarking, AI model scrape radar, and automated statutory royalty clearing.
             </p>
           </div>
 
