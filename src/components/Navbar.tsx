@@ -201,183 +201,275 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Right-aligned Navigation Links (Pushed right next to Get Started button) */}
+          {/* Right-aligned Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-7 text-[15px] font-medium text-slate-800 ml-auto mr-7">
-            
-            {/* Home */}
-            <button 
-              onClick={() => setActiveTab('dashboard')}
-              className="hover:text-[#0144e4] transition-colors py-2"
-            >
-              <span>Home</span>
-            </button>
+            {!currentUser ? (
+              <>
+                {/* Home */}
+                <button 
+                  onClick={() => setActiveTab('dashboard')}
+                  className="hover:text-[#0144e4] transition-colors py-2"
+                >
+                  <span>Home</span>
+                </button>
 
-            {/* Features Dropdown */}
-            <div 
-              className="relative py-2"
-              onMouseEnter={() => setActiveDropdown('features')}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors">
-                <span>Features</span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
-              </button>
+                {/* Features Dropdown */}
+                <div 
+                  className="relative py-2"
+                  onMouseEnter={() => setActiveDropdown('features')}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors">
+                    <span>Features</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
+                  </button>
 
-              {activeDropdown === 'features' && (
-                <div className="absolute top-full left-0 w-64 bg-white border border-[#e9eaf0] rounded-lg shadow-xl p-2 space-y-1 z-50 animate-fadeIn text-left">
-                  {[
-                    { label: 'Biometric & Likeness Vault', desc: '128-node face & voice prints' },
-                    { label: 'C2PA Watermarking', desc: 'SHA-256 cryptographic provenance' },
-                    { label: 'Web Scrape Radar', desc: 'YouTube, TikTok & Meta monitoring' },
-                    { label: 'DMCA Notice Studio', desc: '17 U.S.C. § 512 legal filings' },
-                    { label: 'Stripe Licensing Gate', desc: 'Automated settlement invoicing' },
-                    { label: 'Polygon L2 Provenance', desc: 'On-chain royalty ledger' }
-                  ].map((feat) => (
-                    <a
-                      key={feat.label}
-                      href="#features"
-                      onClick={() => setActiveTab('dashboard')}
-                      className="block px-3 py-2 rounded-md text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
-                    >
-                      <div className="font-bold text-slate-900">{feat.label}</div>
-                      <div className="text-[10px] text-slate-400 font-mono font-medium">{feat.desc}</div>
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Modules Main Menu Submenu Dropdown */}
-            <div 
-              className="relative py-2"
-              onMouseEnter={() => setActiveDropdown('vault_menu')}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors">
-                <Layers className="w-4 h-4" />
-                <span>Modules</span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
-                {pendingClaimsCount > 0 && (
-                  <span className="px-1.5 py-0.2 text-[10px] font-extrabold bg-rose-500 text-white rounded-full">
-                    {pendingClaimsCount}
-                  </span>
-                )}
-              </button>
-
-              {activeDropdown === 'vault_menu' && (
-                <div className="absolute top-full left-0 w-72 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2.5 space-y-1 z-50 animate-fadeIn text-left">
-                  <div className="px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">
-                    Select Module
-                  </div>
-                  {appSubmenus.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = activeTab === item.id;
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => {
-                          setActiveTab(item.id);
-                          setActiveDropdown(null);
-                        }}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-all ${
-                          isActive
-                            ? 'bg-[#0144e4] text-white shadow-2xs'
-                            : 'text-slate-700 hover:bg-blue-50 hover:text-[#0144e4]'
-                        }`}
-                      >
-                        <div className="flex items-center space-x-2.5">
-                          <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#0144e4]'}`} />
-                          <div>
-                            <p className="font-extrabold text-xs">{item.label}</p>
-                            <p className={`text-[10px] font-mono ${isActive ? 'text-blue-100' : 'text-slate-400'}`}>
-                              {item.desc}
-                            </p>
-                          </div>
-                        </div>
-                        {item.badge !== undefined && item.badge > 0 && (
-                          <span className="px-1.5 py-0.2 text-[10px] font-extrabold bg-rose-500 text-white rounded-full">
-                            {item.badge}
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Pricing */}
-            <a 
-              href="#pricing" 
-              onClick={() => setActiveTab('dashboard')} 
-              className="hover:text-[#0144e4] transition-colors py-2"
-            >
-              Pricing
-            </a>
-
-            {/* Blog */}
-            <button 
-              onClick={() => setActiveTab('blog')} 
-              className="hover:text-[#0144e4] transition-colors py-2"
-            >
-              <span>Blog</span>
-            </button>
-
-            {/* About Dropdown */}
-            <div 
-              className="relative py-2"
-              onMouseEnter={() => setActiveDropdown('about')}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors">
-                <span>About</span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
-              </button>
-
-              {activeDropdown === 'about' && (
-                <div className="absolute top-full left-0 w-56 bg-white border border-[#e9eaf0] rounded-lg shadow-xl p-2 space-y-1 z-50 animate-fadeIn text-left">
-                  {[
-                    { label: 'Statutory Compliance', desc: 'BIPA & DMCA 17 U.S.C. § 512' },
-                    { label: 'Developer API', desc: 'FastAPI REST Telemetry' },
-                    { label: 'Contact Counsel', desc: '24/7 Legal rights support' }
-                  ].map((item) => (
-                    <a
-                      key={item.label}
-                      href="#about"
-                      onClick={() => setActiveTab('dashboard')}
-                      className="block px-3 py-2 rounded-md text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
-                    >
-                      <div className="font-bold text-slate-900">{item.label}</div>
-                      <div className="text-[10px] text-slate-400 font-mono font-medium">{item.desc}</div>
-                    </a>
-                  ))}
-                  {currentUser?.role === 'admin' && (
-                    <a
-                      href="?portal=admin"
-                      className="block px-3 py-2 rounded-md text-xs font-bold text-[#0144e4] bg-blue-50 hover:bg-blue-100 transition-all border border-blue-100"
-                    >
-                      🚀 Launch admin.authr.id
-                    </a>
+                  {activeDropdown === 'features' && (
+                    <div className="absolute top-full left-0 w-64 bg-white border border-[#e9eaf0] rounded-lg shadow-xl p-2 space-y-1 z-50 animate-fadeIn text-left">
+                      {[
+                        { label: 'Biometric & Likeness Vault', desc: '128-node face & voice prints' },
+                        { label: 'C2PA Watermarking', desc: 'SHA-256 cryptographic provenance' },
+                        { label: 'Web Scrape Radar', desc: 'YouTube, TikTok & Meta monitoring' },
+                        { label: 'DMCA Notice Studio', desc: '17 U.S.C. § 512 legal filings' },
+                        { label: 'Stripe Licensing Gate', desc: 'Automated settlement invoicing' },
+                        { label: 'Polygon L2 Provenance', desc: 'On-chain royalty ledger' }
+                      ].map((feat) => (
+                        <a
+                          key={feat.label}
+                          href="#features"
+                          onClick={() => setActiveTab('dashboard')}
+                          className="block px-3 py-2 rounded-md text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
+                        >
+                          <div className="font-bold text-slate-900">{feat.label}</div>
+                          <div className="text-[10px] text-slate-400 font-mono font-medium">{feat.desc}</div>
+                        </a>
+                      ))}
+                    </div>
                   )}
                 </div>
-              )}
-            </div>
 
-            {/* Admin Menu Item (Visible when logged in as Admin) */}
-            {isAdminUser && (
-              <button 
-                onClick={() => setActiveTab('admin')}
-                className={`relative py-2 transition-colors hover:text-[#0144e4] ${
-                  activeTab === 'admin' ? 'text-[#0144e4] font-semibold' : ''
-                }`}
-              >
-                <span>Admin</span>
-                {activeTab === 'admin' && (
-                  <span className="absolute bottom-[-4px] left-0 right-0 h-[2.5px] bg-[#0144e4] rounded-full" />
+                {/* Pricing */}
+                <a 
+                  href="#pricing" 
+                  onClick={() => setActiveTab('dashboard')} 
+                  className="hover:text-[#0144e4] transition-colors py-2"
+                >
+                  Pricing
+                </a>
+
+                {/* Blog */}
+                <button 
+                  onClick={() => setActiveTab('blog')} 
+                  className="hover:text-[#0144e4] transition-colors py-2"
+                >
+                  <span>Blog</span>
+                </button>
+
+                {/* About Dropdown */}
+                <div 
+                  className="relative py-2"
+                  onMouseEnter={() => setActiveDropdown('about')}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors">
+                    <span>About</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
+                  </button>
+
+                  {activeDropdown === 'about' && (
+                    <div className="absolute top-full left-0 w-56 bg-white border border-[#e9eaf0] rounded-lg shadow-xl p-2 space-y-1 z-50 animate-fadeIn text-left">
+                      {[
+                        { label: 'Statutory Compliance', desc: 'BIPA & DMCA 17 U.S.C. § 512' },
+                        { label: 'Developer API', desc: 'FastAPI REST Telemetry' },
+                        { label: 'Contact Counsel', desc: '24/7 Legal rights support' }
+                      ].map((item) => (
+                        <a
+                          key={item.label}
+                          href="#about"
+                          onClick={() => setActiveTab('dashboard')}
+                          className="block px-3 py-2 rounded-md text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
+                        >
+                          <div className="font-bold text-slate-900">{item.label}</div>
+                          <div className="text-[10px] text-slate-400 font-mono font-medium">{item.desc}</div>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Logged in view: Modules split across top horizontal menu into 3 grouped items */}
+                
+                {/* 1. Vault & Registries */}
+                <div 
+                  className="relative py-2"
+                  onMouseEnter={() => setActiveDropdown('group_vault')}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors">
+                    <Zap className="w-4 h-4 text-[#0144e4]" />
+                    <span>Vault & Registries</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
+                  </button>
+
+                  {activeDropdown === 'group_vault' && (
+                    <div className="absolute top-full left-0 w-72 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2.5 space-y-1 z-50 animate-fadeIn text-left">
+                      <div className="px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">
+                        Vault & Registries
+                      </div>
+                      {appSubmenus.filter(m => ['dashboard', 'biometrics', 'assets'].includes(m.id)).map((item) => {
+                        const Icon = item.icon;
+                        const isActive = activeTab === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => {
+                              setActiveTab(item.id);
+                              setActiveDropdown(null);
+                            }}
+                            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-all ${
+                              isActive
+                                ? 'bg-[#0144e4] text-white shadow-2xs'
+                                : 'text-slate-700 hover:bg-blue-50 hover:text-[#0144e4]'
+                            }`}
+                          >
+                            <div className="flex items-center space-x-2.5">
+                              <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#0144e4]'}`} />
+                              <div>
+                                <p className="font-extrabold text-xs">{item.label}</p>
+                                <p className={`text-[10px] font-mono ${isActive ? 'text-blue-100' : 'text-slate-400'}`}>
+                                  {item.desc}
+                                </p>
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* 2. Rights & Enforcement */}
+                <div 
+                  className="relative py-2"
+                  onMouseEnter={() => setActiveDropdown('group_rights')}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors">
+                    <Radar className="w-4 h-4 text-[#0144e4]" />
+                    <span>Rights & Enforcement</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
+                    {pendingClaimsCount > 0 && (
+                      <span className="px-1.5 py-0.2 text-[10px] font-extrabold bg-rose-500 text-white rounded-full">
+                        {pendingClaimsCount}
+                      </span>
+                    )}
+                  </button>
+
+                  {activeDropdown === 'group_rights' && (
+                    <div className="absolute top-full left-0 w-72 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2.5 space-y-1 z-50 animate-fadeIn text-left">
+                      <div className="px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">
+                        Protection & Enforcement
+                      </div>
+                      {appSubmenus.filter(m => ['detection', 'settlement', 'legal'].includes(m.id)).map((item) => {
+                        const Icon = item.icon;
+                        const isActive = activeTab === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => {
+                              setActiveTab(item.id);
+                              setActiveDropdown(null);
+                            }}
+                            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-all ${
+                              isActive
+                                ? 'bg-[#0144e4] text-white shadow-2xs'
+                                : 'text-slate-700 hover:bg-blue-50 hover:text-[#0144e4]'
+                            }`}
+                          >
+                            <div className="flex items-center space-x-2.5">
+                              <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#0144e4]'}`} />
+                              <div>
+                                <p className="font-extrabold text-xs">{item.label}</p>
+                                <p className={`text-[10px] font-mono ${isActive ? 'text-blue-100' : 'text-slate-400'}`}>
+                                  {item.desc}
+                                </p>
+                              </div>
+                            </div>
+                            {item.badge !== undefined && item.badge > 0 && (
+                              <span className="px-1.5 py-0.2 text-[10px] font-extrabold bg-rose-500 text-white rounded-full">
+                                {item.badge}
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* 3. Financials & Telemetry */}
+                <div 
+                  className="relative py-2"
+                  onMouseEnter={() => setActiveDropdown('group_financials')}
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors">
+                    <DollarSign className="w-4 h-4 text-[#0144e4]" />
+                    <span>Financials & Telemetry</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
+                  </button>
+
+                  {activeDropdown === 'group_financials' && (
+                    <div className="absolute top-full left-0 w-72 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2.5 space-y-1 z-50 animate-fadeIn text-left">
+                      <div className="px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">
+                        Financials & Analytics
+                      </div>
+                      {appSubmenus.filter(m => ['financials', 'webservices', 'blog'].includes(m.id)).map((item) => {
+                        const Icon = item.icon;
+                        const isActive = activeTab === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => {
+                              setActiveTab(item.id);
+                              setActiveDropdown(null);
+                            }}
+                            className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-all ${
+                              isActive
+                                ? 'bg-[#0144e4] text-white shadow-2xs'
+                                : 'text-slate-700 hover:bg-blue-50 hover:text-[#0144e4]'
+                            }`}
+                          >
+                            <div className="flex items-center space-x-2.5">
+                              <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#0144e4]'}`} />
+                              <div>
+                                <p className="font-extrabold text-xs">{item.label}</p>
+                                <p className={`text-[10px] font-mono ${isActive ? 'text-blue-100' : 'text-slate-400'}`}>
+                                  {item.desc}
+                                </p>
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Admin Menu Item (Visible when logged in as Admin) */}
+                {isAdminUser && (
+                  <button 
+                    onClick={() => setActiveTab('admin')}
+                    className="hover:text-[#0144e4] transition-colors py-2 flex items-center space-x-1.5"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-[#0144e4]" />
+                    <span>Admin</span>
+                  </button>
                 )}
-              </button>
+              </>
             )}
-
           </nav>
 
           {/* Right Header Actions (Exact Krazy Button & Search Icon Layout) */}
