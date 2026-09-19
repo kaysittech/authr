@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { loginApi, registerApi, verifyIdentityApi } from '../services/api';
 import { getDisciplineStrategy } from '../services/disciplineStrategies';
+import { signInWithGoogleFirebase } from '../firebase';
 
 export interface UserSession {
   id: string;
@@ -83,6 +84,34 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   // Google Sign-In Picker State
   const [showGooglePicker, setShowGooglePicker] = useState(false);
   const [customGoogleEmail, setCustomGoogleEmail] = useState('');
+
+  const handleDirectGoogleSignIn = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await signInWithGoogleFirebase();
+      const fbUser = res.user;
+      const oauthUser: UserSession = {
+        id: fbUser.uid,
+        email: fbUser.email || 'creator.google@authr.id',
+        fullName: fbUser.displayName || 'Google Verified Creator',
+        handle: `@${(fbUser.displayName || 'creator').toLowerCase().replace(/\s+/g, '_')}_authr`,
+        discipline: 'Musicians & Composers',
+        avatarUrl: fbUser.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+        token: await fbUser.getIdToken(),
+        kycStatus: 'verified',
+        idDocumentType: 'Google OAuth 2.0 Identity Token',
+        idMatchScore: 99.8
+      };
+      onLoginSuccess(oauthUser);
+      onClose();
+    } catch (err: any) {
+      console.info('Firebase popup fallback to picker', err);
+      setShowGooglePicker(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSelectGoogleAccount = (selectedEmail: string, selectedName: string) => {
     setIsLoading(true);
@@ -368,7 +397,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         <div className="space-y-3">
           <button
             type="button"
-            onClick={() => setShowGooglePicker(true)}
+            onClick={handleDirectGoogleSignIn}
             className="w-full py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-[#0144e4] text-xs font-bold flex items-center justify-center space-x-3 transition-all shadow-2xs hover:shadow-xs group"
           >
             <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">

@@ -21,6 +21,7 @@ import {
 import { ProtectedAsset } from '../types';
 import { UserSession } from './AuthModal';
 import { ingestAssetApi } from '../services/api';
+import { saveAssetToFirestore } from '../firebase';
 
 interface AssetProtectionProps {
   assets: ProtectedAsset[];
@@ -81,6 +82,9 @@ export const AssetProtection: React.FC<AssetProtectionProps> = ({
     setIsIngesting(true);
     try {
       const res = await ingestAssetApi(newTitle, newUrl || 'https://youtube.com/watch?v=registered_asset', newPlatform, newFile || undefined);
+      if (currentUser?.id) {
+        await saveAssetToFirestore(currentUser.id, res.asset);
+      }
       onAddAsset(res.asset);
       setSelectedAsset(res.asset);
       setIsRegisterModalOpen(false);
@@ -103,6 +107,9 @@ export const AssetProtection: React.FC<AssetProtectionProps> = ({
         createdAt: new Date().toISOString(),
         matchesCount: 0
       };
+      if (currentUser?.id) {
+        await saveAssetToFirestore(currentUser.id, fallbackAsset);
+      }
       onAddAsset(fallbackAsset);
       setSelectedAsset(fallbackAsset);
       setIsRegisterModalOpen(false);
