@@ -471,17 +471,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <span className="text-sm group-hover:text-[#0144e4]">Continue with Google</span>
           </button>
 
-          <div className="flex items-center space-x-2">
-            <button
-              type="button"
-              onClick={() => handleOAuthLogin('apple')}
-              className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center justify-center space-x-2 transition-all shadow-2xs font-mono"
-            >
-              <span className="text-base leading-none"></span>
-              <span>Sign in with Apple ID</span>
-            </button>
-          </div>
-
           <div className="relative flex items-center justify-center pt-2">
             <div className="border-t border-slate-200 w-full"></div>
             <span className="bg-white px-2.5 text-[10px] font-bold text-slate-400 uppercase font-mono tracking-wider absolute">Or Email &amp; Password</span>
