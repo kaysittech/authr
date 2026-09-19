@@ -473,37 +473,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             )}
 
-            {/* Search Toggle Icon (Solid Blue Magnifying Glass) */}
-            <div className="relative flex items-center">
-              {isSearchOpen ? (
-                <div className="flex items-center space-x-2 animate-fadeIn">
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search Vault..."
-                    className="px-3 py-1.5 text-xs border border-[#e9eaf0] rounded-md focus:outline-none focus:ring-2 focus:ring-[#0144e4] w-36 sm:w-44"
-                    autoFocus
-                  />
-                  <button 
-                    onClick={() => setIsSearchOpen(false)}
-                    className="p-1 text-slate-400 hover:text-slate-600"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setIsSearchOpen(true)}
-                  className="p-1 text-[#0144e4] hover:text-[#0038c7] transition-colors"
-                  title="Search"
-                  aria-label="Search"
-                >
-                  <Search className="w-5 h-5 stroke-[2.5]" />
-                </button>
-              )}
-            </div>
-
           </div>
 
         </div>
