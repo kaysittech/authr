@@ -484,33 +484,31 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   return (
     <div className="space-y-8 animate-fadeIn">
       
-      {/* Admin Panel Hero Header - BRIGHT LIGHT DESIGN */}
-      <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200/80 shadow-sm relative overflow-hidden text-slate-900">
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
-
+      {/* Admin Panel Hero Header - CLEAN BLUE & WHITE DESIGN */}
+      <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs relative overflow-hidden text-slate-900">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <div className="flex items-center space-x-3">
-              <span className="px-3 py-1 text-xs font-black uppercase tracking-widest bg-amber-400 text-slate-950 rounded-full flex items-center gap-1.5 font-mono shadow-xs">
+              <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-blue-50 text-[#0144e4] border border-blue-200/60 rounded-full flex items-center gap-1.5 shadow-xs">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                SUPERUSER ADMIN OPS
+                Admin Operations Portal
               </span>
-              <span className="text-xs text-slate-500 font-mono">Node #SW-ADMIN-PROD-01 • Mode: Superuser Master</span>
+              <span className="text-xs text-slate-400 font-medium">Node #SW-ADMIN-PROD-01 • Mode: Superuser</span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-3 font-display">
-              Independent Rights & Network Operations Panel
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-3 font-display">
+              Admin Dashboard
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl font-medium">
-              Global clearinghouse analytics, Government ID KYC approval queue, crawler swarm health, and biometric vector registry management.
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl font-normal">
+              Overview of system telemetry, creator vaults, content CMS, pricing plans, and security compliance.
             </p>
           </div>
 
           <div className="flex items-center space-x-3 self-start md:self-auto">
             <button
               onClick={() => { onSimulateScan(); showToast('Global Crawler Swarm Sweep Dispatched Across 1,420 Nodes!'); }}
-              className="px-5 py-3 rounded-2xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-md transition-all flex items-center space-x-2 whitespace-nowrap"
+              className="px-5 py-2.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-bold text-xs shadow-xs transition-all flex items-center space-x-2 whitespace-nowrap"
             >
-              <RefreshCw className="w-4 h-4 animate-spin text-white" />
+              <RefreshCw className="w-4 h-4 text-white" />
               <span>Trigger Global Crawler Sweep</span>
             </button>
           </div>
@@ -519,55 +517,55 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
       {/* Admin KPI Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Active Creator Vaults</span>
-            <div className="p-3 rounded-xl bg-amber-50 text-amber-700 border border-amber-200">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Creator Vaults</span>
+            <div className="p-2.5 rounded-xl bg-blue-50 text-[#0144e4] border border-blue-100">
               <Users className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-black text-slate-900 font-mono">8,942</div>
-            <p className="text-[11px] text-emerald-600 font-bold mt-1 font-mono">✓ 99.2% KYC Verified</p>
+            <div className="text-2xl font-extrabold text-slate-900">8,942</div>
+            <p className="text-xs text-emerald-600 font-semibold mt-1">✓ 99.2% KYC Verified</p>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Gross Volume Cleared</span>
-            <div className="p-3 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Gross Volume Cleared</span>
+            <div className="p-2.5 rounded-xl bg-blue-50 text-[#0144e4] border border-blue-100">
               <DollarSign className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-black text-emerald-700 font-mono">$1,248,920</div>
-            <p className="text-[11px] text-slate-500 mt-1 font-mono">Platform Fee (15%): $187,338</p>
+            <div className="text-2xl font-extrabold text-slate-900">$1,248,920</div>
+            <p className="text-xs text-slate-500 mt-1">Platform Fee (15%): $187,338</p>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Active Crawler Swarms</span>
-            <div className="p-3 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active Crawler Swarms</span>
+            <div className="p-2.5 rounded-xl bg-blue-50 text-[#0144e4] border border-blue-100">
               <Radar className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-black text-indigo-700 font-mono">1,420 Nodes</div>
-            <p className="text-[11px] text-indigo-600 font-bold mt-1 font-mono">● 0.04ms Latency Feed</p>
+            <div className="text-2xl font-extrabold text-slate-900">1,420 Nodes</div>
+            <p className="text-xs text-blue-600 font-semibold mt-1">● 0.04ms Latency Feed</p>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">BIPA & C2PA Compliance</span>
-            <div className="p-3 rounded-xl bg-purple-50 text-purple-700 border border-purple-200">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">BIPA & C2PA Compliance</span>
+            <div className="p-2.5 rounded-xl bg-blue-50 text-[#0144e4] border border-blue-100">
               <ShieldCheck className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-black text-purple-700 font-mono">100% Compliant</div>
-            <p className="text-[11px] text-slate-500 mt-1 font-mono">Zero Security Failures</p>
+            <div className="text-2xl font-extrabold text-slate-900">100% Compliant</div>
+            <p className="text-xs text-slate-500 mt-1">Zero Security Failures</p>
           </div>
         </div>
       </div>
@@ -579,11 +577,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           { id: 'pages', label: 'Page Content CMS (12)', icon: BookOpen },
           { id: 'pricing', label: 'Plans, Pricing & Trial Manager', icon: DollarSign },
           { id: 'users', label: 'Creator Vault & KYC Directory', icon: Users },
-          { id: 'matches', label: 'Infringement Clearinghouse Queue', icon: Scale },
-          { id: 'reviews', label: 'Customer Reviews & Testimonials', icon: MessageSquare },
-          { id: 'system', label: 'Crawler Swarms & Node Infrastructure', icon: Server },
+          { id: 'matches', label: 'Infringement Queue', icon: Scale },
+          { id: 'reviews', label: 'Customer Reviews', icon: MessageSquare },
+          { id: 'system', label: 'Crawler & Node Infrastructure', icon: Server },
           { id: 'webservices', label: 'Web Services Telemetry', icon: Server },
-          { id: 'audit', label: 'BIPA & Security Audit Log', icon: Lock }
+          { id: 'audit', label: 'Security & BIPA Audit Log', icon: Lock }
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeAdminTab === tab.id;
@@ -591,10 +589,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             <button
               key={tab.id}
               onClick={() => setActiveAdminTab(tab.id as any)}
-              className={`px-4 py-2.5 rounded-xl text-xs font-extrabold flex items-center space-x-2 transition-all whitespace-nowrap ${
+              className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all whitespace-nowrap ${
                 isActive
-                  ? 'bg-slate-900 text-white shadow-sm'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+                  ? 'bg-[#0144e4] text-white shadow-xs'
+                  : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50 hover:text-[#0144e4]'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -608,18 +606,18 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       {activeAdminTab === 'overview' && (
         <div className="space-y-6">
           {/* Admin Demo Account Selector Card */}
-          <div className="p-6 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-md space-y-4">
+          <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div className="flex items-center space-x-2.5">
-                <div className="w-9 h-9 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">
-                  <Zap className="w-5 h-5 fill-slate-950" />
+              <div className="flex items-center space-x-3">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0144e4] flex items-center justify-center font-bold border border-blue-100">
+                  <Zap className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-extrabold text-white">Admin Demo Accounts & Creator Simulator</h3>
-                  <p className="text-[11px] text-slate-400">Click any creator account to log in as that user and test their vault, registered works, and detection telemetry.</p>
+                  <h3 className="text-sm font-extrabold text-slate-900">Admin Demo Accounts & Creator Simulator</h3>
+                  <p className="text-xs text-slate-500">Click any creator account to log in as that user and test their vault, registered works, and telemetry.</p>
                 </div>
               </div>
-              <span className="text-[10px] font-mono font-bold px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 w-fit">
+              <span className="text-[10px] font-bold px-3 py-1 rounded-full bg-blue-50 text-[#0144e4] border border-blue-200/60 w-fit">
                 SITE ADMIN ACCESS ONLY
               </span>
             </div>
@@ -646,15 +644,15 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       showToast(`Switched session to Demo Creator: ${u.fullName}`);
                     }
                   }}
-                  className="p-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-700/90 border border-slate-700 text-left transition-all hover:scale-[1.01] flex items-center space-x-3 group"
+                  className="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50/50 border border-slate-200 hover:border-blue-300 text-left transition-all flex items-center space-x-3 group"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-extrabold text-xs shadow-sm flex-shrink-0">
+                  <div className="w-9 h-9 rounded-lg bg-[#0144e4] text-white flex items-center justify-center font-bold text-xs shadow-xs flex-shrink-0">
                     {u.fullName.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-bold text-white group-hover:text-amber-400 truncate">{u.fullName}</div>
-                    <div className="text-[10px] text-slate-400 font-mono truncate">{u.discipline}</div>
-                    <div className="text-[9px] text-amber-400 font-mono font-extrabold mt-0.5">⚡ Click to Test Vault</div>
+                    <div className="text-xs font-bold text-slate-900 group-hover:text-[#0144e4] truncate">{u.fullName}</div>
+                    <div className="text-[11px] text-slate-500 truncate">{u.discipline}</div>
+                    <div className="text-[10px] text-[#0144e4] font-bold mt-0.5">⚡ Click to Test Vault</div>
                   </div>
                 </button>
               ))}
@@ -662,109 +660,109 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-5">
+            <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-5">
               <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-              <div>
-                <h3 className="text-base font-extrabold text-slate-900">Clearinghouse Volume & Settlement Flow</h3>
-                <p className="text-xs text-slate-500">Real-time breakdown of automated DMCA licensing settlements across disciplines.</p>
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-900">Clearinghouse Volume & Settlement Flow</h3>
+                  <p className="text-xs text-slate-500">Real-time breakdown of automated DMCA licensing settlements across disciplines.</p>
+                </div>
+                <span className="px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full text-xs font-bold">
+                  98.4% Resolution Rate
+                </span>
               </div>
-              <span className="px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-full font-mono text-xs font-bold">
-                98.4% Resolution Rate
-              </span>
+
+              <div className="grid grid-cols-3 gap-4 pt-2">
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase block">Visual Art Settlements</span>
+                  <span className="text-lg font-extrabold text-slate-900">$482,100</span>
+                </div>
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase block">Voice & Acoustic Licensing</span>
+                  <span className="text-lg font-extrabold text-slate-900">$390,450</span>
+                </div>
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+                  <span className="text-[10px] text-slate-500 font-bold uppercase block">Music Master Stems</span>
+                  <span className="text-lg font-extrabold text-slate-900">$376,370</span>
+                </div>
+              </div>
+
+              <div className="p-5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">Superuser System Controls</span>
+                  <span className="text-[10px] text-emerald-600 font-bold">Node Status: HEALTHY</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                  <button
+                    onClick={() => showToast('Triggered full clearinghouse re-index sweep!')}
+                    className="px-3.5 py-2.5 rounded-xl bg-white hover:bg-blue-50/60 text-xs font-bold text-slate-700 hover:text-[#0144e4] border border-slate-200 hover:border-blue-300 shadow-xs flex items-center justify-center space-x-2 transition-all"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5 text-[#0144e4]" />
+                    <span>Flush Redis Cache</span>
+                  </button>
+                  <button
+                    onClick={() => showToast('Master Cryptographic C2PA Keys Rotated Successfully!')}
+                    className="px-3.5 py-2.5 rounded-xl bg-white hover:bg-blue-50/60 text-xs font-bold text-slate-700 hover:text-[#0144e4] border border-slate-200 hover:border-blue-300 shadow-xs flex items-center justify-center space-x-2 transition-all"
+                  >
+                    <Lock className="w-3.5 h-3.5 text-[#0144e4]" />
+                    <span>Rotate C2PA Keys</span>
+                  </button>
+                  <button
+                    onClick={() => showToast('Dispatched BIPA Statutory Compliance Audit across 8,942 accounts!')}
+                    className="px-3.5 py-2.5 rounded-xl bg-white hover:bg-blue-50/60 text-xs font-bold text-slate-700 hover:text-[#0144e4] border border-slate-200 hover:border-blue-300 shadow-xs flex items-center justify-center space-x-2 transition-all"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#0144e4]" />
+                    <span>Audit BIPA Logs</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 pt-2 font-mono">
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <span className="text-[10px] text-slate-400 font-bold uppercase block">Visual Art Settlements</span>
-                <span className="text-lg font-black text-slate-900">$482,100</span>
-              </div>
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <span className="text-[10px] text-slate-400 font-bold uppercase block">Voice & Acoustic Licensing</span>
-                <span className="text-lg font-black text-slate-900">$390,450</span>
-              </div>
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <span className="text-[10px] text-slate-400 font-bold uppercase block">Music Master Stems</span>
-                <span className="text-lg font-black text-slate-900">$376,370</span>
-              </div>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold text-amber-400 font-mono uppercase">Superuser Master System Controls</span>
-                <span className="text-[10px] text-slate-400 font-mono">Node Status: HEALTHY</span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                <button
-                  onClick={() => showToast('Triggered full clearinghouse re-index sweep!')}
-                  className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 border border-slate-700 flex items-center justify-center space-x-2"
-                >
-                  <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Flush Redis Cache</span>
-                </button>
-                <button
-                  onClick={() => showToast('Master Cryptographic C2PA Keys Rotated Successfully!')}
-                  className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 border border-slate-700 flex items-center justify-center space-x-2"
-                >
-                  <Lock className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Rotate C2PA Keys</span>
-                </button>
-                <button
-                  onClick={() => showToast('Dispatched BIPA Statutory Compliance Audit across 8,942 accounts!')}
-                  className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 border border-slate-700 flex items-center justify-center space-x-2"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-purple-400" />
-                  <span>Audit BIPA Logs</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Scrape Daemon & Crawler Cluster Controls */}
-          <div className="p-6 rounded-3xl bg-slate-900 text-white space-y-4 shadow-sm border border-slate-800">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+            {/* Scrape Daemon & Crawler Cluster Controls */}
+            <div className="p-6 rounded-2xl bg-white border border-slate-200/80 text-slate-900 space-y-4 shadow-xs">
+              <div className="flex flex-col justify-between gap-3 pb-3 border-b border-slate-200">
                 <div>
                   <div className="flex items-center space-x-2">
-                    <Radar className="w-5 h-5 text-amber-400 animate-pulse" />
-                    <h3 className="text-base font-extrabold text-white">Global Background Scrape Daemon Controls</h3>
+                    <Radar className="w-5 h-5 text-[#0144e4]" />
+                    <h3 className="text-base font-extrabold text-slate-900">Background Scrape Controls</h3>
                   </div>
-                  <p className="text-xs text-slate-400 font-mono mt-0.5">
-                    Configures automated cron scrape interval for 1,420 distributed crawler nodes across YouTube, TikTok & LLM datasets.
+                  <p className="text-xs text-slate-500 mt-1">
+                    Configures automated cron scrape interval for 1,420 distributed crawler nodes.
                   </p>
                 </div>
 
                 <div className="flex items-center space-x-2">
-                  <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/40">
-                    ● Daemon Running (Interval: 6 Hours)
+                  <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+                    ● Daemon Active (6 Hours)
                   </span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+              <div className="grid grid-cols-1 gap-2.5">
                 <button
                   onClick={() => showToast('Scrape Daemon frequency set to Every 1 Hour')}
-                  className="p-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 border border-slate-700 text-left space-y-1 transition-all"
+                  className="p-3 rounded-xl bg-slate-50 hover:bg-blue-50/40 text-xs font-bold text-slate-700 border border-slate-200 hover:border-blue-300 text-left space-y-1 transition-all"
                 >
-                  <span className="text-[10px] text-amber-400 uppercase font-mono block font-bold">Ultra High Frequency</span>
-                  <span className="text-sm font-extrabold block">Every 1 Hour</span>
-                  <span className="text-[10px] text-slate-400 block font-normal">High System Bandwidth</span>
+                  <span className="text-[10px] text-slate-500 uppercase font-semibold block">Ultra High Frequency</span>
+                  <span className="text-sm font-extrabold block text-slate-900">Every 1 Hour</span>
+                  <span className="text-[10px] text-slate-500 block font-normal">High System Bandwidth</span>
                 </button>
 
                 <button
                   onClick={() => showToast('Scrape Daemon frequency set to Every 6 Hours (Default)')}
-                  className="p-3 rounded-2xl bg-[#0144e4] text-white border border-blue-600 text-left space-y-1 font-extrabold shadow-sm transition-all"
+                  className="p-3 rounded-xl bg-[#0144e4] text-white border border-[#0144e4] text-left space-y-1 font-bold shadow-xs transition-all"
                 >
-                  <span className="text-[10px] text-blue-100 uppercase font-mono block font-extrabold">Recommended (Active)</span>
-                  <span className="text-sm font-black block">Every 6 Hours</span>
-                  <span className="text-[10px] text-blue-100 block font-semibold">Balanced Node Performance</span>
+                  <span className="text-[10px] text-blue-100 uppercase font-semibold block">Recommended (Active)</span>
+                  <span className="text-sm font-extrabold block">Every 6 Hours</span>
+                  <span className="text-[10px] text-blue-100 block font-normal">Balanced Node Performance</span>
                 </button>
 
                 <button
                   onClick={() => showToast('Scrape Daemon frequency set to Every 12 Hours')}
-                  className="p-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 border border-slate-700 text-left space-y-1 transition-all"
+                  className="p-3 rounded-xl bg-slate-50 hover:bg-blue-50/40 text-xs font-bold text-slate-700 border border-slate-200 hover:border-blue-300 text-left space-y-1 transition-all"
                 >
-                  <span className="text-[10px] text-amber-400 uppercase font-mono block font-bold">Standard Frequency</span>
-                  <span className="text-sm font-extrabold block">Every 12 Hours</span>
-                  <span className="text-[10px] text-slate-400 block font-normal">Eco Mode Crawl</span>
+                  <span className="text-[10px] text-slate-500 uppercase font-semibold block">Standard Frequency</span>
+                  <span className="text-sm font-extrabold block text-slate-900">Every 12 Hours</span>
+                  <span className="text-[10px] text-slate-500 block font-normal">Eco Mode Crawl</span>
                 </button>
 
                 <button
@@ -772,42 +770,42 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     onSimulateScan();
                     showToast('Emergency Swarm Scrape Job Dispatched across 1,420 Nodes!');
                   }}
-                  className="p-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-500 text-left space-y-1 shadow-sm transition-all"
+                  className="p-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0144e4] border border-blue-200 text-left space-y-1 shadow-xs transition-all"
                 >
-                  <span className="text-[10px] text-indigo-200 uppercase font-mono block font-bold">Emergency Trigger</span>
+                  <span className="text-[10px] text-[#0144e4] uppercase font-semibold block">Emergency Trigger</span>
                   <span className="text-sm font-extrabold block flex items-center space-x-1">
-                    <Zap className="w-4 h-4 text-amber-400" />
+                    <Zap className="w-4 h-4 text-[#0144e4]" />
                     <span>Run Full Sweep</span>
                   </span>
-                  <span className="text-[10px] text-indigo-200 block font-normal">Immediate Redis Job Queue</span>
+                  <span className="text-[10px] text-blue-700 block font-normal">Immediate Redis Job Queue</span>
                 </button>
               </div>
             </div>
+          </div>
 
-          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+          <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
             <h3 className="text-base font-extrabold text-slate-900">Platform Health & Swarm Metrics</h3>
-            <div className="space-y-3 font-mono text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-                <span className="text-slate-500 font-bold">PostgreSQL Main DB:</span>
+                <span className="text-slate-600 font-semibold">PostgreSQL Main DB:</span>
                 <span className="text-emerald-700 font-bold">● Connected (1.2ms)</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-                <span className="text-slate-500 font-bold">Faiss Vector Index:</span>
-                <span className="text-emerald-700 font-bold">● 4.2M Vectors Loaded</span>
+                <span className="text-slate-600 font-semibold">Faiss Vector Index:</span>
+                <span className="text-emerald-700 font-bold">● 4.2M Vectors</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-                <span className="text-slate-500 font-bold">C2PA Signature Engine:</span>
+                <span className="text-slate-600 font-semibold">C2PA Signature Engine:</span>
                 <span className="text-emerald-700 font-bold">● Active (HSM-v2)</span>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between">
-                <span className="text-slate-500 font-bold">BIPA Verification Node:</span>
+                <span className="text-slate-600 font-semibold">BIPA Verification Node:</span>
                 <span className="text-emerald-700 font-bold">● Operational</span>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
 
       {/* ---------------- ADMIN TAB: PAGE CONTENT MANAGEMENT (CMS) ---------------- */}
       {activeAdminTab === 'pages' && (
@@ -953,9 +951,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     </button>
                     <button
                       onClick={() => setEditingCareerRoleModal({ ...job })}
-                      className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center space-x-1"
+                      className="px-3 py-1.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-bold text-xs flex items-center space-x-1"
                     >
-                      <Edit3 className="w-3.5 h-3.5 text-amber-400" />
+                      <Edit3 className="w-3.5 h-3.5 text-white" />
                       <span>Edit Role</span>
                     </button>
                   </div>
@@ -986,9 +984,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               <div className="flex items-center space-x-2">
                 <button
                   onClick={handleAddHeroStat}
-                  className="px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-sm transition-all flex items-center space-x-1.5"
+                  className="px-3.5 py-2.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center space-x-1.5"
                 >
-                  <Plus className="w-4 h-4 text-amber-400" />
+                  <Plus className="w-4 h-4 text-white" />
                   <span>Add Metric Card</span>
                 </button>
 
@@ -1206,9 +1204,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     features: ['New Feature 1', 'New Feature 2'],
                     buttonText: 'Choose plan'
                   })}
-                  className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-sm transition-all flex items-center space-x-2"
+                  className="px-4 py-2.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center space-x-2"
                 >
-                  <Plus className="w-4 h-4 text-amber-400" />
+                  <Plus className="w-4 h-4 text-white" />
                   <span>Add New Plan</span>
                 </button>
               </div>
@@ -1290,19 +1288,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
             {/* Global Take-Rate & Add-on Controls */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              <div className="p-5 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2">
-                <span className="text-[11px] font-bold text-amber-900 font-mono uppercase block">App Platform Commission Fee</span>
+              <div className="p-5 rounded-2xl bg-blue-50/70 border border-blue-200 space-y-2">
+                <span className="text-[11px] font-bold text-blue-900 uppercase block">App Platform Commission Fee</span>
                 <div className="flex items-center space-x-2">
                   <input
                     type="number"
                     step="0.5"
                     value={platformTakeRate}
                     onChange={(e) => setPlatformTakeRate(parseFloat(e.target.value) || 0)}
-                    className="w-24 bg-white border border-amber-300 rounded-xl px-3 py-2 text-sm font-black font-mono text-slate-900 focus:outline-none focus:border-amber-500"
+                    className="w-24 bg-white border border-blue-300 rounded-xl px-3 py-2 text-sm font-extrabold text-slate-900 focus:outline-none focus:border-[#0144e4]"
                   />
-                  <span className="text-sm font-black font-mono text-amber-900">%</span>
+                  <span className="text-sm font-bold text-[#0144e4]">%</span>
                 </div>
-                <p className="text-[10px] text-amber-800 font-medium">Applied to gross settlement claims & license clearings.</p>
+                <p className="text-[10px] text-slate-500 font-medium">Applied to gross settlement claims & license clearings.</p>
               </div>
 
               <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
@@ -1433,26 +1431,26 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             {/* Live Commission Revenue Calculator Box */}
-            <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-3 font-mono">
+            <div className="p-5 rounded-2xl bg-blue-50/80 border border-blue-200 text-slate-900 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold text-amber-400 uppercase tracking-widest">Live Platform Revenue Split Model</span>
-                <span className="text-[10px] text-slate-400">Current App Take Rate: {platformTakeRate}%</span>
+                <span className="text-xs font-extrabold text-[#0144e4] uppercase tracking-wider">Live Platform Revenue Split Model</span>
+                <span className="text-[11px] text-slate-500 font-medium">Current App Take Rate: {platformTakeRate}%</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1 text-xs">
-                <div className="p-3.5 rounded-xl bg-slate-800 border border-slate-700 space-y-1">
-                  <span className="text-[10px] text-slate-400 uppercase font-bold block">Gross Volume Cleared</span>
-                  <span className="text-lg font-black text-white">$1,248,920.00</span>
+                <div className="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
+                  <span className="text-[10px] text-slate-500 uppercase font-bold block">Gross Volume Cleared</span>
+                  <span className="text-lg font-extrabold text-slate-900">$1,248,920.00</span>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-1">
-                  <span className="text-[10px] text-amber-400 uppercase font-bold block">App Take-Rate Revenue ({platformTakeRate}%)</span>
-                  <span className="text-lg font-black text-amber-400">${(1248920 * (platformTakeRate / 100)).toFixed(2)}</span>
+                <div className="p-3.5 rounded-xl bg-white border border-blue-200 space-y-1 shadow-2xs">
+                  <span className="text-[10px] text-[#0144e4] uppercase font-bold block">App Take-Rate Revenue ({platformTakeRate}%)</span>
+                  <span className="text-lg font-extrabold text-[#0144e4]">${(1248920 * (platformTakeRate / 100)).toFixed(2)}</span>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 space-y-1">
-                  <span className="text-[10px] text-emerald-400 uppercase font-bold block">Net Creator Payout ({(100 - platformTakeRate).toFixed(1)}%)</span>
-                  <span className="text-lg font-black text-emerald-400">${(1248920 * (1 - (platformTakeRate / 100))).toFixed(2)}</span>
+                <div className="p-3.5 rounded-xl bg-white border border-emerald-200 space-y-1 shadow-2xs">
+                  <span className="text-[10px] text-emerald-700 uppercase font-bold block">Net Creator Payout ({(100 - platformTakeRate).toFixed(1)}%)</span>
+                  <span className="text-lg font-extrabold text-emerald-700">${(1248920 * (1 - (platformTakeRate / 100))).toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -1539,9 +1537,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     joinedDate: new Date().toISOString().split('T')[0],
                     bipaHash: `bipa_hash_0x${Date.now()}_vector`
                   })}
-                  className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-sm transition-all flex items-center space-x-1.5"
+                  className="px-4 py-2 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center space-x-1.5"
                 >
-                  <Plus className="w-4 h-4 text-amber-400" />
+                  <Plus className="w-4 h-4 text-white" />
                   <span>Add New User</span>
                 </button>
               </div>
@@ -1556,7 +1554,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   placeholder="Search by full name, email, or handle..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-900 focus:border-amber-400 focus:outline-none font-sans"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-900 focus:border-[#0144e4] focus:outline-none font-sans"
                 />
               </div>
 
@@ -1834,9 +1832,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
             <button
               onClick={() => showToast('All 1,420 Crawler Swarm Nodes restarted!')}
-              className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2"
+              className="px-4 py-2 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
+              <RefreshCw className="w-3.5 h-3.5 text-white" />
               <span>Restart Swarms</span>
             </button>
           </div>
@@ -1885,7 +1883,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 <div>
                   <div className="flex items-center space-x-2">
                     <span className="text-[10px] text-slate-400">{log.time}</span>
-                    <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-slate-900 text-amber-400">{log.event}</span>
+                    <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-50 text-[#0144e4] border border-blue-200">{log.event}</span>
                     <span className="text-slate-800 font-bold">{log.user}</span>
                   </div>
                   <p className="text-slate-600 text-[11px] mt-1">{log.detail}</p>
@@ -2137,9 +2135,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   category: 'Legal',
                   image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80'
                 })}
-                className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-md transition-all flex items-center space-x-2"
+                className="px-5 py-2.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-md transition-all flex items-center space-x-2"
               >
-                <Plus className="w-4 h-4 text-amber-400" />
+                <Plus className="w-4 h-4 text-white" />
                 <span>Create New Article</span>
               </button>
             </div>
@@ -2156,7 +2154,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       alt={article.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute top-3 left-3 bg-slate-900/90 backdrop-blur-xs text-white text-[10px] font-extrabold uppercase font-mono px-2.5 py-1 rounded-md">
+                    <div className="absolute top-3 left-3 bg-[#0144e4] text-white text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-md shadow-xs">
                       {article.category}
                     </div>
                   </div>
@@ -2211,7 +2209,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           <div className="relative w-full max-w-2xl bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-2xl space-y-5 my-auto">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <div className="flex items-center space-x-2.5">
-                <div className="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-600 flex items-center justify-center font-bold border border-amber-300">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0144e4] flex items-center justify-center font-bold border border-blue-100">
                   <BookOpen className="w-5 h-5 text-slate-900" />
                 </div>
                 <h3 className="text-base font-extrabold text-slate-900">
@@ -2331,7 +2329,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                 <button
                   type="submit"
-                  className="flex-1 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center space-x-1.5"
+                  className="flex-1 py-3 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center space-x-1.5"
                 >
                   <span>Publish Article</span>
                 </button>
@@ -2740,7 +2738,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
             <button
               onClick={() => setSelectedUserDocModal(null)}
-              className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-xs"
+              className="w-full py-2.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-xs"
             >
               Close Inspection Window
             </button>
@@ -2828,9 +2826,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                         sections: [...editingPageModal.sections, newSec]
                       });
                     }}
-                    className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center space-x-1"
+                    className="px-3 py-1.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-bold text-xs flex items-center space-x-1"
                   >
-                    <Plus className="w-3.5 h-3.5 text-amber-400" />
+                    <Plus className="w-3.5 h-3.5 text-white" />
                     <span>Add Section</span>
                   </button>
                 </div>
@@ -2950,7 +2948,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             <div className="pt-4 border-t border-slate-200 text-right">
               <button
                 onClick={() => setPreviewPageModal(null)}
-                className="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-extrabold text-xs"
+                className="px-5 py-2.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs"
               >
                 Close Preview
               </button>
@@ -3060,8 +3058,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
       {/* Admin Toast Message */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-slate-900 text-white shadow-2xl font-bold text-xs flex items-center space-x-3 animate-fadeIn border border-slate-700">
-          <ShieldCheck className="w-5 h-5 text-amber-400 flex-shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 p-4 rounded-2xl bg-[#0144e4] text-white shadow-2xl font-bold text-xs flex items-center space-x-3 animate-fadeIn border border-blue-500">
+          <ShieldCheck className="w-5 h-5 text-white flex-shrink-0" />
           <span>{toastMessage}</span>
           <button onClick={() => setToastMessage(null)} className="text-slate-400 hover:text-white font-bold ml-2">✕</button>
         </div>
