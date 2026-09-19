@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sidebar } from './components/Sidebar';
+import { Navbar } from './components/Navbar';
 import { Dashboard } from './components/Dashboard';
 import { LikenessRegistry } from './components/LikenessRegistry';
 import { AssetProtection } from './components/AssetProtection';
@@ -187,10 +187,10 @@ export function App() {
   const pendingClaimsCount = claims.filter(c => c.status === 'pending').length;
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col md:flex-row antialiased selection:bg-amber-100 selection:text-amber-900">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col antialiased selection:bg-blue-100 selection:text-blue-900">
       
-      {/* Navigation Left Sidebar */}
-      <Sidebar
+      {/* Top Main Menu Navbar */}
+      <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         policyMode={policyMode}
@@ -200,7 +200,6 @@ export function App() {
         onOpenAuthModal={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
         onSelectDiscipline={handleSelectDiscipline}
-        onOpenUpgradeModal={() => setActiveTab('dashboard')}
       />
 
       {/* Main Canvas View */}
