@@ -252,7 +252,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
-            {/* Vault / App Main Menu Submenu Dropdown */}
+            {/* Modules Main Menu Submenu Dropdown */}
             <div 
               className="relative py-2"
               onMouseEnter={() => setActiveDropdown('vault_menu')}
@@ -260,7 +260,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors text-[#0144e4] font-bold">
                 <Layers className="w-4 h-4 text-[#0144e4]" />
-                <span>Vault Modules</span>
+                <span>Modules</span>
                 <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
                 {pendingClaimsCount > 0 && (
                   <span className="px-1.5 py-0.2 text-[10px] font-extrabold bg-rose-500 text-white rounded-full">
@@ -272,7 +272,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {activeDropdown === 'vault_menu' && (
                 <div className="absolute top-full left-0 w-72 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2.5 space-y-1 z-50 animate-fadeIn text-left">
                   <div className="px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">
-                    Select Vault Module
+                    Select Module
                   </div>
                   {appSubmenus.map((item) => {
                     const Icon = item.icon;
@@ -510,7 +510,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         }}
                         className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-between"
                       >
-                        <span>Vault Dashboard</span>
+                        <span>Dashboard</span>
                         <Zap className="w-3.5 h-3.5 text-slate-400" />
                       </button>
 
