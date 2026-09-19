@@ -26,9 +26,6 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
             </div>
             <div className="flex items-center space-x-1.5">
               <span className="text-2xl font-extrabold tracking-tight text-slate-900 font-display">Authr</span>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#0144e4] bg-blue-50 px-2 py-0.5 rounded font-mono border border-blue-100">
-                Krazy Theme
-              </span>
             </div>
           </div>
 
