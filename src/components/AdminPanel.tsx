@@ -69,6 +69,8 @@ interface AdminPanelProps {
   onResolveMatch?: (id: string, action?: 'approve' | 'reject') => void;
   onSimulateScan?: () => void;
   onSwitchDemoUser?: (userSession: any) => void;
+  activeAdminTab?: string;
+  setActiveAdminTab?: (tab: any) => void;
 }
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -76,9 +78,15 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   claims,
   onResolveMatch = () => {},
   onSimulateScan = () => {},
-  onSwitchDemoUser
+  onSwitchDemoUser,
+  activeAdminTab: propsActiveAdminTab,
+  setActiveAdminTab: propsSetActiveAdminTab
 }) => {
-  const [activeAdminTab, setActiveAdminTab] = useState<'overview' | 'pages' | 'pricing' | 'users' | 'matches' | 'system' | 'webservices' | 'audit' | 'reviews' | 'blog_posts'>('overview');
+  const [internalAdminTab, setInternalAdminTab] = useState<'overview' | 'pages' | 'pricing' | 'users' | 'matches' | 'system' | 'webservices' | 'audit' | 'reviews' | 'blog_posts'>('overview');
+  
+  const activeAdminTab = propsActiveAdminTab || internalAdminTab;
+  const setActiveAdminTab = propsSetActiveAdminTab || setInternalAdminTab;
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedKycFilter, setSelectedKycFilter] = useState<string>('all');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -568,38 +576,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             <p className="text-xs text-slate-500 mt-1">Zero Security Failures</p>
           </div>
         </div>
-      </div>
-
-      {/* Admin Operations Sub-Navigation */}
-      <div className="flex items-center space-x-2 border-b border-slate-200 pb-3 overflow-x-auto">
-        {[
-          { id: 'overview', label: 'Platform Overview & Ops', icon: Activity },
-          { id: 'pages', label: 'Page Content CMS (12)', icon: BookOpen },
-          { id: 'pricing', label: 'Plans, Pricing & Trial Manager', icon: DollarSign },
-          { id: 'users', label: 'Creator Vault & KYC Directory', icon: Users },
-          { id: 'matches', label: 'Infringement Queue', icon: Scale },
-          { id: 'reviews', label: 'Customer Reviews', icon: MessageSquare },
-          { id: 'system', label: 'Crawler & Node Infrastructure', icon: Server },
-          { id: 'webservices', label: 'Web Services Telemetry', icon: Server },
-          { id: 'audit', label: 'Security & BIPA Audit Log', icon: Lock }
-        ].map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeAdminTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveAdminTab(tab.id as any)}
-              className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all whitespace-nowrap ${
-                isActive
-                  ? 'bg-[#0144e4] text-white shadow-xs'
-                  : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50 hover:text-[#0144e4]'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
       </div>
 
       {/* ---------------- ADMIN TAB 1: OVERVIEW & SYSTEM OPS ---------------- */}

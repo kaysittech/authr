@@ -38,6 +38,7 @@ import { seedDefaultAdminsInFirestore } from './firebase';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<string>('dashboard');
+  const [activeAdminTab, setActiveAdminTab] = useState<string>('overview');
   const [policyMode, setPolicyMode] = useState<PolicyMode>('micro_monetization');
 
   // Scroll to top of page on activeTab change
@@ -203,6 +204,8 @@ export function App() {
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        activeAdminTab={activeAdminTab}
+        setActiveAdminTab={setActiveAdminTab}
         policyMode={policyMode}
         setPolicyMode={setPolicyMode}
         pendingClaimsCount={pendingClaimsCount}
@@ -347,6 +350,8 @@ export function App() {
               <AdminPanel
                 matches={matches}
                 claims={claims}
+                activeAdminTab={activeAdminTab}
+                setActiveAdminTab={setActiveAdminTab}
                 onResolveMatch={(id) => {
                   setMatches(matches.map(m => m.id === id ? { ...m, status: 'resolved' } : m));
                 }}

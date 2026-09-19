@@ -26,7 +26,10 @@ import {
   BookOpen,
   X,
   ArrowLeft,
-  Settings
+  Settings,
+  Activity,
+  Users,
+  MessageSquare
 } from 'lucide-react';
 import { PolicyMode } from '../types';
 import { UserSession } from './AuthModal';
@@ -34,6 +37,8 @@ import { UserSession } from './AuthModal';
 interface NavbarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  activeAdminTab?: string;
+  setActiveAdminTab?: (tab: string) => void;
   policyMode: PolicyMode;
   setPolicyMode: (mode: PolicyMode) => void;
   pendingClaimsCount: number;
@@ -46,6 +51,8 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   setActiveTab,
+  activeAdminTab = 'overview',
+  setActiveAdminTab,
   policyMode,
   setPolicyMode,
   pendingClaimsCount,
@@ -57,6 +64,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const currentAdminTab = activeAdminTab;
 
   const disc = currentUser?.discipline || '';
   const isLikenessAndVoice = disc.includes('Likeness') || disc === '';
@@ -170,13 +178,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <p className="text-[10px] text-slate-400 font-mono truncate">{currentUser.handle}</p>
               </div>
               {isAdminUser && (
-                <span className="px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-mono text-[9px] font-black uppercase flex-shrink-0">
+                <span className="px-1.5 py-0.5 rounded bg-blue-50 text-[#0144e4] font-mono text-[9px] font-black uppercase flex-shrink-0 border border-blue-200">
                   ADMIN
                 </span>
               )}
             </div>
 
-            {/* Licensing Policy Options (Moved under Profile Menu) */}
+            {/* Licensing Policy Options */}
             <div className="space-y-1.5">
               <div className="px-1 text-[9px] font-extrabold uppercase tracking-wider text-slate-400 font-mono">
                 Licensing Policy Mode
@@ -241,10 +249,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               {isAdminUser && (
                 <button
                   onClick={() => handleTabSelect('admin')}
-                  className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-amber-700 hover:bg-amber-50 transition-colors flex items-center justify-between"
+                  className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-[#0144e4] hover:bg-blue-50 transition-colors flex items-center justify-between"
                 >
                   <span>Admin Portal</span>
-                  <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#0144e4]" />
                 </button>
               )}
             </div>
@@ -268,36 +276,216 @@ export const Navbar: React.FC<NavbarProps> = ({
     );
   };
 
-  // DEDICATED ADMIN HEADER (Hides main site menu, shows Back to Site button + Admin logo)
+  // DEDICATED ADMIN HEADER WITH TOP MENU BAR DROPDOWNS
   if (activeTab === 'admin') {
     return (
       <header className="sticky top-0 z-50 bg-white border-b border-[#e9eaf0] shadow-2xs font-sans">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             
-            {/* Left: Back to Site Pill Button & Admin Title */}
+            {/* Left: Back to Site Pill Button & Logo */}
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => handleTabSelect('dashboard')}
-                className="px-4 py-2.5 rounded-full border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-xs transition-all flex items-center space-x-2 shadow-2xs group"
+                className="px-4 py-2 rounded-full border border-slate-300 hover:border-[#0144e4] bg-white hover:bg-blue-50/50 text-slate-800 hover:text-[#0144e4] font-bold text-xs transition-all flex items-center space-x-1.5 shadow-2xs group"
               >
-                <ArrowLeft className="w-4 h-4 text-slate-700 group-hover:-translate-x-0.5 transition-transform" />
+                <ArrowLeft className="w-3.5 h-3.5 text-slate-600 group-hover:text-[#0144e4] group-hover:-translate-x-0.5 transition-transform" />
                 <span>Back to Site</span>
               </button>
 
-              <div className="h-6 w-[1px] bg-slate-200" />
+              <div className="h-6 w-[1px] bg-slate-200 hidden sm:block" />
 
-              <div className="flex items-center space-x-2.5">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#0144e4] flex items-center justify-center border border-blue-100 shadow-2xs">
-                  <Settings className="w-5 h-5" />
+              <div className="hidden sm:flex items-center space-x-2">
+                <div className="w-8 h-8 rounded-lg bg-[#0144e4] text-white flex items-center justify-center font-bold shadow-xs">
+                  <ShieldCheck className="w-5 h-5 stroke-[2.5]" />
                 </div>
-                <span className="text-xl font-extrabold text-slate-900 tracking-tight font-display">
-                  Admin
+                <span className="text-xl font-extrabold text-slate-900 tracking-tight font-display flex items-center space-x-1.5">
+                  <span>Authr</span>
+                  <span className="text-[#0144e4] text-xs font-bold px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 font-sans">Admin</span>
                 </span>
               </div>
             </div>
 
-            {/* Right: Logged In Admin Profile & Sign Out */}
+            {/* Middle: 3 Grouped Top Menu Bar Dropdowns matching Home Page Header Style */}
+            <nav className="hidden lg:flex items-center space-x-6 text-[15px] font-medium text-slate-800">
+              
+              {/* 1. Operations & Security */}
+              <div 
+                className="relative py-2"
+                onMouseEnter={() => setActiveDropdown('admin_ops')}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                <button 
+                  onClick={() => setActiveDropdown(activeDropdown === 'admin_ops' ? null : 'admin_ops')}
+                  className={`flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors py-2 font-bold text-sm ${
+                    ['overview', 'matches', 'audit'].includes(currentAdminTab) ? 'text-[#0144e4]' : 'text-slate-800'
+                  }`}
+                >
+                  <Activity className="w-4 h-4 text-[#0144e4]" />
+                  <span>Operations & Security</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
+                </button>
+
+                {activeDropdown === 'admin_ops' && (
+                  <div className="absolute top-full left-0 w-72 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2.5 space-y-1 z-50 animate-fadeIn text-left">
+                    <div className="px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">
+                      Operations & Security
+                    </div>
+                    {[
+                      { id: 'overview', label: 'Platform Overview & Ops', icon: Activity, desc: 'Master telemetry & node status' },
+                      { id: 'matches', label: 'Infringement Clearinghouse', icon: Scale, desc: 'Flagged scrapes & DMCA claims' },
+                      { id: 'audit', label: 'Security & BIPA Audit Log', icon: Lock, desc: 'Immutable compliance ledger' }
+                    ].map((item) => {
+                      const Icon = item.icon;
+                      const isActive = currentAdminTab === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            if (setActiveAdminTab) setActiveAdminTab(item.id);
+                            setActiveDropdown(null);
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-all ${
+                            isActive
+                              ? 'bg-[#0144e4] text-white shadow-2xs'
+                              : 'text-slate-700 hover:bg-blue-50 hover:text-[#0144e4]'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2.5">
+                            <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#0144e4]'}`} />
+                            <div>
+                              <p className="font-extrabold text-xs">{item.label}</p>
+                              <p className={`text-[10px] font-mono ${isActive ? 'text-blue-100' : 'text-slate-400'}`}>
+                                {item.desc}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* 2. CMS & Commercial */}
+              <div 
+                className="relative py-2"
+                onMouseEnter={() => setActiveDropdown('admin_cms')}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                <button 
+                  onClick={() => setActiveDropdown(activeDropdown === 'admin_cms' ? null : 'admin_cms')}
+                  className={`flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors py-2 font-bold text-sm ${
+                    ['pages', 'pricing', 'reviews'].includes(currentAdminTab) ? 'text-[#0144e4]' : 'text-slate-800'
+                  }`}
+                >
+                  <BookOpen className="w-4 h-4 text-[#0144e4]" />
+                  <span>CMS & Commercial</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
+                </button>
+
+                {activeDropdown === 'admin_cms' && (
+                  <div className="absolute top-full left-0 w-72 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2.5 space-y-1 z-50 animate-fadeIn text-left">
+                    <div className="px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">
+                      CMS & Commercial
+                    </div>
+                    {[
+                      { id: 'pages', label: 'Page Content CMS', icon: BookOpen, desc: 'Manage landing & career content' },
+                      { id: 'pricing', label: 'Plans & Pricing Manager', icon: DollarSign, desc: 'Subscription tiers & take-rate' },
+                      { id: 'reviews', label: 'Customer Reviews', icon: MessageSquare, desc: 'Testimonials & case studies' }
+                    ].map((item) => {
+                      const Icon = item.icon;
+                      const isActive = currentAdminTab === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            if (setActiveAdminTab) setActiveAdminTab(item.id);
+                            setActiveDropdown(null);
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-all ${
+                            isActive
+                              ? 'bg-[#0144e4] text-white shadow-2xs'
+                              : 'text-slate-700 hover:bg-blue-50 hover:text-[#0144e4]'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2.5">
+                            <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#0144e4]'}`} />
+                            <div>
+                              <p className="font-extrabold text-xs">{item.label}</p>
+                              <p className={`text-[10px] font-mono ${isActive ? 'text-blue-100' : 'text-slate-400'}`}>
+                                {item.desc}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* 3. Users & Infrastructure */}
+              <div 
+                className="relative py-2"
+                onMouseEnter={() => setActiveDropdown('admin_users')}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                <button 
+                  onClick={() => setActiveDropdown(activeDropdown === 'admin_users' ? null : 'admin_users')}
+                  className={`flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors py-2 font-bold text-sm ${
+                    ['users', 'system', 'webservices'].includes(currentAdminTab) ? 'text-[#0144e4]' : 'text-slate-800'
+                  }`}
+                >
+                  <Users className="w-4 h-4 text-[#0144e4]" />
+                  <span>Users & Infrastructure</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
+                </button>
+
+                {activeDropdown === 'admin_users' && (
+                  <div className="absolute top-full left-0 w-72 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2.5 space-y-1 z-50 animate-fadeIn text-left">
+                    <div className="px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">
+                      Users & Infrastructure
+                    </div>
+                    {[
+                      { id: 'users', label: 'Creator Vault & Directory', icon: Users, desc: 'Accounts & KYC approvals' },
+                      { id: 'system', label: 'Crawler & Swarm Nodes', icon: Server, desc: '1,420 distributed scrapers' },
+                      { id: 'webservices', label: 'Web Services Telemetry', icon: Radar, desc: 'API endpoints & diagnostics' }
+                    ].map((item) => {
+                      const Icon = item.icon;
+                      const isActive = currentAdminTab === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            if (setActiveAdminTab) setActiveAdminTab(item.id);
+                            setActiveDropdown(null);
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-all ${
+                            isActive
+                              ? 'bg-[#0144e4] text-white shadow-2xs'
+                              : 'text-slate-700 hover:bg-blue-50 hover:text-[#0144e4]'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2.5">
+                            <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#0144e4]'}`} />
+                            <div>
+                              <p className="font-extrabold text-xs">{item.label}</p>
+                              <p className={`text-[10px] font-mono ${isActive ? 'text-blue-100' : 'text-slate-400'}`}>
+                                {item.desc}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+            </nav>
+
+            {/* Right: Logged In Admin Profile Dropdown */}
             {currentUser && renderUserProfileDropdown()}
 
           </div>
