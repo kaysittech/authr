@@ -21,7 +21,8 @@ import {
   Layers,
   Award,
   Lock,
-  Globe
+  Globe,
+  ChevronDown
 } from 'lucide-react';
 import { DigitalTwin, ProtectedAsset, DetectionMatch, SettlementClaim, PolicyMode } from '../types';
 import { DisciplineUpgradeModal } from './DisciplineUpgradeModal';
@@ -295,59 +296,74 @@ export const Dashboard: React.FC<DashboardProps> = ({
       </div>
 
       {/* Creative Discipline Workspace Bar */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-3">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-            Discipline Workspace
-          </span>
-          <span className="px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-blue-50 text-[#0144e4] border border-blue-200/60">
-            {activeDisciplineName}
-          </span>
-        </div>
+      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-100">
+          <div className="flex items-center space-x-3">
+            <div className="p-2.5 rounded-xl bg-blue-50 text-[#0144e4] border border-blue-100 flex-shrink-0">
+              <Layers className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Creative Discipline Workspace</h2>
+              <div className="relative mt-1 inline-block">
+                <select
+                  value={selectedDiscipline}
+                  onChange={(e) => {
+                    const val = e.target.value as DisciplineType;
+                    if (val === 'all' || unlockedDisciplines.includes(val)) {
+                      setSelectedDiscipline(val);
+                    } else {
+                      setTargetUpgradeDiscipline(val);
+                      setIsUpgradeModalOpen(true);
+                    }
+                  }}
+                  className="appearance-none bg-slate-50 hover:bg-blue-50/50 text-[#0144e4] text-sm sm:text-base font-extrabold py-2 pl-3.5 pr-9 rounded-xl border border-blue-200/80 focus:outline-none focus:ring-2 focus:ring-[#0144e4]/20 transition-all cursor-pointer shadow-2xs"
+                >
+                  {[
+                    { id: 'all', label: '✨ All Creative Disciplines' },
+                    { id: 'likeness', label: '👤 Likeness & Voice' },
+                    { id: 'musicians', label: '🎵 Musicians & Composers' },
+                    { id: 'artists', label: '🎨 Visual & Fine Artists' },
+                    { id: 'creators', label: '📷 Video Creators & Podcasters' },
+                    { id: 'authors', label: '📝 Authors & Writers' },
+                    { id: 'businesses', label: '💼 Commercial Brands & Agencies' },
+                  ].map((d) => (
+                    <option key={d.id} value={d.id} className="text-slate-800 font-bold bg-white">
+                      {d.label} {d.id !== 'all' && !unlockedDisciplines.includes(d.id) ? '🔒 (Add-On Module)' : ''}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-4 h-4 text-[#0144e4] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
+          </div>
 
-        <div className="flex items-center space-x-2 flex-wrap gap-y-2">
-          {[
-            { id: 'all', label: 'All Creative Disciplines', icon: Sparkles },
-            { id: 'likeness', label: 'Likeness & Voice', icon: UserCheck },
-            { id: 'musicians', label: 'Musicians & Composers', icon: Music },
-            { id: 'artists', label: 'Visual & Fine Artists', icon: Palette },
-            { id: 'creators', label: 'Video Creators & Podcasters', icon: Camera },
-            { id: 'authors', label: 'Authors & Writers', icon: FileCheck2 },
-            { id: 'businesses', label: 'Commercial Brands & Agencies', icon: Briefcase },
-          ].map((discipline) => {
-            const Icon = discipline.icon;
-            const isSelected = selectedDiscipline === discipline.id;
-            const isUnlocked = discipline.id === 'all' || unlockedDisciplines.includes(discipline.id);
-
-            const handleClick = () => {
-              if (isUnlocked) {
-                setSelectedDiscipline(discipline.id as DisciplineType);
-              } else {
-                setTargetUpgradeDiscipline(discipline.id);
-                setIsUpgradeModalOpen(true);
-              }
+          {/* Rates summary inline */}
+          {selectedDiscipline !== 'all' && (() => {
+            const mapDisciplineNames: Record<string, string> = {
+              likeness: 'Likeness & Voice Protection',
+              musicians: 'Musicians & Composers',
+              artists: 'Visual & Fine Artists',
+              creators: 'Video Creators & Podcasters',
+              authors: 'Authors & Literary Writers',
+              businesses: 'Commercial Brands & Agencies'
             };
+            const fullDisciplineName = mapDisciplineNames[selectedDiscipline];
+            const strategy = getDisciplineStrategy(fullDisciplineName);
 
             return (
-              <button
-                key={discipline.id}
-                onClick={handleClick}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all shadow-2xs ${
-                  isSelected
-                    ? 'bg-[#0144e4] text-white border border-[#0144e4]'
-                    : isUnlocked
-                    ? 'bg-slate-50 text-slate-700 border border-slate-200/80 hover:bg-blue-50/50 hover:text-[#0144e4]'
-                    : 'bg-slate-100 text-slate-400 border border-slate-200/60'
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                <span>{discipline.label}</span>
-              </button>
+              <div className="flex items-center space-x-3 bg-blue-50/70 border border-blue-200/60 px-4 py-2.5 rounded-xl self-start sm:self-center">
+                <div className="text-xs">
+                  <span className="font-semibold text-slate-600">Default Rate: </span>
+                  <span className="text-[#0144e4] font-extrabold">${strategy.defaultAiRate}/query</span>
+                  <span className="text-slate-300 mx-1.5">•</span>
+                  <span className="text-[#0144e4] font-extrabold">${strategy.defaultLicenseRate}/ad</span>
+                </div>
+              </div>
             );
-          })}
+          })()}
         </div>
 
-        {/* Active Discipline Strategy Summary */}
+        {/* Active Strategy & Rights Monitored */}
         {selectedDiscipline !== 'all' && (() => {
           const mapDisciplineNames: Record<string, string> = {
             likeness: 'Likeness & Voice Protection',
@@ -361,23 +377,18 @@ export const Dashboard: React.FC<DashboardProps> = ({
           const strategy = getDisciplineStrategy(fullDisciplineName);
 
           return (
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 animate-fadeIn text-xs">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center space-x-2">
-                  <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-blue-50 text-[#0144e4] border border-blue-200/60">
-                    {strategy.shortLabel}
-                  </span>
-                  <span className="font-bold text-slate-900">{strategy.primaryMonetization}</span>
-                </div>
-                <div className="font-semibold text-slate-600">
-                  Default Rate: <span className="text-[#0144e4] font-bold">${strategy.defaultAiRate}/query</span> • <span className="text-[#0144e4] font-bold">${strategy.defaultLicenseRate}/ad</span>
-                </div>
+            <div className="flex items-center justify-between flex-wrap gap-3 text-xs">
+              <div className="flex items-center space-x-2">
+                <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-blue-50 text-[#0144e4] border border-blue-200/60">
+                  {strategy.shortLabel}
+                </span>
+                <span className="font-bold text-slate-800">{strategy.primaryMonetization}</span>
               </div>
-              
-              <div className="flex items-center space-x-2 text-slate-600 flex-wrap gap-y-1">
+
+              <div className="flex items-center space-x-2 flex-wrap gap-1.5">
                 <span className="text-slate-400 font-semibold text-[11px]">Monitored Rights:</span>
                 {strategy.rightsMonitored.map((right, idx) => (
-                  <span key={idx} className="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-800 text-[11px] font-medium">
+                  <span key={idx} className="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/80 text-slate-700 text-[11px] font-semibold">
                     ✓ {right}
                   </span>
                 ))}
