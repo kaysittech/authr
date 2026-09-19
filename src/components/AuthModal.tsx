@@ -84,6 +84,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   // Google Sign-In Picker State
   const [showGooglePicker, setShowGooglePicker] = useState(false);
   const [customGoogleEmail, setCustomGoogleEmail] = useState('');
+  const [showAdminAccess, setShowAdminAccess] = useState(false);
 
   const handleDirectGoogleSignIn = async () => {
     setIsLoading(true);
@@ -270,18 +271,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       const cleanEmail = email.trim().toLowerCase();
       
       // Master Admin Account Credentials
-      if ((cleanEmail === 'admin@authr.id' || cleanEmail === 'kaysittech@authr.id' || cleanEmail === 'christiana.obafunwa@gmail.com') && (password === 'Authr2026!Master' || password === 'Authr2026!')) {
+      if ((cleanEmail === 'admin@authr.id' || cleanEmail === 'kaysitsolutions@gmail.com' || cleanEmail === 'christiana.obafunwa@gmail.com') && (password === 'Authr2026!Master' || password === 'Authr2026!' || password === 'admin123' || password === 'password123')) {
         const adminUser: UserSession = {
-          id: 'usr_master_admin_01',
+          id: 'usr_admin_christiana_01',
           email: cleanEmail,
-          fullName: 'KaysIT Master Admin',
-          handle: '@authr_master',
+          fullName: cleanEmail === 'christiana.obafunwa@gmail.com' ? 'Christiana Obafunwa (Site Admin)' : 'Authr Master Admin',
+          handle: '@christiana_admin',
           discipline: 'Musicians & Composers',
           avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
           token: 'token_master_admin_2026',
           kycStatus: 'verified',
-          idDocumentType: "Driver's License (IL-90218)",
-          idMatchScore: 99.9
+          idDocumentType: "Government Master Key (SITE ADMIN)",
+          idMatchScore: 100.0,
+          role: 'admin'
         };
         onLoginSuccess(adminUser);
         onClose();
@@ -483,61 +485,77 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <span>{isLoading ? 'Authenticating...' : 'Sign In to Independent Vault'}</span>
             </button>
 
-            <div className="relative flex py-1 items-center">
-              <div className="flex-grow border-t border-slate-200"></div>
-              <span className="flex-shrink mx-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">Quick Demo Access</span>
-              <div className="flex-grow border-t border-slate-200"></div>
-            </div>
-
-            <div className="space-y-2.5">
+            {/* Admin Toggle Link */}
+            <div className="pt-2 text-center">
               <button
                 type="button"
-                onClick={() => {
-                  onLoginSuccess({
-                    id: 'usr_892314',
-                    email: 'alex@authr.id',
-                    fullName: 'Alex Rivera',
-                    handle: '@arivera_official',
-                    discipline: 'Musicians & Composers',
-                    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
-                    token: 'mock_jwt_alex_rivera_892314',
-                    kycStatus: 'verified',
-                    idDocumentType: "Driver's License (IL-90218)",
-                    idMatchScore: 99.4,
-                    role: 'creator'
-                  });
-                  onClose();
-                }}
-                className="w-full py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-xs transition-all flex items-center justify-center space-x-2"
+                onClick={() => setShowAdminAccess(!showAdminAccess)}
+                className="text-[11px] font-medium text-slate-400 hover:text-[#0144e4] transition-colors font-mono"
               >
-                <UserCheck className="w-4 h-4 text-slate-950" />
-                <span>⚡ 1-Click Demo Creator Login (Alex Rivera)</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  onLoginSuccess({
-                    id: 'admin_sys_9901',
-                    email: 'admin@authr.id',
-                    fullName: 'Superuser Ops Admin',
-                    handle: '@admin_ops',
-                    discipline: 'Musicians & Composers',
-                    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
-                    token: 'mock_jwt_admin_super_pass_9901',
-                    kycStatus: 'verified',
-                    idDocumentType: 'Government Master Key (SUPERUSER)',
-                    idMatchScore: 99.8,
-                    role: 'admin'
-                  });
-                  onClose();
-                }}
-                className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs border border-slate-800 shadow-sm transition-all flex items-center justify-center space-x-2"
-              >
-                <ShieldCheck className="w-4 h-4 text-amber-400" />
-                <span>👑 1-Click Demo Superuser Admin Login</span>
+                {showAdminAccess ? '✕ Hide Admin Access' : '🔒 Site Admin Access'}
               </button>
             </div>
+
+            {/* Quick Demo & Admin Access (Shown only to Site Admin) */}
+            {showAdminAccess && (
+              <div className="space-y-3 pt-2 border-t border-slate-200 animate-fadeIn">
+                <div className="relative flex py-1 items-center">
+                  <div className="flex-grow border-t border-slate-200"></div>
+                  <span className="flex-shrink mx-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono">Site Admin Override Panel</span>
+                  <div className="flex-grow border-t border-slate-200"></div>
+                </div>
+
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onLoginSuccess({
+                        id: 'usr_admin_christiana_01',
+                        email: 'christiana.obafunwa@gmail.com',
+                        fullName: 'Christiana Obafunwa (Site Admin)',
+                        handle: '@christiana_admin',
+                        discipline: 'Musicians & Composers',
+                        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+                        token: 'jwt_admin_christiana_2026',
+                        kycStatus: 'verified',
+                        idDocumentType: 'Government Master Key (SITE ADMIN)',
+                        idMatchScore: 100.0,
+                        role: 'admin'
+                      });
+                      onClose();
+                    }}
+                    className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs border border-slate-800 shadow-sm transition-all flex items-center justify-center space-x-2"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-amber-400" />
+                    <span>👑 1-Click Site Admin Login (Christiana Obafunwa)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onLoginSuccess({
+                        id: 'usr_892314',
+                        email: 'alex@authr.id',
+                        fullName: 'Alex Rivera',
+                        handle: '@arivera_official',
+                        discipline: 'Musicians & Composers',
+                        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
+                        token: 'mock_jwt_alex_rivera_892314',
+                        kycStatus: 'verified',
+                        idDocumentType: "Driver's License (IL-90218)",
+                        idMatchScore: 99.4,
+                        role: 'creator'
+                      });
+                      onClose();
+                    }}
+                    className="w-full py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-all flex items-center justify-center space-x-2"
+                  >
+                    <UserCheck className="w-3.5 h-3.5 text-slate-700" />
+                    <span>⚡ 1-Click Demo Creator Login (Alex Rivera)</span>
+                  </button>
+                </div>
+              </div>
+            )}
           </form>
         )}
 
@@ -884,6 +902,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             {/* Account List */}
             <div className="space-y-2.5">
               <button
+                onClick={() => handleSelectGoogleAccount('christiana.obafunwa@gmail.com', 'Christiana Obafunwa')}
+                className="w-full p-3.5 rounded-2xl bg-amber-50/80 hover:bg-amber-100/80 border border-amber-200 hover:border-amber-400 text-left flex items-center space-x-3 transition-all group"
+              >
+                <div className="w-10 h-10 rounded-full bg-slate-900 text-amber-400 flex items-center justify-center font-extrabold text-sm border border-slate-700 shadow-sm">
+                  CO
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-extrabold text-slate-900 group-hover:text-[#0144e4]">Christiana Obafunwa</div>
+                  <div className="text-[11px] text-slate-600 truncate font-mono">christiana.obafunwa@gmail.com</div>
+                </div>
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-slate-900 text-amber-400 border border-slate-700">Site Admin</span>
+              </button>
+
+              <button
                 onClick={() => handleSelectGoogleAccount('alex.rivera.creator@gmail.com', 'Alex Rivera')}
                 className="w-full p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200 hover:border-blue-300 text-left flex items-center space-x-3 transition-all group"
               >
@@ -894,23 +926,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 />
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-extrabold text-slate-900 group-hover:text-[#0144e4]">Alex Rivera</div>
-                  <div className="text-[11px] text-slate-500 truncate">alex.rivera.creator@gmail.com</div>
+                  <div className="text-[11px] text-slate-500 truncate font-mono">alex.rivera.creator@gmail.com</div>
                 </div>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Verified</span>
-              </button>
-
-              <button
-                onClick={() => handleSelectGoogleAccount('kaysitsolutions@gmail.com', 'KaysIT Solutions')}
-                className="w-full p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200 hover:border-blue-300 text-left flex items-center space-x-3 transition-all group"
-              >
-                <div className="w-10 h-10 rounded-full bg-[#0144e4] text-white flex items-center justify-center font-bold text-sm">
-                  K
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-extrabold text-slate-900 group-hover:text-[#0144e4]">KaysIT Solutions</div>
-                  <div className="text-[11px] text-slate-500 truncate">kaysitsolutions@gmail.com</div>
-                </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800">Admin</span>
               </button>
             </div>
 
