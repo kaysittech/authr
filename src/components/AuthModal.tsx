@@ -502,7 +502,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               className="w-full py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
             >
               <Sparkles className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-              <span>{isLoading ? 'Authenticating...' : 'Sign In to Independent Vault'}</span>
+              <span>{isLoading ? 'Authenticating...' : 'Sign In'}</span>
             </button>
           </form>
         )}
