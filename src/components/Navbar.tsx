@@ -134,22 +134,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Right-aligned Navigation Links (Pushed right next to Get Started button) */}
           <nav className="hidden lg:flex items-center space-x-7 text-[15px] font-medium text-slate-800 ml-auto mr-7">
             
-            {/* Admin Portal Tab (for Admin Users) */}
-            {isAdminUser && (
-              <button 
-                onClick={() => setActiveTab('admin')}
-                className={`relative py-2 transition-colors flex items-center space-x-1 font-extrabold ${
-                  activeTab === 'admin' ? 'text-amber-500' : 'text-slate-900 hover:text-amber-600'
-                }`}
-              >
-                <ShieldCheck className="w-4 h-4 text-amber-500 stroke-[2.5]" />
-                <span>Admin Portal</span>
-                {activeTab === 'admin' && (
-                  <span className="absolute bottom-[-4px] left-0 right-0 h-[2.5px] bg-amber-500 rounded-full" />
-                )}
-              </button>
-            )}
-
             {/* Home */}
             <button 
               onClick={() => setActiveTab('dashboard')}
