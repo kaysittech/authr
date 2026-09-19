@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import { ManagedPage, CareerOpenRole } from '../types';
 import { getManagedPagesFromFirestore, getCareerRolesFromFirestore } from '../firebase';
-import { INITIAL_MANAGED_PAGES, INITIAL_CAREER_ROLES } from '../services/mockData';
+import { INITIAL_MANAGED_PAGES, INITIAL_CAREER_ROLES, mergePagesWithDefaults } from '../services/mockData';
 
 interface FooterPagesViewProps {
   pageId: string;
@@ -69,24 +69,20 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
     if (saved) {
       try {
         const parsed: ManagedPage[] = JSON.parse(saved);
-        return sanitizePages(parsed);
+        return sanitizePages(mergePagesWithDefaults(parsed));
       } catch (e) {}
     }
-    return INITIAL_MANAGED_PAGES;
+    return sanitizePages(INITIAL_MANAGED_PAGES);
   });
 
   useEffect(() => {
     getManagedPagesFromFirestore().then(pages => {
-      if (pages && pages.length > 0) {
-        setManagedPages(sanitizePages(pages));
-      }
+      setManagedPages(sanitizePages(mergePagesWithDefaults(pages)));
     });
 
     const handleSync = () => {
       getManagedPagesFromFirestore().then(pages => {
-        if (pages && pages.length > 0) {
-          setManagedPages(sanitizePages(pages));
-        }
+        setManagedPages(sanitizePages(mergePagesWithDefaults(pages)));
       });
     };
     window.addEventListener('rg_page_content_updated', handleSync);

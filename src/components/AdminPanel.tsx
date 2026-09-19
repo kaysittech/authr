@@ -40,7 +40,7 @@ import {
   Copy
 } from 'lucide-react';
 import { DetectionMatch, SettlementClaim, CustomerReview, PricingPlan, TrialConfig, UserAccount, HeroStatRow, ManagedPage, ManagedPageSection, CareerOpenRole } from '../types';
-import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_USERS, INITIAL_HERO_STAT_ROWS, INITIAL_MANAGED_PAGES, INITIAL_CAREER_ROLES } from '../services/mockData';
+import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_USERS, INITIAL_HERO_STAT_ROWS, INITIAL_MANAGED_PAGES, INITIAL_CAREER_ROLES, mergePagesWithDefaults } from '../services/mockData';
 import { Article, BLOG_ARTICLES } from './BlogView';
 import { 
   getManagedPagesFromFirestore, 
@@ -108,7 +108,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
   // Sync state with Firebase Firestore on mount
   useEffect(() => {
-    getManagedPagesFromFirestore().then(pages => setManagedPagesList(pages));
+    getManagedPagesFromFirestore().then(pages => setManagedPagesList(mergePagesWithDefaults(pages)));
     getCareerRolesFromFirestore().then(roles => setCareerRolesList(roles));
     getHeroStatsFromFirestore().then(stats => setAdminHeroStats(stats));
     getCustomerReviewsFromFirestore().then(revs => setTestimonialsList(revs));
@@ -171,7 +171,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     if (saved) {
       try {
         const parsed: ManagedPage[] = JSON.parse(saved);
-        return parsed.map(p => p.id === 'careers' && p.title.includes('Sovereign Creator Rights') ? { ...p, title: p.title.replace('Sovereign Creator Rights', 'Creator Rights') } : p);
+        return mergePagesWithDefaults(parsed);
       } catch (e) {}
     }
     return INITIAL_MANAGED_PAGES;
@@ -850,7 +850,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 <h2 className="text-lg font-extrabold text-slate-900">Page Content & Text CMS</h2>
               </div>
               <p className="text-xs text-slate-500 mt-1">
-                Manage and customize page titles, subtitles, summary intros, and body text sections for all 12 public & legal pages.
+                Manage and customize page titles, subtitles, summary intros, and body text sections for all 18 public, feature, and legal pages.
               </p>
             </div>
           </div>
@@ -859,12 +859,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           <div className="flex items-center space-x-2 overflow-x-auto pb-2 font-mono text-xs">
             {[
               { id: 'all', label: `All Pages (${managedPagesList.length})` },
+              { id: 'COMPANY', label: `Company (${managedPagesList.filter(p => p.category.includes('COMPANY') || p.category.includes('ABOUT') || p.category.includes('BLOG')).length})` },
+              { id: 'FEATURES', label: `Features (${managedPagesList.filter(p => p.category.includes('FEATURES')).length})` },
+              { id: 'LEGAL & SECURITY', label: `Legal & Security (${managedPagesList.filter(p => p.category.includes('LEGAL') || p.category.includes('COMPLIANCE')).length})` },
               { id: 'HOME & LANDING', label: `Home & Landing (${managedPagesList.filter(p => p.category === 'HOME & LANDING').length})` },
-              { id: 'FEATURES MENU', label: `Features Menu (${managedPagesList.filter(p => p.category === 'FEATURES MENU' || p.category === 'FEATURES').length})` },
-              { id: 'ABOUT MENU', label: `About Menu (${managedPagesList.filter(p => p.category === 'ABOUT MENU').length})` },
-              { id: 'PRICING MENU', label: `Pricing & Blog (${managedPagesList.filter(p => p.category === 'PRICING MENU' || p.category === 'BLOG MENU').length})` },
-              { id: 'COMPANY & CAREERS', label: `Company (${managedPagesList.filter(p => p.category === 'COMPANY & CAREERS' || p.category === 'COMPANY').length})` },
-              { id: 'LEGAL & COMPLIANCE', label: `Legal & Security (${managedPagesList.filter(p => p.category === 'LEGAL & COMPLIANCE' || p.category === 'LEGAL & SECURITY').length})` }
+              { id: 'PRICING', label: `Pricing (${managedPagesList.filter(p => p.category.includes('PRICING')).length})` }
             ].map(filter => (
               <button
                 key={filter.id}
@@ -885,10 +884,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             {managedPagesList
               .filter(p => {
                 if (pageCategoryFilter === 'all') return true;
-                if (pageCategoryFilter === 'FEATURES MENU') return p.category === 'FEATURES MENU' || p.category === 'FEATURES';
-                if (pageCategoryFilter === 'PRICING MENU') return p.category === 'PRICING MENU' || p.category === 'BLOG MENU';
-                if (pageCategoryFilter === 'COMPANY & CAREERS') return p.category === 'COMPANY & CAREERS' || p.category === 'COMPANY';
-                if (pageCategoryFilter === 'LEGAL & COMPLIANCE') return p.category === 'LEGAL & COMPLIANCE' || p.category === 'LEGAL & SECURITY';
+                if (pageCategoryFilter === 'COMPANY') return p.category.includes('COMPANY') || p.category.includes('ABOUT') || p.category.includes('BLOG');
+                if (pageCategoryFilter === 'FEATURES') return p.category.includes('FEATURES');
+                if (pageCategoryFilter === 'LEGAL & SECURITY') return p.category.includes('LEGAL') || p.category.includes('COMPLIANCE');
+                if (pageCategoryFilter === 'PRICING') return p.category.includes('PRICING');
                 return p.category === pageCategoryFilter;
               })
               .map((page) => (
