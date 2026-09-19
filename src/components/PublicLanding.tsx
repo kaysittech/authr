@@ -25,7 +25,10 @@ import {
   ChevronRight,
   Cpu,
   Smartphone,
-  LayoutGrid
+  LayoutGrid,
+  FileCheck,
+  Building2,
+  Server
 } from 'lucide-react';
 import { PublicHeader } from './PublicHeader';
 import { Footer } from './Footer';
@@ -43,21 +46,21 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
 
   const testimonials = [
     {
-      quote: "Authr revolutionized how we manage creator licensing and biometric identity protection. The automated legal notices and instant settlement gates work flawlessly.",
-      author: "Bryant Chou",
-      title: "Director at TrueBox",
+      quote: "Authr revolutionized how we manage creator licensing and biometric identity protection. The automated legal notices and instant settlement checkout gates work flawlessly.",
+      author: "Alex Rivera",
+      title: "Independent Recording Artist & Producer",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
     },
     {
-      quote: "The C2PA cryptographic watermarking and web scrape radar saved our studio over $140,000 in stolen digital asset royalties within the first 60 days.",
-      author: "Kyle Killen",
-      title: "Designer at Tiempo Labs",
+      quote: "The C2PA cryptographic watermarking and web scrape radar saved our studio over $140,000 in stolen voice actor and artwork royalties within the first 60 days.",
+      author: "Sarah Conner",
+      title: "Voice Actor & Podcast Host",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
     },
     {
-      quote: "Integrating BIPA biometric verification and Stripe Connect payouts gave our enterprise brand complete legal standing across 54 global markets.",
-      author: "Sergei Kalashnikov",
-      title: "CEO at BintoBox",
+      quote: "Integrating BIPA biometric verification and Stripe Connect payouts gave our commercial brand agency complete legal standing across 54 global markets.",
+      author: "Marcus Vance",
+      title: "Creative Brand & IP Director",
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
     }
   ];
@@ -65,7 +68,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
   return (
     <div className="bg-white text-slate-900 font-sans min-h-screen">
       
-      {/* Krazy Header Bar */}
+      {/* KRAZY HEADER NAVBAR */}
       <PublicHeader onOpenRegister={onOpenRegister} onOpenLogin={onOpenLogin} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-20">
@@ -74,71 +77,130 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
         <section className="bg-[#f7f8fa] border border-[#e9eaf0] rounded-2xl p-8 sm:p-12 lg:p-16 shadow-2xs">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             
-            {/* Left Content */}
+            {/* Hero Left Text & Actions */}
             <div className="lg:col-span-6 space-y-6 text-left">
               
               <div className="inline-block text-[#0144e4] font-bold text-xs uppercase tracking-widest font-mono">
-                Free Technology & Royalty Theme
+                Independent Creator Rights & Royalty Network
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15] font-display">
-                Grow Your Business 10x with <span className="text-[#0144e4]">Krazy</span>
+                Claim Sovereign Rights Over Your <span className="text-[#0144e4]">Voice, Likeness</span> & Digital Media.
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 font-medium leading-relaxed">
-                The Krazy brings all of your website requirements under one roof — services, sales, biometric rights protection, and automated support altogether.
+                Authr brings all of your creator protection under one roof — biometric identity registration, C2PA cryptographic signatures, automated AI web scraping detection, and instant statutory licensing settlements.
               </p>
 
               <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                 <button
                   onClick={onOpenRegister}
-                  className="px-8 py-4 rounded-xl bg-[#0144e4] hover:bg-[#0035b5] text-white font-extrabold text-sm shadow-md shadow-blue-500/20 transition-all text-center"
+                  className="px-8 py-4 rounded-xl bg-[#0144e4] hover:bg-[#0035b5] text-white font-extrabold text-sm shadow-md shadow-blue-500/20 transition-all text-center flex items-center justify-center space-x-2"
                 >
-                  Install Theme
+                  <UserCheck className="w-4.5 h-4.5" />
+                  <span>Create Account (Government ID)</span>
+                  <ArrowRight className="w-4.5 h-4.5" />
                 </button>
 
                 <button
                   onClick={onOpenLogin}
-                  className="px-8 py-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-[#e9eaf0] transition-all text-center"
+                  className="px-8 py-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-[#e9eaf0] transition-all text-center flex items-center justify-center space-x-2"
                 >
-                  Learn more
+                  <Lock className="w-4.5 h-4.5 text-[#0144e4]" />
+                  <span>Sign In to Vault</span>
                 </button>
+              </div>
+
+              {/* Micro Trust Indicators */}
+              <div className="pt-2 flex flex-wrap items-center gap-6 text-xs text-slate-500 font-mono">
+                <span className="flex items-center gap-1.5 font-semibold">
+                  <CheckCircle2 className="w-4 h-4 text-[#0144e4]" />
+                  Government ID Verified
+                </span>
+                <span className="flex items-center gap-1.5 font-semibold">
+                  <CheckCircle2 className="w-4 h-4 text-[#0144e4]" />
+                  BIPA Compliant
+                </span>
+                <span className="flex items-center gap-1.5 font-semibold">
+                  <CheckCircle2 className="w-4 h-4 text-[#0144e4]" />
+                  Stripe Payout Gateway
+                </span>
               </div>
 
             </div>
 
-            {/* Right Image Block (Exact Hero Banner Preview) */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-xl overflow-hidden border border-[#e9eaf0] shadow-xl bg-white p-2">
-                <img 
-                  src="https://484997.hs-sites.com/hubfs/hero-banner.png" 
-                  alt="Next-Gen User Analytics Dashboard" 
-                  className="w-full h-auto rounded-lg object-cover"
-                  onError={(e) => {
-                    // Fallback to high quality tech mockup if remote asset blocked
-                    (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80";
-                  }}
-                />
+            {/* Hero Right Graphic Mockup */}
+            <div className="lg:col-span-6 relative">
+              <div className="relative rounded-xl overflow-hidden border border-[#e9eaf0] shadow-xl bg-white p-6 space-y-5 text-left">
+                
+                {/* Header snippet */}
+                <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 text-[#0144e4] flex items-center justify-center font-bold">
+                      <ShieldCheck className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-extrabold text-slate-900">Likeness & Voice Registry</h4>
+                      <p className="text-[11px] text-slate-400 font-mono">ID Verified • BIPA Compliant</p>
+                    </div>
+                  </div>
+                  <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full font-mono">
+                    Active & Protected
+                  </span>
+                </div>
+
+                {/* Stat Rows */}
+                <div className="space-y-3">
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center space-x-2.5">
+                      <Fingerprint className="w-4 h-4 text-[#0144e4]" />
+                      <span className="text-xs font-bold text-slate-700">Facial Geometry Vector</span>
+                    </div>
+                    <span className="text-xs font-mono font-bold text-slate-900">128 Nodes Hashed</span>
+                  </div>
+
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center space-x-2.5">
+                      <Radio className="w-4 h-4 text-purple-600" />
+                      <span className="text-xs font-bold text-slate-700">Acoustic Voice Spectrum</span>
+                    </div>
+                    <span className="text-xs font-mono font-bold text-slate-900">44.1kHz FFT Matched</span>
+                  </div>
+
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center space-x-2.5">
+                      <DollarSign className="w-4 h-4 text-emerald-600" />
+                      <span className="text-xs font-bold text-slate-700">Royalties Cleared</span>
+                    </div>
+                    <span className="text-sm font-black font-display text-emerald-600">$1,248,500.00</span>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex items-center justify-between text-[11px] text-slate-400 font-mono border-t border-slate-100">
+                  <span>C2PA Manifest #AUTHR-8923</span>
+                  <span className="text-[#0144e4] font-bold">Polygon Mainnet Active →</span>
+                </div>
+
               </div>
             </div>
 
           </div>
         </section>
 
-        {/* SECTION 2: LOGO SLIDER (kz-logo-slider) */}
+        {/* SECTION 2: LOGO SLIDER / COMPLIANCE STRIP (kz-logo-slider) */}
         <section className="bg-[#f7f8fa] border border-[#e9eaf0] rounded-xl p-6">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-center justify-items-center opacity-80">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-center justify-items-center opacity-85">
             {[
-              { name: "logo-1", label: "Acme Corp" },
-              { name: "logo-2", label: "Quantum" },
-              { name: "logo-3", label: "Echo Tech" },
-              { name: "logo-4", label: "Pulse Systems" },
-              { name: "logo-5", label: "Apex Global" },
-              { name: "logo-6", label: "Sovereign" }
-            ].map((logo, index) => (
-              <div key={index} className="flex items-center space-x-2 font-display font-black text-slate-400 text-lg tracking-wider">
-                <Globe className="w-5 h-5 text-[#0144e4]" />
-                <span className="uppercase">{logo.label}</span>
+              { label: "C2PA Provenance", desc: "Cryptographic Standard" },
+              { label: "BIPA Privacy", desc: "100% Law Compliant" },
+              { label: "17 U.S.C. § 512", desc: "DMCA Takedown Engine" },
+              { label: "Stripe Connect", desc: "Instant Direct Payouts" },
+              { label: "Polygon L2", desc: "On-Chain Ledger" },
+              { label: "SendGrid Webhook", desc: "Court Notice Sync" }
+            ].map((partner, index) => (
+              <div key={index} className="flex flex-col items-center text-center space-y-0.5 font-sans">
+                <span className="text-xs font-extrabold text-slate-800 font-display uppercase tracking-wider">{partner.label}</span>
+                <span className="text-[10px] text-slate-400 font-mono">{partner.desc}</span>
               </div>
             ))}
           </div>
@@ -150,28 +212,43 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
             Our BeSpoke Solutions
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display">
-            Sync Across All Devices
+            Sync Across All Devices &amp; AI Networks
           </h2>
           <p className="text-base text-slate-600 font-medium">
-            Everything you need to make your business grow super fast!
+            Everything you need to protect and monetize your intellectual property super fast!
           </p>
         </section>
 
         {/* SECTION 4: TWO-COLUMN CONTENT 1 (kz-two-column-content-1) */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center bg-white p-8 sm:p-12 rounded-2xl border border-[#e9eaf0] shadow-2xs">
-          <div className="lg:col-span-6">
-            <img 
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80" 
-              alt="Web Applications" 
-              className="w-full h-80 object-cover rounded-xl border border-[#e9eaf0] shadow-sm"
-            />
+          <div className="lg:col-span-6 text-left space-y-3">
+            <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3">
+              <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-700 pb-2 border-b border-slate-200">
+                <span>BIOMETRIC IDENTITY VAULT</span>
+                <span className="text-[#0144e4]">BIPA VERIFIED</span>
+              </div>
+              <div className="space-y-2 text-xs font-mono text-slate-600">
+                <div className="flex justify-between">
+                  <span>Facial Mesh Hashing:</span>
+                  <span className="font-bold text-slate-900">SHA-256 128-Node Vector</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Voice Spectral FFT:</span>
+                  <span className="font-bold text-slate-900">44.1kHz Multi-Band Spectrum</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Government ID Match:</span>
+                  <span className="font-bold text-emerald-600">Driver's License / Passport OK</span>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="lg:col-span-6 space-y-5 text-left">
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-display">
-              Web Applications
+              Biometric &amp; Government ID Protection
             </h3>
             <p className="text-sm text-slate-600 leading-relaxed font-medium">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Build robust, secure enterprise systems with automated biometric verification.
+              Register your facial geometry vector mesh and acoustic spectral voice vector. All biometric fingerprints are linked to official driver’s license or passport credentials, providing 100% legal standing under statutory copyright litigation.
             </p>
             <button 
               onClick={onOpenRegister}
@@ -186,10 +263,10 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center bg-white p-8 sm:p-12 rounded-2xl border border-[#e9eaf0] shadow-2xs">
           <div className="lg:col-span-6 space-y-5 text-left order-2 lg:order-1">
             <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-display">
-              Mobile Apps
+              Automated Web Scrape &amp; AI Radar
             </h3>
             <p className="text-sm text-slate-600 leading-relaxed font-medium">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Seamless iOS and Android SDK integrations for real-time mobile asset telemetry.
+              Continuous monitoring across YouTube Data API v3, TikTok Research API, and Meta Graph API for unauthorized voice cloning, face swaps, or stolen media assets. Automatically issues 17 U.S.C. § 512(c) statutory notices.
             </p>
             <button 
               onClick={onOpenRegister}
@@ -199,11 +276,26 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
             </button>
           </div>
           <div className="lg:col-span-6 order-1 lg:order-2">
-            <img 
-              src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80" 
-              alt="Mobile Apps" 
-              className="w-full h-80 object-cover rounded-xl border border-[#e9eaf0] shadow-sm"
-            />
+            <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3 text-left">
+              <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-700 pb-2 border-b border-slate-200">
+                <span>ENTERPRISE SCRAPE TELEMETRY</span>
+                <span className="text-emerald-600">LIVE SCAN ACTIVE</span>
+              </div>
+              <div className="space-y-2 text-xs font-mono text-slate-600">
+                <div className="flex justify-between">
+                  <span>YouTube Data API v3:</span>
+                  <span className="font-bold text-slate-900">10,000 Units / Day Scan</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>TikTok Research API:</span>
+                  <span className="font-bold text-slate-900">Jitter Backoff Active</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Meta Graph API v18.0:</span>
+                  <span className="font-bold text-emerald-600">Real-Time Hash Match</span>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -212,22 +304,22 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
           {[
             {
               title: "Dashboard",
-              desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.",
+              desc: "Real-time overview of active rights profiles, protected stems, web scrape matches, and instant payouts.",
               icon: LayoutGrid
             },
             {
               title: "Custom Rules",
-              desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.",
+              desc: "Toggle seamlessly between Strict Privacy (DMCA Takedowns) and Commercial Royalty Licensing.",
               icon: Sliders
             },
             {
               title: "Presets",
-              desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.",
+              desc: "Store 128-node facial landmark meshes and FFT spectral voice prints verified against government IDs.",
               icon: Cpu
             },
             {
               title: "Metrics",
-              desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.",
+              desc: "Automated settlement invoices, Stripe Connect billing portals, and Polygon L2 provenance tracking.",
               icon: BarChart3
             }
           ].map((card, index) => {
@@ -276,10 +368,10 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
                 <div className="h-0.5 w-10 bg-[#0144e4]"></div>
                 
                 <ul className="space-y-3 text-xs text-slate-600 font-medium pt-2">
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>1 Biometric Voice &amp; Likeness Profile</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Web Scrape Detection (YouTube/TikTok)</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>C2PA Watermark Signing</span></li>
                   <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Email Support</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>iOS and Android App</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Customizable Dashboard</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Metric API</span></li>
                 </ul>
               </div>
 
@@ -303,10 +395,10 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
                 <div className="h-0.5 w-10 bg-[#0144e4]"></div>
                 
                 <ul className="space-y-3 text-xs text-slate-600 font-medium pt-2">
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Email Support</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>iOS and Android App</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Customizable Dashboard</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Metric API</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>3 Active Discipline Profiles</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Automated DMCA Legal Notice Studio</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Stripe Commercial Licensing Gate</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Custom Policy Toggles</span></li>
                 </ul>
               </div>
 
@@ -334,10 +426,10 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
                 <div className="h-0.5 w-10 bg-[#0144e4]"></div>
                 
                 <ul className="space-y-3 text-xs text-slate-600 font-medium pt-2">
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Email Support</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>iOS and Android App</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Customizable Dashboard</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Metric API</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>All 6 Creative Discipline Modules</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Polygon L2 On-Chain Provenance</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Enterprise Social API Keys</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>24/7 Priority Support</span></li>
                 </ul>
               </div>
 
@@ -349,7 +441,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
               </button>
             </div>
 
-            {/* Business Plan */}
+            {/* Business / Enterprise Plan */}
             <div className="bg-white p-8 rounded-xl border border-[#e9eaf0] shadow-xs flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="flex items-baseline space-x-1">
@@ -361,10 +453,10 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
                 <div className="h-0.5 w-10 bg-[#0144e4]"></div>
                 
                 <ul className="space-y-3 text-xs text-slate-600 font-medium pt-2">
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Email Support</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>iOS and Android App</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Customizable Dashboard</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Metric API</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Unlimited Brand IP Vaults</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Custom API Webhooks</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Dedicated Legal Counsel Sync</span></li>
+                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Bulk DMCA Court Filings</span></li>
                 </ul>
               </div>
 
@@ -459,28 +551,28 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             {[
               {
-                title: "Why customer retention is the ultimate growth strategy?",
-                date: "July 4, 2022",
-                readMin: "2 min read time",
-                author: "John Doe",
-                category: "Growth",
-                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80"
+                title: "Understanding BIPA & Statutory Likeness Protection under 17 U.S.C. § 512",
+                date: "July 4, 2026",
+                readMin: "3 min read time",
+                author: "Authr Legal Team",
+                category: "Legal",
+                image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80"
               },
               {
-                title: "How to Create an Automated Email in Outlook?",
-                date: "July 1, 2022",
+                title: "How C2PA Cryptographic Watermarking Prevents Unauthorized AI Model Training",
+                date: "July 1, 2026",
                 readMin: "2 min read time",
-                author: "Krazy Writer",
-                category: "Tips",
-                image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=600&q=80"
+                author: "Tech Engineering",
+                category: "C2PA",
+                image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80"
               },
               {
-                title: "How to build the ultimate technology application?",
-                date: "June 30, 2022",
-                readMin: "2 min read time",
-                author: "John Doe",
-                category: "Growth",
-                image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80"
+                title: "Monetizing Deepfake Influxes with Automated Stripe Settlement Gates",
+                date: "June 30, 2026",
+                readMin: "4 min read time",
+                author: "Monetization Ops",
+                category: "Royalties",
+                image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80"
               }
             ].map((post, index) => (
               <article key={index} className="bg-white rounded-xl border border-[#e9eaf0] shadow-[0_5px_20px_0_rgba(0,0,0,0.05)] overflow-hidden flex flex-col justify-between space-y-4">
@@ -501,7 +593,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
                     </h3>
 
                     <p className="text-xs text-slate-500 font-medium line-clamp-2">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vel ut congue varius congue aliquet leo....
+                      Comprehensive guide to automated intellectual property defense, biometric registration, and statutory royalty clearing.
                     </p>
                   </div>
 
@@ -523,13 +615,13 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
             
             <div className="lg:col-span-6 text-left space-y-3">
               <div className="text-blue-200 font-bold text-xs uppercase tracking-widest font-mono">
-                Have a question?
+                Have a legal or licensing question?
               </div>
               <h2 className="text-3xl sm:text-4xl font-extrabold font-display">
-                Contact Us
+                Contact Rights Counsel
               </h2>
               <p className="text-sm text-blue-100 font-medium leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.
+                Our copyright specialists and technical engineering team are available 24/7 to assist with statutory infringement claims, C2PA integrations, or custom enterprise API setups.
               </p>
             </div>
 
@@ -547,7 +639,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
 
       </main>
 
-      {/* Krazy Footer */}
+      {/* KRAZY FOOTER */}
       <Footer />
 
     </div>

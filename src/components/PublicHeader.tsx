@@ -32,7 +32,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
             </div>
           </div>
 
-          {/* Center Navigation Links (Exact Krazy Menu) */}
+          {/* Center Navigation Links (Exact Krazy Menu Structure) */}
           <nav className="hidden md:flex items-center space-x-8 text-sm font-bold text-slate-700">
             
             <a href="#" className="hover:text-[#0144e4] transition-colors py-2">Home</a>
@@ -49,14 +49,14 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
               </button>
 
               {activeDropdown === 'features' && (
-                <div className="absolute top-full left-0 w-56 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2 space-y-1 animate-fadeIn">
+                <div className="absolute top-full left-0 w-64 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2 space-y-1 animate-fadeIn">
                   {[
-                    'Machine Learning',
-                    'User Journey',
-                    'Automated Reports',
-                    'User Analytics',
-                    'Adaptive Testing',
-                    'Customized Dashboard'
+                    'Biometric & Likeness Vault',
+                    'C2PA Cryptographic Watermarking',
+                    'Automated Web Scrape Radar',
+                    'DMCA & Legal Notice Studio',
+                    'Stripe Royalty Checkout Gate',
+                    'Polygon L2 Provenance Ledger'
                   ].map((item) => (
                     <a
                       key={item}
@@ -71,7 +71,7 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
             </div>
 
             <a href="#pricing" className="hover:text-[#0144e4] transition-colors py-2">Pricing</a>
-            <a href="#blog" className="hover:text-[#0144e4] transition-colors py-2">Blog</a>
+            <a href="#blog" className="hover:text-[#0144e4] transition-colors py-2">Resource Center</a>
 
             {/* About Dropdown */}
             <div 
@@ -85,8 +85,8 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
               </button>
 
               {activeDropdown === 'about' && (
-                <div className="absolute top-full left-0 w-48 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2 space-y-1 animate-fadeIn">
-                  {['Contact', 'Careers', 'Get Started'].map((item) => (
+                <div className="absolute top-full left-0 w-52 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2 space-y-1 animate-fadeIn">
+                  {['Statutory Compliance', 'Developer API', 'Contact Rights Counsel'].map((item) => (
                     <a
                       key={item}
                       href="#about"
