@@ -119,3 +119,20 @@ export interface TrialConfig {
   customPlanText: string;
 }
 
+export interface UserAccount {
+  id: string;
+  email: string;
+  fullName: string;
+  handle: string;
+  discipline: string;
+  role: 'creator' | 'agency' | 'admin';
+  kycStatus: 'verified' | 'pending' | 'review_required';
+  accountStatus: 'active' | 'suspended';
+  idDocumentType: string;
+  idMatchScore: number;
+  registeredAssetsCount: number;
+  totalEarnings: number;
+  joinedDate: string;
+  bipaHash: string;
+}
+

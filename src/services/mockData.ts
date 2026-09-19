@@ -1,4 +1,71 @@
-import { DigitalTwin, ProtectedAsset, DetectionMatch, SettlementClaim, FinancialTransaction, CustomerReview, PricingPlan, TrialConfig } from '../types';
+import { DigitalTwin, ProtectedAsset, DetectionMatch, SettlementClaim, FinancialTransaction, CustomerReview, PricingPlan, TrialConfig, UserAccount } from '../types';
+
+export const INITIAL_USERS: UserAccount[] = [
+  {
+    id: 'usr_892314',
+    email: 'alex@authr.id',
+    fullName: 'Alex Rivera',
+    handle: '@arivera_official',
+    discipline: 'Musicians & Composers',
+    role: 'creator',
+    kycStatus: 'verified',
+    accountStatus: 'active',
+    idDocumentType: "Driver's License (IL-90218)",
+    idMatchScore: 99.4,
+    registeredAssetsCount: 5,
+    totalEarnings: 1521.92,
+    joinedDate: '2026-07-15',
+    bipaHash: 'bipa_hash_0x892314_vocal_mesh'
+  },
+  {
+    id: 'usr_902184',
+    email: 'sarah.conner@authr.id',
+    fullName: 'Sarah Conner',
+    handle: '@sconner_art',
+    discipline: 'Visual & Fine Artists',
+    role: 'creator',
+    kycStatus: 'verified',
+    accountStatus: 'active',
+    idDocumentType: 'Passport (US-88102)',
+    idMatchScore: 98.7,
+    registeredAssetsCount: 12,
+    totalEarnings: 3420.00,
+    joinedDate: '2026-07-20',
+    bipaHash: 'bipa_hash_0x902184_art_signature'
+  },
+  {
+    id: 'usr_441092',
+    email: 'jane.doe@authr.id',
+    fullName: 'Jane Doe',
+    handle: '@janedoe_podcasts',
+    discipline: 'Video Creators & Podcasters',
+    role: 'creator',
+    kycStatus: 'review_required',
+    accountStatus: 'active',
+    idDocumentType: 'State ID Card (NY-44019)',
+    idMatchScore: 88.2,
+    registeredAssetsCount: 3,
+    totalEarnings: 450.00,
+    joinedDate: '2026-08-01',
+    bipaHash: 'bipa_hash_0x441092_voice_print'
+  },
+  {
+    id: 'usr_119284',
+    email: 'licensing@brandcorp.com',
+    fullName: 'BrandCorp Media Agency',
+    handle: '@brandcorp_hq',
+    discipline: 'Commercial Brands & Agencies',
+    role: 'agency',
+    kycStatus: 'verified',
+    accountStatus: 'active',
+    idDocumentType: 'Articles of Incorporation (DE-0012)',
+    idMatchScore: 99.9,
+    registeredAssetsCount: 28,
+    totalEarnings: 14850.00,
+    joinedDate: '2026-06-10',
+    bipaHash: 'bipa_hash_0x119284_corporate_vault'
+  }
+];
 
 export const INITIAL_PRICING_PLANS: PricingPlan[] = [
   {

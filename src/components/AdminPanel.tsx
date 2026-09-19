@@ -34,8 +34,8 @@ import {
   X,
   BookOpen
 } from 'lucide-react';
-import { DetectionMatch, SettlementClaim, CustomerReview, PricingPlan, TrialConfig } from '../types';
-import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG } from '../services/mockData';
+import { DetectionMatch, SettlementClaim, CustomerReview, PricingPlan, TrialConfig, UserAccount } from '../types';
+import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_USERS } from '../services/mockData';
 import { Article, BLOG_ARTICLES } from './BlogView';
 
 interface AdminPanelProps {
@@ -57,6 +57,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedKycFilter, setSelectedKycFilter] = useState<string>('all');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3500);
+  };
 
   // Customer Reviews State
   const [testimonialsList, setTestimonialsList] = useState<CustomerReview[]>(() => {
@@ -235,91 +240,70 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   // Inspection Modal State
   const [selectedUserDocModal, setSelectedUserDocModal] = useState<any | null>(null);
 
-  // Mock User Directory for Admin Management
-  const [usersList, setUsersList] = useState<Array<{
-    id: string;
-    email: string;
-    fullName: string;
-    handle: string;
-    discipline: string;
-    kycStatus: 'verified' | 'pending' | 'review_required';
-    idDocumentType: string;
-    idMatchScore: number;
-    registeredAssetsCount: number;
-    totalEarnings: number;
-    joinedDate: string;
-    bipaHash: string;
-  }>>([
-    {
-      id: 'usr_892314',
-      email: 'alex@authr.id',
-      fullName: 'Alex Rivera',
-      handle: '@arivera_official',
-      discipline: 'Musicians & Composers',
-      kycStatus: 'verified',
-      idDocumentType: "Driver's License (IL-90218)",
-      idMatchScore: 99.4,
-      registeredAssetsCount: 5,
-      totalEarnings: 1521.92,
-      joinedDate: '2026-07-15',
-      bipaHash: 'bipa_hash_0x892314_vocal_mesh'
-    },
-    {
-      id: 'usr_902184',
-      email: 'sarah.conner@authr.id',
-      fullName: 'Sarah Conner',
-      handle: '@sconner_art',
-      discipline: 'Visual & Fine Artists',
-      kycStatus: 'verified',
-      idDocumentType: 'Passport (US-88102)',
-      idMatchScore: 98.7,
-      registeredAssetsCount: 12,
-      totalEarnings: 3420.00,
-      joinedDate: '2026-07-20',
-      bipaHash: 'bipa_hash_0x902184_art_signature'
-    },
-    {
-      id: 'usr_441092',
-      email: 'jane.doe@authr.id',
-      fullName: 'Jane Doe',
-      handle: '@janedoe_podcasts',
-      discipline: 'Video Creators & Podcasters',
-      kycStatus: 'review_required',
-      idDocumentType: 'State ID Card (NY-44019)',
-      idMatchScore: 88.2,
-      registeredAssetsCount: 3,
-      totalEarnings: 450.00,
-      joinedDate: '2026-08-01',
-      bipaHash: 'bipa_hash_0x441092_voice_print'
-    },
-    {
-      id: 'usr_119284',
-      email: 'licensing@brandcorp.com',
-      fullName: 'BrandCorp Media Agency',
-      handle: '@brandcorp_hq',
-      discipline: 'Commercial Brands & Agencies',
-      kycStatus: 'verified',
-      idDocumentType: 'Articles of Incorporation (DE-0012)',
-      idMatchScore: 99.9,
-      registeredAssetsCount: 28,
-      totalEarnings: 14850.00,
-      joinedDate: '2026-06-10',
-      bipaHash: 'bipa_hash_0x119284_corporate_vault'
+  // User Management State with localStorage persistence
+  const [usersList, setUsersList] = useState<UserAccount[]>(() => {
+    const saved = localStorage.getItem('rg_admin_users');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
     }
-  ]);
+    return INITIAL_USERS;
+  });
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3500);
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('all');
+  const [selectedRoleFilter, setSelectedRoleFilter] = useState<string>('all');
+  const [editingUserModal, setEditingUserModal] = useState<UserAccount | null>(null);
+
+  const saveUsersList = (newList: UserAccount[]) => {
+    setUsersList(newList);
+    localStorage.setItem('rg_admin_users', JSON.stringify(newList));
+    window.dispatchEvent(new Event('rg_users_updated'));
+  };
+
+  const handleSaveUser = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUserModal) return;
+    if (!editingUserModal.fullName.trim() || !editingUserModal.email.trim()) {
+      alert('Please enter user full name and email address');
+      return;
+    }
+
+    const exists = usersList.some(u => u.id === editingUserModal.id);
+    let updated: UserAccount[];
+    if (exists) {
+      updated = usersList.map(u => u.id === editingUserModal.id ? editingUserModal : u);
+    } else {
+      updated = [editingUserModal, ...usersList];
+    }
+    saveUsersList(updated);
+    setEditingUserModal(null);
+    showToast(exists ? `Updated user "${editingUserModal.fullName}"` : `Added new user "${editingUserModal.fullName}"`);
+  };
+
+  const handleDeleteUser = (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to permanently delete user "${name}"?`)) return;
+    const updated = usersList.filter(u => u.id !== id);
+    saveUsersList(updated);
+    showToast(`User "${name}" has been deleted.`);
   };
 
   const handleApproveKyc = (userId: string) => {
-    setUsersList(usersList.map(u => u.id === userId ? { ...u, kycStatus: 'verified', idMatchScore: 99.1 } : u));
+    const updated = usersList.map(u => u.id === userId ? { ...u, kycStatus: 'verified' as const, idMatchScore: 99.4 } : u);
+    saveUsersList(updated);
     showToast(`KYC Verification manually approved for User ID: ${userId}`);
   };
 
   const handleToggleSuspendUser = (userId: string) => {
-    showToast(`User status updated for User ID: ${userId}`);
+    const targetUser = usersList.find(u => u.id === userId);
+    if (!targetUser) return;
+    const newStatus: 'active' | 'suspended' = targetUser.accountStatus === 'suspended' ? 'active' : 'suspended';
+    const updated = usersList.map(u => u.id === userId ? { ...u, accountStatus: newStatus } : u);
+    saveUsersList(updated);
+    showToast(`Account status for ${targetUser.fullName} set to ${newStatus.toUpperCase()}`);
+  };
+
+  const handleResetUsers = () => {
+    saveUsersList(INITIAL_USERS);
+    showToast('User directory reset to default initial accounts');
   };
 
   const filteredUsers = usersList.filter(u => {
@@ -327,7 +311,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                          u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          u.handle.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesKyc = selectedKycFilter === 'all' || u.kycStatus === selectedKycFilter;
-    return matchesQuery && matchesKyc;
+    const matchesStatus = selectedStatusFilter === 'all' || u.accountStatus === selectedStatusFilter;
+    const matchesRole = selectedRoleFilter === 'all' || u.role === selectedRoleFilter;
+    return matchesQuery && matchesKyc && matchesStatus && matchesRole;
   });
 
   return (
@@ -1058,151 +1044,314 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
       )}
 
-      {/* ---------------- ADMIN TAB 2: CREATOR VAULT DIRECTORY ---------------- */}
+      {/* ---------------- ADMIN TAB 2: USER IDENTITY & ACCOUNT MANAGEMENT ---------------- */}
       {activeAdminTab === 'users' && (
-        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h2 className="text-lg font-extrabold text-slate-900">User Identity & KYC Directory</h2>
-              <p className="text-xs text-slate-500 mt-0.5">Inspect registered creator accounts, biometric KYC match scores, and settlement balances.</p>
+        <div className="space-y-6 animate-fadeIn">
+          
+          {/* User Stats Overview Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono block">Total Registered Accounts</span>
+                <span className="text-2xl font-black text-slate-900 font-mono mt-1 block">{usersList.length} Accounts</span>
+              </div>
+              <div className="p-3 rounded-xl bg-amber-50 text-amber-700 border border-amber-200">
+                <Users className="w-5 h-5" />
+              </div>
             </div>
 
-            <div className="flex items-center space-x-3">
-              <div className="relative">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-                <input
-                  type="text"
-                  placeholder="Search user name or handle..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-900 focus:border-amber-400 focus:outline-none"
-                />
+            <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono block">KYC Verified Users</span>
+                <span className="text-2xl font-black text-emerald-700 font-mono mt-1 block">
+                  {usersList.filter(u => u.kycStatus === 'verified').length} / {usersList.length}
+                </span>
               </div>
+              <div className="p-3 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+            </div>
 
-              <select
-                value={selectedKycFilter}
-                onChange={(e) => setSelectedKycFilter(e.target.value)}
-                className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-bold focus:border-amber-400 focus:outline-none"
-              >
-                <option value="all">All KYC Statuses</option>
-                <option value="verified">Verified Only</option>
-                <option value="review_required">Review Required</option>
-              </select>
+            <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono block">Active Creator Vaults</span>
+                <span className="text-2xl font-black text-indigo-700 font-mono mt-1 block">
+                  {usersList.filter(u => u.accountStatus !== 'suspended').length} Active
+                </span>
+              </div>
+              <div className="p-3 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+            </div>
+
+            <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono block">Suspended / Restricted</span>
+                <span className="text-2xl font-black text-rose-600 font-mono mt-1 block">
+                  {usersList.filter(u => u.accountStatus === 'suspended').length} Suspended
+                </span>
+              </div>
+              <div className="p-3 rounded-xl bg-rose-50 text-rose-700 border border-rose-200">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
             </div>
           </div>
 
-          {/* User Table */}
-          <div className="overflow-x-auto border border-slate-200 rounded-2xl">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">
-                  <th className="p-4">User / Creator</th>
-                  <th className="p-4">Discipline Profile</th>
-                  <th className="p-4">Government ID KYC</th>
-                  <th className="p-4">Match Score</th>
-                  <th className="p-4">Registered Works</th>
-                  <th className="p-4">Total Revenue</th>
-                  <th className="p-4 text-right">Admin Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                {filteredUsers.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="p-4">
-                      <div>
-                        <div className="font-bold text-slate-900 flex items-center space-x-1.5">
-                          <span>{u.fullName}</span>
-                          <span className="text-[10px] font-mono text-slate-400">({u.handle})</span>
-                        </div>
-                        <div className="text-[11px] text-slate-500 font-mono mt-0.5">{u.email} • ID: {u.id}</div>
-                      </div>
-                    </td>
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div>
+                <h2 className="text-lg font-extrabold text-slate-900">User Identity & Account Management Directory ({filteredUsers.length})</h2>
+                <p className="text-xs text-slate-500 mt-0.5">Manage user accounts, edit creator profiles, approve KYC verification, and control suspension access.</p>
+              </div>
 
-                    <td className="p-4 font-bold text-slate-700">
-                      <span className="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200 text-[11px] font-mono">
-                        {u.discipline}
-                      </span>
-                    </td>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={handleResetUsers}
+                  className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 transition-all flex items-center space-x-1.5"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Reset Directory</span>
+                </button>
 
-                    <td className="p-4">
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1.5 w-fit ${
-                        u.kycStatus === 'verified'
-                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
-                          : 'bg-amber-50 text-amber-800 border border-amber-300'
-                      }`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${u.kycStatus === 'verified' ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
-                        <span>{u.kycStatus === 'verified' ? 'KYC VERIFIED' : 'REVIEW REQUIRED'}</span>
-                      </span>
-                      <span className="text-[10px] text-slate-400 block mt-1 font-mono">{u.idDocumentType}</span>
-                    </td>
+                <button
+                  onClick={() => setEditingUserModal({
+                    id: `usr_${Date.now()}`,
+                    fullName: '',
+                    email: '',
+                    handle: '@new_creator',
+                    discipline: 'Musicians & Composers',
+                    role: 'creator',
+                    kycStatus: 'pending',
+                    accountStatus: 'active',
+                    idDocumentType: "Driver's License (Pending)",
+                    idMatchScore: 98.0,
+                    registeredAssetsCount: 0,
+                    totalEarnings: 0,
+                    joinedDate: new Date().toISOString().split('T')[0],
+                    bipaHash: `bipa_hash_0x${Date.now()}_vector`
+                  })}
+                  className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-sm transition-all flex items-center space-x-1.5"
+                >
+                  <Plus className="w-4 h-4 text-amber-400" />
+                  <span>Add New User</span>
+                </button>
+              </div>
+            </div>
 
-                    <td className="p-4">
-                      <span className="font-mono font-bold text-slate-900 text-xs">{u.idMatchScore}% Match</span>
-                    </td>
+            {/* Filters Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="relative flex-1 min-w-[240px]">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <input
+                  type="text"
+                  placeholder="Search by full name, email, or handle..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-900 focus:border-amber-400 focus:outline-none font-sans"
+                />
+              </div>
 
-                    <td className="p-4 font-mono font-bold text-slate-800">
-                      {u.registeredAssetsCount} Works
-                    </td>
+              <div className="flex items-center space-x-2 flex-wrap">
+                <select
+                  value={selectedRoleFilter}
+                  onChange={(e) => setSelectedRoleFilter(e.target.value)}
+                  className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-bold focus:border-amber-400 focus:outline-none"
+                >
+                  <option value="all">All Roles</option>
+                  <option value="creator">Creator</option>
+                  <option value="agency">Agency / Commercial</option>
+                  <option value="admin">Superuser Admin</option>
+                </select>
 
-                    <td className="p-4 font-mono font-bold text-amber-700">
-                      ${u.totalEarnings.toFixed(2)}
-                    </td>
+                <select
+                  value={selectedKycFilter}
+                  onChange={(e) => setSelectedKycFilter(e.target.value)}
+                  className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-bold focus:border-amber-400 focus:outline-none"
+                >
+                  <option value="all">All KYC Statuses</option>
+                  <option value="verified">KYC Verified Only</option>
+                  <option value="review_required">Review Required</option>
+                  <option value="pending">Pending KYC</option>
+                </select>
 
-                    <td className="p-4 text-right">
-                      <div className="flex items-center justify-end space-x-2">
-                        <button
-                          onClick={() => {
-                            if (onSwitchDemoUser) {
-                              onSwitchDemoUser({
-                                id: u.id,
-                                email: u.email,
-                                fullName: u.fullName,
-                                handle: u.handle,
-                                discipline: u.discipline,
-                                avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-                                token: `jwt_demo_switch_${u.id}`,
-                                kycStatus: u.kycStatus,
-                                idDocumentType: u.idDocumentType,
-                                idMatchScore: u.idMatchScore,
-                                role: 'creator'
-                              });
-                              showToast(`Switched active session to ${u.fullName}!`);
-                            }
-                          }}
-                          className="px-2.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-[11px] transition-all flex items-center space-x-1 shadow-2xs"
-                        >
-                          <Zap className="w-3.5 h-3.5 fill-slate-950" />
-                          <span>Test Demo Account</span>
-                        </button>
+                <select
+                  value={selectedStatusFilter}
+                  onChange={(e) => setSelectedStatusFilter(e.target.value)}
+                  className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-bold focus:border-amber-400 focus:outline-none"
+                >
+                  <option value="all">All Account Statuses</option>
+                  <option value="active">Active Accounts</option>
+                  <option value="suspended">Suspended Accounts</option>
+                </select>
+              </div>
+            </div>
 
-                        <button
-                          onClick={() => setSelectedUserDocModal(u)}
-                          className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-[11px] border border-slate-200 transition-all flex items-center space-x-1"
-                        >
-                          <Eye className="w-3.5 h-3.5 text-slate-600" />
-                          <span>Inspect ID Doc</span>
-                        </button>
-
-                        {u.kycStatus !== 'verified' && (
-                          <button
-                            onClick={() => handleApproveKyc(u.id)}
-                            className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] transition-all shadow-xs"
-                          >
-                            Approve KYC
-                          </button>
-                        )}
-                        <button
-                          onClick={() => handleToggleSuspendUser(u.id)}
-                          className="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 font-bold text-[11px] border border-rose-200 transition-all"
-                        >
-                          Suspend
-                        </button>
-                      </div>
-                    </td>
+            {/* User Table */}
+            <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">
+                    <th className="p-4">User Account</th>
+                    <th className="p-4">Discipline Profile</th>
+                    <th className="p-4">Account Status</th>
+                    <th className="p-4">Government ID KYC</th>
+                    <th className="p-4">Match Score</th>
+                    <th className="p-4">Works / Revenue</th>
+                    <th className="p-4 text-right">Admin Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  {filteredUsers.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="p-8 text-center text-xs text-slate-500 font-medium">
+                        No users found matching current search and filter criteria.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredUsers.map((u) => (
+                      <tr key={u.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="p-4">
+                          <div>
+                            <div className="font-bold text-slate-900 flex items-center space-x-2">
+                              <span>{u.fullName}</span>
+                              <span className="text-[10px] font-mono text-slate-400">({u.handle})</span>
+                              <span className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wider font-mono ${
+                                u.role === 'admin' 
+                                  ? 'bg-purple-100 text-purple-800' 
+                                  : u.role === 'agency'
+                                  ? 'bg-blue-100 text-blue-800'
+                                  : 'bg-slate-100 text-slate-700'
+                              }`}>
+                                {u.role || 'creator'}
+                              </span>
+                            </div>
+                            <div className="text-[11px] text-slate-500 font-mono mt-0.5">{u.email} • ID: {u.id}</div>
+                          </div>
+                        </td>
+
+                        <td className="p-4 font-bold text-slate-700">
+                          <span className="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200 text-[11px] font-mono">
+                            {u.discipline}
+                          </span>
+                        </td>
+
+                        <td className="p-4">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider flex items-center space-x-1 w-fit font-mono ${
+                            u.accountStatus === 'suspended'
+                              ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                              : 'bg-emerald-50 text-emerald-800 border border-emerald-300'
+                          }`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${u.accountStatus === 'suspended' ? 'bg-rose-600' : 'bg-emerald-500'}`}></span>
+                            <span>{u.accountStatus === 'suspended' ? 'SUSPENDED' : 'ACTIVE'}</span>
+                          </span>
+                        </td>
+
+                        <td className="p-4">
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center space-x-1 w-fit ${
+                            u.kycStatus === 'verified'
+                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
+                              : u.kycStatus === 'review_required'
+                              ? 'bg-amber-50 text-amber-800 border border-amber-300'
+                              : 'bg-slate-100 text-slate-600 border border-slate-300'
+                          }`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${
+                              u.kycStatus === 'verified' ? 'bg-emerald-500' : u.kycStatus === 'review_required' ? 'bg-amber-500' : 'bg-slate-400'
+                            }`}></span>
+                            <span>{u.kycStatus === 'verified' ? 'VERIFIED' : u.kycStatus === 'review_required' ? 'REVIEW REQUIRED' : 'PENDING'}</span>
+                          </span>
+                          <span className="text-[10px] text-slate-400 block mt-1 font-mono">{u.idDocumentType}</span>
+                        </td>
+
+                        <td className="p-4">
+                          <span className="font-mono font-bold text-slate-900 text-xs">{u.idMatchScore}% Match</span>
+                        </td>
+
+                        <td className="p-4 font-mono">
+                          <div className="font-bold text-slate-900 text-xs">{u.registeredAssetsCount} Works</div>
+                          <div className="text-[11px] text-amber-700 font-extrabold mt-0.5">${(u.totalEarnings || 0).toFixed(2)}</div>
+                        </td>
+
+                        <td className="p-4 text-right">
+                          <div className="flex items-center justify-end space-x-1.5">
+                            <button
+                              onClick={() => {
+                                if (onSwitchDemoUser) {
+                                  onSwitchDemoUser({
+                                    id: u.id,
+                                    email: u.email,
+                                    fullName: u.fullName,
+                                    handle: u.handle,
+                                    discipline: u.discipline,
+                                    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+                                    token: `jwt_demo_switch_${u.id}`,
+                                    kycStatus: u.kycStatus,
+                                    idDocumentType: u.idDocumentType,
+                                    idMatchScore: u.idMatchScore,
+                                    role: u.role || 'creator'
+                                  });
+                                  showToast(`Switched active session to ${u.fullName}!`);
+                                }
+                              }}
+                              className="px-2 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-[10px] transition-all flex items-center space-x-1 shadow-2xs"
+                              title="Switch active session to this user"
+                            >
+                              <Zap className="w-3 h-3 fill-slate-950" />
+                              <span>Test Demo</span>
+                            </button>
+
+                            <button
+                              onClick={() => setEditingUserModal({ ...u })}
+                              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all border border-slate-200"
+                              title="Edit User Details"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
+
+                            <button
+                              onClick={() => setSelectedUserDocModal(u)}
+                              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all border border-slate-200"
+                              title="Inspect Government ID OCR Data"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                            </button>
+
+                            {u.kycStatus !== 'verified' && (
+                              <button
+                                onClick={() => handleApproveKyc(u.id)}
+                                className="px-2 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] transition-all"
+                                title="Approve KYC Verification"
+                              >
+                                Approve KYC
+                              </button>
+                            )}
+
+                            <button
+                              onClick={() => handleToggleSuspendUser(u.id)}
+                              className={`px-2 py-1 rounded-lg font-bold text-[10px] border transition-all ${
+                                u.accountStatus === 'suspended'
+                                  ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-300'
+                                  : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-300'
+                              }`}
+                              title={u.accountStatus === 'suspended' ? 'Reactivate Account' : 'Suspend Account'}
+                            >
+                              {u.accountStatus === 'suspended' ? 'Reactivate' : 'Suspend'}
+                            </button>
+
+                            <button
+                              onClick={() => handleDeleteUser(u.id, u.fullName)}
+                              className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 transition-all border border-rose-200"
+                              title="Delete User Account"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
@@ -1963,6 +2112,197 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 >
                   <Sparkles className="w-4 h-4 text-slate-950" />
                   <span>Save Plan</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT/ADD USER ACCOUNT MODAL */}
+      {editingUserModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200 animate-scaleIn max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-9 h-9 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                  <Users className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-900">
+                    {usersList.some(u => u.id === editingUserModal.id) ? 'Edit User Account' : 'Add New User Account'}
+                  </h3>
+                  <p className="text-xs text-slate-500">Configure creator profile, discipline, KYC status, and access role.</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setEditingUserModal(null)}
+                className="p-2 rounded-xl bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveUser} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingUserModal.fullName}
+                    onChange={(e) => setEditingUserModal({ ...editingUserModal, fullName: e.target.value })}
+                    placeholder="e.g. Alex Rivera"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-sans"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">Email Address *</label>
+                  <input
+                    type="email"
+                    required
+                    value={editingUserModal.email}
+                    onChange={(e) => setEditingUserModal({ ...editingUserModal, email: e.target.value })}
+                    placeholder="alex@authr.id"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-sans"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">Handle / Username</label>
+                  <input
+                    type="text"
+                    value={editingUserModal.handle}
+                    onChange={(e) => setEditingUserModal({ ...editingUserModal, handle: e.target.value })}
+                    placeholder="@handle"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-mono"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">Discipline Profile</label>
+                  <select
+                    value={editingUserModal.discipline}
+                    onChange={(e) => setEditingUserModal({ ...editingUserModal, discipline: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-sans"
+                  >
+                    <option value="Musicians & Composers">Musicians & Composers</option>
+                    <option value="Visual & Fine Artists">Visual & Fine Artists</option>
+                    <option value="Video Creators & Podcasters">Video Creators & Podcasters</option>
+                    <option value="Authors & Literary Writers">Authors & Literary Writers</option>
+                    <option value="Commercial Brands & Agencies">Commercial Brands & Agencies</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">Account Role</label>
+                  <select
+                    value={editingUserModal.role}
+                    onChange={(e) => setEditingUserModal({ ...editingUserModal, role: e.target.value as any })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-sans"
+                  >
+                    <option value="creator">Creator</option>
+                    <option value="agency">Commercial Agency</option>
+                    <option value="admin">Superuser Admin</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">Government ID KYC</label>
+                  <select
+                    value={editingUserModal.kycStatus}
+                    onChange={(e) => setEditingUserModal({ ...editingUserModal, kycStatus: e.target.value as any })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-sans"
+                  >
+                    <option value="verified">Verified</option>
+                    <option value="review_required">Review Required</option>
+                    <option value="pending">Pending</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">Account Status</label>
+                  <select
+                    value={editingUserModal.accountStatus}
+                    onChange={(e) => setEditingUserModal({ ...editingUserModal, accountStatus: e.target.value as any })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-sans"
+                  >
+                    <option value="active">Active</option>
+                    <option value="suspended">Suspended</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">ID Document Label</label>
+                  <input
+                    type="text"
+                    value={editingUserModal.idDocumentType}
+                    onChange={(e) => setEditingUserModal({ ...editingUserModal, idDocumentType: e.target.value })}
+                    placeholder="e.g. Driver's License (IL-90218)"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-sans"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">KYC Facial Match Score (%)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={editingUserModal.idMatchScore}
+                    onChange={(e) => setEditingUserModal({ ...editingUserModal, idMatchScore: parseFloat(e.target.value) || 0 })}
+                    placeholder="99.4"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">Registered Works Count</label>
+                  <input
+                    type="number"
+                    value={editingUserModal.registeredAssetsCount}
+                    onChange={(e) => setEditingUserModal({ ...editingUserModal, registeredAssetsCount: parseInt(e.target.value) || 0 })}
+                    placeholder="5"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-mono"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">Total Revenue Cleared ($)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value={editingUserModal.totalEarnings}
+                    onChange={(e) => setEditingUserModal({ ...editingUserModal, totalEarnings: parseFloat(e.target.value) || 0 })}
+                    placeholder="1521.92"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setEditingUserModal(null)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-md transition-all flex items-center space-x-2"
+                >
+                  <Sparkles className="w-4 h-4 text-slate-950" />
+                  <span>Save User</span>
                 </button>
               </div>
             </form>
