@@ -35,6 +35,12 @@ import { Footer } from './Footer';
 
 import { CustomerReview, PricingPlan, TrialConfig, HeroStatRow } from '../types';
 import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_HERO_STAT_ROWS } from '../services/mockData';
+import { 
+  getCustomerReviewsFromFirestore, 
+  getPricingPlansFromFirestore, 
+  getTrialConfigFromFirestore, 
+  getHeroStatsFromFirestore 
+} from '../firebase';
 
 interface PublicLandingProps {
   onOpenRegister: () => void;
@@ -85,37 +91,22 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
   });
 
   useEffect(() => {
+    getCustomerReviewsFromFirestore().then(revs => { if (revs && revs.length > 0) setTestimonials(revs); });
+    getPricingPlansFromFirestore().then(plans => { if (plans && plans.length > 0) setPricingPlans(plans); });
+    getTrialConfigFromFirestore().then(cfg => { if (cfg) setTrialConfig(cfg); });
+    getHeroStatsFromFirestore().then(stats => { if (stats && stats.length > 0) setHeroStats(stats); });
+
     const syncTestimonials = () => {
-      const saved = localStorage.getItem('rg_testimonials');
-      if (saved) {
-        try { setTestimonials(JSON.parse(saved)); } catch (e) {}
-      } else {
-        setTestimonials(INITIAL_TESTIMONIALS);
-      }
+      getCustomerReviewsFromFirestore().then(revs => { if (revs && revs.length > 0) setTestimonials(revs); });
     };
 
     const syncPricing = () => {
-      const savedPlans = localStorage.getItem('rg_pricing_plans');
-      if (savedPlans) {
-        try { setPricingPlans(JSON.parse(savedPlans)); } catch (e) {}
-      } else {
-        setPricingPlans(INITIAL_PRICING_PLANS);
-      }
-      const savedTrial = localStorage.getItem('rg_trial_config');
-      if (savedTrial) {
-        try { setTrialConfig(JSON.parse(savedTrial)); } catch (e) {}
-      } else {
-        setTrialConfig(INITIAL_TRIAL_CONFIG);
-      }
+      getPricingPlansFromFirestore().then(plans => { if (plans && plans.length > 0) setPricingPlans(plans); });
+      getTrialConfigFromFirestore().then(cfg => { if (cfg) setTrialConfig(cfg); });
     };
 
     const syncHeroStats = () => {
-      const saved = localStorage.getItem('rg_hero_stat_rows');
-      if (saved) {
-        try { setHeroStats(JSON.parse(saved)); } catch (e) {}
-      } else {
-        setHeroStats(INITIAL_HERO_STAT_ROWS);
-      }
+      getHeroStatsFromFirestore().then(stats => { if (stats && stats.length > 0) setHeroStats(stats); });
     };
 
     window.addEventListener('storage', syncTestimonials);
@@ -124,6 +115,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
     window.addEventListener('rg_pricing_updated', syncPricing);
     window.addEventListener('storage', syncHeroStats);
     window.addEventListener('rg_hero_stats_updated', syncHeroStats);
+
     return () => {
       window.removeEventListener('storage', syncTestimonials);
       window.removeEventListener('rg_testimonials_updated', syncTestimonials);

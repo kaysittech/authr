@@ -27,6 +27,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { ManagedPage, CareerOpenRole } from '../types';
+import { getManagedPagesFromFirestore, getCareerRolesFromFirestore } from '../firebase';
 import { INITIAL_MANAGED_PAGES, INITIAL_CAREER_ROLES } from '../services/mockData';
 
 interface FooterPagesViewProps {
@@ -62,7 +63,7 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
     });
   };
 
-  // Managed Pages State (Admin CMS Sync)
+  // Managed Pages State (Admin CMS Sync via Firestore)
   const [managedPages, setManagedPages] = useState<ManagedPage[]>(() => {
     const saved = localStorage.getItem('rg_managed_pages');
     if (saved) {
@@ -75,20 +76,24 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
   });
 
   useEffect(() => {
-    const handleSync = () => {
-      const saved = localStorage.getItem('rg_managed_pages');
-      if (saved) {
-        try {
-          const parsed: ManagedPage[] = JSON.parse(saved);
-          setManagedPages(sanitizePages(parsed));
-        } catch (e) {}
+    getManagedPagesFromFirestore().then(pages => {
+      if (pages && pages.length > 0) {
+        setManagedPages(sanitizePages(pages));
       }
+    });
+
+    const handleSync = () => {
+      getManagedPagesFromFirestore().then(pages => {
+        if (pages && pages.length > 0) {
+          setManagedPages(sanitizePages(pages));
+        }
+      });
     };
     window.addEventListener('rg_page_content_updated', handleSync);
     return () => window.removeEventListener('rg_page_content_updated', handleSync);
   }, []);
 
-  // Career Open Roles State (Admin Sync)
+  // Career Open Roles State (Admin Sync via Firestore)
   const [careerRoles, setCareerRoles] = useState<CareerOpenRole[]>(() => {
     const saved = localStorage.getItem('rg_career_roles');
     if (saved) {
@@ -98,11 +103,18 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
   });
 
   useEffect(() => {
-    const handleSyncRoles = () => {
-      const saved = localStorage.getItem('rg_career_roles');
-      if (saved) {
-        try { setCareerRoles(JSON.parse(saved)); } catch (e) {}
+    getCareerRolesFromFirestore().then(roles => {
+      if (roles && roles.length > 0) {
+        setCareerRoles(roles);
       }
+    });
+
+    const handleSyncRoles = () => {
+      getCareerRolesFromFirestore().then(roles => {
+        if (roles && roles.length > 0) {
+          setCareerRoles(roles);
+        }
+      });
     };
     window.addEventListener('rg_career_roles_updated', handleSyncRoles);
     return () => window.removeEventListener('rg_career_roles_updated', handleSyncRoles);

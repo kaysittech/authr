@@ -40,6 +40,28 @@ import {
 import { DetectionMatch, SettlementClaim, CustomerReview, PricingPlan, TrialConfig, UserAccount, HeroStatRow, ManagedPage, ManagedPageSection, CareerOpenRole } from '../types';
 import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_USERS, INITIAL_HERO_STAT_ROWS, INITIAL_MANAGED_PAGES, INITIAL_CAREER_ROLES } from '../services/mockData';
 import { Article, BLOG_ARTICLES } from './BlogView';
+import { 
+  getManagedPagesFromFirestore, 
+  saveManagedPageToFirestore,
+  getCareerRolesFromFirestore,
+  saveCareerRoleToFirestore,
+  deleteCareerRoleFromFirestore,
+  getHeroStatsFromFirestore,
+  saveHeroStatToFirestore,
+  getCustomerReviewsFromFirestore,
+  saveCustomerReviewToFirestore,
+  deleteCustomerReviewFromFirestore,
+  getPricingPlansFromFirestore,
+  savePricingPlanToFirestore,
+  getTrialConfigFromFirestore,
+  saveTrialConfigToFirestore,
+  getBlogArticlesFromFirestore,
+  saveBlogArticleToFirestore,
+  deleteBlogArticleFromFirestore,
+  getUsersFromFirestore,
+  saveUserToFirestore,
+  deleteUserFromFirestore
+} from '../firebase';
 
 interface AdminPanelProps {
   matches: DetectionMatch[];
@@ -66,6 +88,18 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     setTimeout(() => setToastMessage(null), 3500);
   };
 
+  // Sync state with Firebase Firestore on mount
+  useEffect(() => {
+    getManagedPagesFromFirestore().then(pages => setManagedPagesList(pages));
+    getCareerRolesFromFirestore().then(roles => setCareerRolesList(roles));
+    getHeroStatsFromFirestore().then(stats => setAdminHeroStats(stats));
+    getCustomerReviewsFromFirestore().then(revs => setTestimonialsList(revs));
+    getPricingPlansFromFirestore().then(plans => setAdminPricingPlans(plans));
+    getTrialConfigFromFirestore().then(config => setAdminTrialConfig(config));
+    getBlogArticlesFromFirestore().then(arts => setArticlesList(arts));
+    getUsersFromFirestore().then(users => setUsersList(users));
+  }, []);
+
   // Managed Page Content (CMS) State
   const [managedPagesList, setManagedPagesList] = useState<ManagedPage[]>(() => {
     const saved = localStorage.getItem('rg_managed_pages');
@@ -85,6 +119,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const saveManagedPagesList = (newList: ManagedPage[]) => {
     setManagedPagesList(newList);
     localStorage.setItem('rg_managed_pages', JSON.stringify(newList));
+    newList.forEach(p => saveManagedPageToFirestore(p));
     window.dispatchEvent(new Event('rg_page_content_updated'));
   };
 
@@ -103,24 +138,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
     const updatedList = managedPagesList.map(p => p.id === updatedPage.id ? updatedPage : p);
     saveManagedPagesList(updatedList);
+    saveManagedPageToFirestore(updatedPage);
     setEditingPageModal(null);
     showToast(`Page "${updatedPage.title}" text updated successfully!`);
-  };
-
-  const handleResetAllPages = () => {
-    if (window.confirm('Reset all 12 page texts back to default content?')) {
-      saveManagedPagesList(INITIAL_MANAGED_PAGES);
-      showToast('All 12 page texts reset to default content');
-    }
-  };
-
-  const handleResetSinglePage = (id: string) => {
-    const defaultPage = INITIAL_MANAGED_PAGES.find(p => p.id === id);
-    if (defaultPage) {
-      const updatedList = managedPagesList.map(p => p.id === id ? defaultPage : p);
-      saveManagedPagesList(updatedList);
-      showToast(`Page "${defaultPage.title}" reset to default text`);
-    }
   };
 
   // Career Open Roles Management State
@@ -137,6 +157,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const saveCareerRolesList = (newList: CareerOpenRole[]) => {
     setCareerRolesList(newList);
     localStorage.setItem('rg_career_roles', JSON.stringify(newList));
+    newList.forEach(r => saveCareerRoleToFirestore(r));
     window.dispatchEvent(new Event('rg_career_roles_updated'));
   };
 
@@ -157,21 +178,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     }
 
     saveCareerRolesList(updated);
+    saveCareerRoleToFirestore(editingCareerRoleModal);
     setEditingCareerRoleModal(null);
     showToast(exists ? `Updated open role "${editingCareerRoleModal.title}"` : `Added new open role "${editingCareerRoleModal.title}"`);
   };
 
   const handleDeleteCareerRole = (id: string) => {
+    deleteCareerRoleFromFirestore(id);
     const updated = careerRolesList.filter(r => r.id !== id);
     saveCareerRolesList(updated);
     showToast('Career open role deleted successfully.');
-  };
-
-  const handleResetCareerRoles = () => {
-    if (window.confirm('Reset open roles to initial default job listings?')) {
-      saveCareerRolesList(INITIAL_CAREER_ROLES);
-      showToast('Career open roles reset to default.');
-    }
   };
 
   // Customer Reviews State
@@ -188,6 +204,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const saveTestimonialsList = (newList: CustomerReview[]) => {
     setTestimonialsList(newList);
     localStorage.setItem('rg_testimonials', JSON.stringify(newList));
+    newList.forEach(rev => saveCustomerReviewToFirestore(rev));
     window.dispatchEvent(new Event('rg_testimonials_updated'));
   };
 
@@ -207,19 +224,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       updated = [...testimonialsList, editingReviewModal];
     }
     saveTestimonialsList(updated);
+    saveCustomerReviewToFirestore(editingReviewModal);
     setEditingReviewModal(null);
     showToast(exists ? `Updated review for "${editingReviewModal.author}"` : `Added new review for "${editingReviewModal.author}"`);
   };
 
   const handleDeleteReview = (id: string) => {
+    deleteCustomerReviewFromFirestore(id);
     const updated = testimonialsList.filter(r => r.id !== id);
     saveTestimonialsList(updated);
     showToast('Review deleted successfully');
-  };
-
-  const handleResetReviews = () => {
-    saveTestimonialsList(INITIAL_TESTIMONIALS);
-    showToast('Customer reviews reset to initial default testimonials');
   };
 
   // Blog & Articles Management State
@@ -236,6 +250,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const saveArticlesList = (newList: Article[]) => {
     setArticlesList(newList);
     localStorage.setItem('rg_blog_articles', JSON.stringify(newList));
+    newList.forEach(art => saveBlogArticleToFirestore(art));
     window.dispatchEvent(new Event('rg_blog_articles_updated'));
   };
 
@@ -255,19 +270,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       updated = [editingArticleModal, ...articlesList];
     }
     saveArticlesList(updated);
+    saveBlogArticleToFirestore(editingArticleModal);
     setEditingArticleModal(null);
     showToast(exists ? `Updated article "${editingArticleModal.title}"` : `Published new article "${editingArticleModal.title}"`);
   };
 
   const handleDeleteArticle = (id: string) => {
+    deleteBlogArticleFromFirestore(id);
     const updated = articlesList.filter(a => a.id !== id);
     saveArticlesList(updated);
     showToast('Article deleted successfully');
-  };
-
-  const handleResetArticles = () => {
-    saveArticlesList(BLOG_ARTICLES);
-    showToast('Blog articles reset to initial default articles');
   };
 
   // Subscription Plans & 30-Day Trial Manager State
@@ -294,6 +306,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     setAdminTrialConfig(config);
     localStorage.setItem('rg_pricing_plans', JSON.stringify(plans));
     localStorage.setItem('rg_trial_config', JSON.stringify(config));
+    plans.forEach(p => savePricingPlanToFirestore(p));
+    saveTrialConfigToFirestore(config);
     window.dispatchEvent(new Event('rg_pricing_updated'));
   };
 
@@ -313,6 +327,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       updatedPlans = [...adminPricingPlans, editingPlanModal];
     }
     savePricingData(updatedPlans, adminTrialConfig);
+    savePricingPlanToFirestore(editingPlanModal);
     setEditingPlanModal(null);
     showToast(exists ? `Updated plan "${editingPlanModal.name}"` : `Created new plan "${editingPlanModal.name}"`);
   };
@@ -323,14 +338,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     showToast('Plan deleted successfully');
   };
 
-  const handleResetPricingPlans = () => {
-    savePricingData(INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG);
-    showToast('Plans & Pricing configuration reset to defaults');
-  };
-
   const handleSaveTrialConfig = (e: React.FormEvent) => {
     e.preventDefault();
     savePricingData(adminPricingPlans, adminTrialConfig);
+    saveTrialConfigToFirestore(adminTrialConfig);
     showToast('30-Day Free Trial & Header settings saved');
   };
 
@@ -346,6 +357,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const saveHeroStats = (newList: HeroStatRow[]) => {
     setAdminHeroStats(newList);
     localStorage.setItem('rg_hero_stat_rows', JSON.stringify(newList));
+    newList.forEach(stat => saveHeroStatToFirestore(stat));
     window.dispatchEvent(new Event('rg_hero_stats_updated'));
   };
 
@@ -363,6 +375,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     };
     const updated = [...adminHeroStats, newStat];
     saveHeroStats(updated);
+    saveHeroStatToFirestore(newStat);
     showToast('Added new Hero Stat Card');
   };
 
@@ -370,11 +383,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     const updated = adminHeroStats.filter(s => s.id !== id);
     saveHeroStats(updated);
     showToast('Deleted Hero Stat Card');
-  };
-
-  const handleResetHeroStats = () => {
-    saveHeroStats(INITIAL_HERO_STAT_ROWS);
-    showToast('Hero Stat Cards reset to defaults');
   };
 
   // Admin Pricing & Commission Take-Rate State
@@ -410,6 +418,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const saveUsersList = (newList: UserAccount[]) => {
     setUsersList(newList);
     localStorage.setItem('rg_admin_users', JSON.stringify(newList));
+    newList.forEach(u => saveUserToFirestore(u));
     window.dispatchEvent(new Event('rg_users_updated'));
   };
 
@@ -429,12 +438,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       updated = [editingUserModal, ...usersList];
     }
     saveUsersList(updated);
+    saveUserToFirestore(editingUserModal);
     setEditingUserModal(null);
     showToast(exists ? `Updated user "${editingUserModal.fullName}"` : `Added new user "${editingUserModal.fullName}"`);
   };
 
   const handleDeleteUser = (id: string, name: string) => {
     if (!confirm(`Are you sure you want to permanently delete user "${name}"?`)) return;
+    deleteUserFromFirestore(id);
     const updated = usersList.filter(u => u.id !== id);
     saveUsersList(updated);
     showToast(`User "${name}" has been deleted.`);
@@ -811,16 +822,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 Manage and customize page titles, subtitles, summary intros, and body text sections for all 12 public & legal pages.
               </p>
             </div>
-
-            <div className="flex items-center space-x-3">
-              <button
-                onClick={handleResetAllPages}
-                className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 flex items-center space-x-1.5 transition-all"
-              >
-                <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
-                <span>Reset All 12 Pages to Default</span>
-              </button>
-            </div>
           </div>
 
           {/* Category Filter Pills */}
@@ -888,13 +889,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                     <div className="flex items-center space-x-1.5">
                       <button
-                        onClick={() => handleResetSinglePage(page.id)}
-                        title="Reset text to default"
-                        className="p-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-500 border border-slate-200"
-                      >
-                        <RotateCcw className="w-3.5 h-3.5" />
-                      </button>
-                      <button
                         onClick={() => setEditingPageModal(JSON.parse(JSON.stringify(page)))}
                         className="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-xs flex items-center space-x-1"
                       >
@@ -921,13 +915,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
 
               <div className="flex items-center space-x-3">
-                <button
-                  onClick={handleResetCareerRoles}
-                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 flex items-center space-x-1"
-                >
-                  <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Reset Roles</span>
-                </button>
                 <button
                   onClick={() => setEditingCareerRoleModal({
                     id: `job_${Date.now()}`,
@@ -997,14 +984,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
 
               <div className="flex items-center space-x-2">
-                <button
-                  onClick={handleResetHeroStats}
-                  className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 transition-all flex items-center space-x-1.5"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Reset Stat Cards</span>
-                </button>
-
                 <button
                   onClick={handleAddHeroStat}
                   className="px-3.5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-sm transition-all flex items-center space-x-1.5"
@@ -1216,14 +1195,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
 
               <div className="flex items-center space-x-2">
-                <button
-                  onClick={handleResetPricingPlans}
-                  className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 transition-all flex items-center space-x-2"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Reset to Defaults</span>
-                </button>
-
                 <button
                   onClick={() => setEditingPlanModal({
                     id: `plan_${Date.now()}`,
@@ -1551,14 +1522,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
 
               <div className="flex items-center space-x-2">
-                <button
-                  onClick={handleResetUsers}
-                  className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 transition-all flex items-center space-x-1.5"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Reset Directory</span>
-                </button>
-
                 <button
                   onClick={() => setEditingUserModal({
                     id: `usr_${Date.now()}`,
@@ -1959,14 +1922,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
             <div className="flex items-center space-x-3">
               <button
-                onClick={handleResetReviews}
-                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-all flex items-center space-x-2 shadow-2xs"
-              >
-                <RotateCcw className="w-4 h-4 text-slate-500" />
-                <span>Reset to Defaults</span>
-              </button>
-
-              <button
                 onClick={() => setEditingReviewModal({
                   id: `rev_${Date.now()}`,
                   author: '',
@@ -2170,14 +2125,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
 
             <div className="flex items-center space-x-3">
-              <button
-                onClick={handleResetArticles}
-                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-all flex items-center space-x-2 shadow-2xs"
-              >
-                <RotateCcw className="w-4 h-4 text-slate-500" />
-                <span>Reset Defaults</span>
-              </button>
-
               <button
                 onClick={() => setEditingArticleModal({
                   id: `post_${Date.now()}`,

@@ -116,6 +116,8 @@ export const BLOG_ARTICLES: Article[] = [
   }
 ];
 
+import { getBlogArticlesFromFirestore } from '../firebase';
+
 interface BlogViewProps {
   onOpenRegister: () => void;
 }
@@ -134,21 +136,17 @@ export const BlogView: React.FC<BlogViewProps> = ({ onOpenRegister }) => {
   });
 
   React.useEffect(() => {
+    getBlogArticlesFromFirestore().then(arts => {
+      if (arts && arts.length > 0) setArticles(arts);
+    });
+
     const syncArticles = () => {
-      const saved = localStorage.getItem('rg_blog_articles');
-      if (saved) {
-        try { setArticles(JSON.parse(saved)); } catch (e) {}
-      } else {
-        setArticles(BLOG_ARTICLES);
-      }
+      getBlogArticlesFromFirestore().then(arts => {
+        if (arts && arts.length > 0) setArticles(arts);
+      });
     };
 
     window.addEventListener('storage', syncArticles);
-    window.addEventListener('rg_blog_articles_updated', syncArticles);
-    return () => {
-      window.removeEventListener('storage', syncArticles);
-      window.removeEventListener('rg_blog_articles_updated', syncArticles);
-    };
   }, []);
 
   const categories = ['All', ...Array.from(new Set(articles.map(a => a.category)))];

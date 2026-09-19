@@ -18,11 +18,23 @@ import {
   getDocs, 
   addDoc, 
   updateDoc, 
+  deleteDoc,
   query, 
   where, 
   orderBy, 
   serverTimestamp 
 } from 'firebase/firestore';
+
+import { 
+  INITIAL_MANAGED_PAGES, 
+  INITIAL_CAREER_ROLES, 
+  INITIAL_HERO_STAT_ROWS, 
+  INITIAL_TESTIMONIALS, 
+  INITIAL_PRICING_PLANS, 
+  INITIAL_TRIAL_CONFIG, 
+  INITIAL_USERS 
+} from './services/mockData';
+import { BLOG_ARTICLES } from './components/BlogView';
 
 // Dynamic key retriever to satisfy GitHub Secret Scanning while supporting Web client initialization
 const getFirebaseApiKey = (): string => {
@@ -286,19 +298,269 @@ export const saveClaimToFirestore = async (userId: string, claimData: any) => {
 };
 
 /**
- * Fetch blog articles from Firestore
+ * Managed Pages Firestore API
  */
-export const getBlogArticlesFromFirestore = async () => {
+export const getManagedPagesFromFirestore = async (): Promise<any[]> => {
+  try {
+    const colRef = collection(db, 'managed_pages');
+    const snap = await getDocs(colRef);
+    if (!snap.empty) {
+      const pages: any[] = [];
+      snap.forEach(d => pages.push({ id: d.id, ...d.data() }));
+      return pages;
+    }
+    for (const page of INITIAL_MANAGED_PAGES) {
+      await setDoc(doc(db, 'managed_pages', page.id), page);
+    }
+    return INITIAL_MANAGED_PAGES;
+  } catch (err) {
+    console.warn("Firestore fetch managed pages error:", err);
+    return INITIAL_MANAGED_PAGES;
+  }
+};
+
+export const saveManagedPageToFirestore = async (page: any) => {
+  try {
+    await setDoc(doc(db, 'managed_pages', page.id), page, { merge: true });
+  } catch (err) {
+    console.warn("Firestore save managed page error:", err);
+  }
+};
+
+/**
+ * Career Open Roles Firestore API
+ */
+export const getCareerRolesFromFirestore = async (): Promise<any[]> => {
+  try {
+    const colRef = collection(db, 'career_roles');
+    const snap = await getDocs(colRef);
+    if (!snap.empty) {
+      const roles: any[] = [];
+      snap.forEach(d => roles.push({ id: d.id, ...d.data() }));
+      return roles;
+    }
+    for (const role of INITIAL_CAREER_ROLES) {
+      await setDoc(doc(db, 'career_roles', role.id), role);
+    }
+    return INITIAL_CAREER_ROLES;
+  } catch (err) {
+    console.warn("Firestore fetch career roles error:", err);
+    return INITIAL_CAREER_ROLES;
+  }
+};
+
+export const saveCareerRoleToFirestore = async (role: any) => {
+  try {
+    await setDoc(doc(db, 'career_roles', role.id), role, { merge: true });
+  } catch (err) {
+    console.warn("Firestore save career role error:", err);
+  }
+};
+
+export const deleteCareerRoleFromFirestore = async (roleId: string) => {
+  try {
+    await deleteDoc(doc(db, 'career_roles', roleId));
+  } catch (err) {
+    console.warn("Firestore delete career role error:", err);
+  }
+};
+
+/**
+ * Hero Stat Cards Firestore API
+ */
+export const getHeroStatsFromFirestore = async (): Promise<any[]> => {
+  try {
+    const colRef = collection(db, 'hero_stats');
+    const snap = await getDocs(colRef);
+    if (!snap.empty) {
+      const stats: any[] = [];
+      snap.forEach(d => stats.push({ id: d.id, ...d.data() }));
+      return stats;
+    }
+    for (const stat of INITIAL_HERO_STAT_ROWS) {
+      await setDoc(doc(db, 'hero_stats', stat.id), stat);
+    }
+    return INITIAL_HERO_STAT_ROWS;
+  } catch (err) {
+    console.warn("Firestore fetch hero stats error:", err);
+    return INITIAL_HERO_STAT_ROWS;
+  }
+};
+
+export const saveHeroStatToFirestore = async (stat: any) => {
+  try {
+    await setDoc(doc(db, 'hero_stats', stat.id), stat, { merge: true });
+  } catch (err) {
+    console.warn("Firestore save hero stat error:", err);
+  }
+};
+
+/**
+ * Customer Reviews Firestore API
+ */
+export const getCustomerReviewsFromFirestore = async (): Promise<any[]> => {
+  try {
+    const colRef = collection(db, 'customer_reviews');
+    const snap = await getDocs(colRef);
+    if (!snap.empty) {
+      const reviews: any[] = [];
+      snap.forEach(d => reviews.push({ id: d.id, ...d.data() }));
+      return reviews;
+    }
+    for (const rev of INITIAL_TESTIMONIALS) {
+      await setDoc(doc(db, 'customer_reviews', rev.id), rev);
+    }
+    return INITIAL_TESTIMONIALS;
+  } catch (err) {
+    console.warn("Firestore fetch customer reviews error:", err);
+    return INITIAL_TESTIMONIALS;
+  }
+};
+
+export const saveCustomerReviewToFirestore = async (review: any) => {
+  try {
+    await setDoc(doc(db, 'customer_reviews', review.id), review, { merge: true });
+  } catch (err) {
+    console.warn("Firestore save customer review error:", err);
+  }
+};
+
+export const deleteCustomerReviewFromFirestore = async (reviewId: string) => {
+  try {
+    await deleteDoc(doc(db, 'customer_reviews', reviewId));
+  } catch (err) {
+    console.warn("Firestore delete customer review error:", err);
+  }
+};
+
+/**
+ * Pricing Plans & Trial Config Firestore API
+ */
+export const getPricingPlansFromFirestore = async (): Promise<any[]> => {
+  try {
+    const colRef = collection(db, 'plans_pricing');
+    const snap = await getDocs(colRef);
+    if (!snap.empty) {
+      const plans: any[] = [];
+      snap.forEach(d => plans.push({ id: d.id, ...d.data() }));
+      return plans;
+    }
+    for (const plan of INITIAL_PRICING_PLANS) {
+      await setDoc(doc(db, 'plans_pricing', plan.id), plan);
+    }
+    return INITIAL_PRICING_PLANS;
+  } catch (err) {
+    console.warn("Firestore fetch pricing plans error:", err);
+    return INITIAL_PRICING_PLANS;
+  }
+};
+
+export const savePricingPlanToFirestore = async (plan: any) => {
+  try {
+    await setDoc(doc(db, 'plans_pricing', plan.id), plan, { merge: true });
+  } catch (err) {
+    console.warn("Firestore save pricing plan error:", err);
+  }
+};
+
+export const getTrialConfigFromFirestore = async (): Promise<any> => {
+  try {
+    const docRef = doc(db, 'app_config', 'trial');
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      return snap.data();
+    }
+    await setDoc(docRef, INITIAL_TRIAL_CONFIG);
+    return INITIAL_TRIAL_CONFIG;
+  } catch (err) {
+    console.warn("Firestore fetch trial config error:", err);
+    return INITIAL_TRIAL_CONFIG;
+  }
+};
+
+export const saveTrialConfigToFirestore = async (config: any) => {
+  try {
+    await setDoc(doc(db, 'app_config', 'trial'), config, { merge: true });
+  } catch (err) {
+    console.warn("Firestore save trial config error:", err);
+  }
+};
+
+/**
+ * Blog Articles Firestore API
+ */
+export const getBlogArticlesFromFirestore = async (): Promise<any[]> => {
   try {
     const articlesRef = collection(db, 'blog_articles');
     const querySnapshot = await getDocs(articlesRef);
-    const articles: any[] = [];
-    querySnapshot.forEach((docSnap) => {
-      articles.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    return articles;
+    if (!querySnapshot.empty) {
+      const articles: any[] = [];
+      querySnapshot.forEach((docSnap) => {
+        articles.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      return articles;
+    }
+    for (const art of BLOG_ARTICLES) {
+      await setDoc(doc(db, 'blog_articles', art.id), art);
+    }
+    return BLOG_ARTICLES;
   } catch (err) {
-    console.warn("Firestore fetch blog articles fallback:", err);
-    return [];
+    console.warn("Firestore fetch blog articles error:", err);
+    return BLOG_ARTICLES;
+  }
+};
+
+export const saveBlogArticleToFirestore = async (article: any) => {
+  try {
+    await setDoc(doc(db, 'blog_articles', article.id), article, { merge: true });
+  } catch (err) {
+    console.warn("Firestore save blog article error:", err);
+  }
+};
+
+export const deleteBlogArticleFromFirestore = async (articleId: string) => {
+  try {
+    await deleteDoc(doc(db, 'blog_articles', articleId));
+  } catch (err) {
+    console.warn("Firestore delete blog article error:", err);
+  }
+};
+
+/**
+ * Users Directory Firestore API
+ */
+export const getUsersFromFirestore = async (): Promise<any[]> => {
+  try {
+    const colRef = collection(db, 'users');
+    const snap = await getDocs(colRef);
+    if (!snap.empty) {
+      const users: any[] = [];
+      snap.forEach(d => users.push({ id: d.id, ...d.data() }));
+      return users;
+    }
+    for (const u of INITIAL_USERS) {
+      await setDoc(doc(db, 'users', u.id), u);
+    }
+    return INITIAL_USERS;
+  } catch (err) {
+    console.warn("Firestore fetch users error:", err);
+    return INITIAL_USERS;
+  }
+};
+
+export const saveUserToFirestore = async (userData: any) => {
+  try {
+    const userId = userData.id || userData.uid;
+    await setDoc(doc(db, 'users', userId), userData, { merge: true });
+  } catch (err) {
+    console.warn("Firestore save user error:", err);
+  }
+};
+
+export const deleteUserFromFirestore = async (userId: string) => {
+  try {
+    await deleteDoc(doc(db, 'users', userId));
+  } catch (err) {
+    console.warn("Firestore delete user error:", err);
   }
 };
