@@ -89,7 +89,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   // Google Sign-In Picker State
   const [showGooglePicker, setShowGooglePicker] = useState(false);
   const [customGoogleEmail, setCustomGoogleEmail] = useState('');
-  const [showAdminAccess, setShowAdminAccess] = useState(false);
 
   const handleDirectGoogleSignIn = async () => {
     setIsLoading(true);
@@ -505,78 +504,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <Sparkles className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
               <span>{isLoading ? 'Authenticating...' : 'Sign In to Independent Vault'}</span>
             </button>
-
-            {/* Admin Toggle Link */}
-            <div className="pt-2 text-center">
-              <button
-                type="button"
-                onClick={() => setShowAdminAccess(!showAdminAccess)}
-                className="text-[11px] font-medium text-slate-400 hover:text-[#0144e4] transition-colors font-mono"
-              >
-                {showAdminAccess ? '✕ Hide Admin Access' : '🔒 Site Admin Access'}
-              </button>
-            </div>
-
-            {/* Quick Demo & Admin Access (Shown only to Site Admin) */}
-            {showAdminAccess && (
-              <div className="space-y-3 pt-2 border-t border-slate-200 animate-fadeIn">
-                <div className="relative flex py-1 items-center">
-                  <div className="flex-grow border-t border-slate-200"></div>
-                  <span className="flex-shrink mx-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono">Site Admin Override Panel</span>
-                  <div className="flex-grow border-t border-slate-200"></div>
-                </div>
-
-                <div className="space-y-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onLoginSuccess({
-                        id: 'usr_admin_master_01',
-                        email: 'admin@authr.id',
-                        fullName: 'Authr Site Admin',
-                        handle: '@site_admin',
-                        discipline: 'Musicians & Composers',
-                        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
-                        token: 'jwt_admin_site_2026',
-                        kycStatus: 'verified',
-                        idDocumentType: 'Government Master Key (SITE ADMIN)',
-                        idMatchScore: 100.0,
-                        role: 'admin'
-                      });
-                      onClose();
-                    }}
-                    className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs border border-slate-800 shadow-sm transition-all flex items-center justify-center space-x-2"
-                  >
-                    <ShieldCheck className="w-4 h-4 text-amber-400" />
-                    <span>👑 1-Click Site Admin Login</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onLoginSuccess({
-                        id: 'usr_892314',
-                        email: 'alex@authr.id',
-                        fullName: 'Alex Rivera',
-                        handle: '@arivera_official',
-                        discipline: 'Musicians & Composers',
-                        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
-                        token: 'mock_jwt_alex_rivera_892314',
-                        kycStatus: 'verified',
-                        idDocumentType: "Driver's License (IL-90218)",
-                        idMatchScore: 99.4,
-                        role: 'creator'
-                      });
-                      onClose();
-                    }}
-                    className="w-full py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-all flex items-center justify-center space-x-2"
-                  >
-                    <UserCheck className="w-3.5 h-3.5 text-slate-700" />
-                    <span>⚡ 1-Click Demo Creator Login (Alex Rivera)</span>
-                  </button>
-                </div>
-              </div>
-            )}
           </form>
         )}
 
