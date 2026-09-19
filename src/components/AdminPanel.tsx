@@ -34,10 +34,11 @@ import {
   X,
   BookOpen,
   Fingerprint,
-  Radio
+  Radio,
+  Briefcase
 } from 'lucide-react';
-import { DetectionMatch, SettlementClaim, CustomerReview, PricingPlan, TrialConfig, UserAccount, HeroStatRow, ManagedPage, ManagedPageSection } from '../types';
-import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_USERS, INITIAL_HERO_STAT_ROWS, INITIAL_MANAGED_PAGES } from '../services/mockData';
+import { DetectionMatch, SettlementClaim, CustomerReview, PricingPlan, TrialConfig, UserAccount, HeroStatRow, ManagedPage, ManagedPageSection, CareerOpenRole } from '../types';
+import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_USERS, INITIAL_HERO_STAT_ROWS, INITIAL_MANAGED_PAGES, INITIAL_CAREER_ROLES } from '../services/mockData';
 import { Article, BLOG_ARTICLES } from './BlogView';
 
 interface AdminPanelProps {
@@ -119,6 +120,57 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       const updatedList = managedPagesList.map(p => p.id === id ? defaultPage : p);
       saveManagedPagesList(updatedList);
       showToast(`Page "${defaultPage.title}" reset to default text`);
+    }
+  };
+
+  // Career Open Roles Management State
+  const [careerRolesList, setCareerRolesList] = useState<CareerOpenRole[]>(() => {
+    const saved = localStorage.getItem('rg_career_roles');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return INITIAL_CAREER_ROLES;
+  });
+
+  const [editingCareerRoleModal, setEditingCareerRoleModal] = useState<CareerOpenRole | null>(null);
+
+  const saveCareerRolesList = (newList: CareerOpenRole[]) => {
+    setCareerRolesList(newList);
+    localStorage.setItem('rg_career_roles', JSON.stringify(newList));
+    window.dispatchEvent(new Event('rg_career_roles_updated'));
+  };
+
+  const handleSaveCareerRole = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingCareerRoleModal) return;
+    if (!editingCareerRoleModal.title.trim() || !editingCareerRoleModal.desc.trim()) {
+      alert('Please fill out the role title and description.');
+      return;
+    }
+
+    const exists = careerRolesList.some(r => r.id === editingCareerRoleModal.id);
+    let updated: CareerOpenRole[];
+    if (exists) {
+      updated = careerRolesList.map(r => r.id === editingCareerRoleModal.id ? editingCareerRoleModal : r);
+    } else {
+      updated = [...careerRolesList, editingCareerRoleModal];
+    }
+
+    saveCareerRolesList(updated);
+    setEditingCareerRoleModal(null);
+    showToast(exists ? `Updated open role "${editingCareerRoleModal.title}"` : `Added new open role "${editingCareerRoleModal.title}"`);
+  };
+
+  const handleDeleteCareerRole = (id: string) => {
+    const updated = careerRolesList.filter(r => r.id !== id);
+    saveCareerRolesList(updated);
+    showToast('Career open role deleted successfully.');
+  };
+
+  const handleResetCareerRoles = () => {
+    if (window.confirm('Reset open roles to initial default job listings?')) {
+      saveCareerRolesList(INITIAL_CAREER_ROLES);
+      showToast('Career open roles reset to default.');
     }
   };
 
@@ -853,6 +905,76 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   </div>
                 </div>
               ))}
+          </div>
+
+          {/* Section: Careers Open Roles Manager */}
+          <div className="pt-6 border-t border-slate-200 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+              <div className="flex items-center space-x-3">
+                <div className="p-3 rounded-2xl bg-indigo-50 text-indigo-700 border border-indigo-200">
+                  <Briefcase className="w-5 h-5 text-indigo-700" />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-900">Careers Page Open Roles ({careerRolesList.length})</h3>
+                  <p className="text-xs text-slate-500 mt-0.5">Add, edit, or remove job listings displayed on the public Careers page.</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={handleResetCareerRoles}
+                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 flex items-center space-x-1"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Reset Roles</span>
+                </button>
+                <button
+                  onClick={() => setEditingCareerRoleModal({
+                    id: `job_${Date.now()}`,
+                    title: '',
+                    dept: 'Security & Core Infrastructure',
+                    location: 'Remote',
+                    type: 'Full-Time',
+                    desc: ''
+                  })}
+                  className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs shadow-xs flex items-center space-x-1.5"
+                >
+                  <Plus className="w-4 h-4 text-amber-300" />
+                  <span>Add Open Role</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {careerRolesList.map((job) => (
+                <div key={job.id} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs font-mono">
+                      <span className="font-bold text-indigo-600">{job.dept}</span>
+                      <span className="text-slate-500 font-bold">{job.location} • {job.type}</span>
+                    </div>
+                    <h4 className="text-base font-bold text-slate-900 font-display">{job.title}</h4>
+                    <p className="text-xs text-slate-600 leading-relaxed font-medium">{job.desc}</p>
+                  </div>
+
+                  <div className="pt-3 border-t border-slate-200 flex items-center justify-end space-x-2">
+                    <button
+                      onClick={() => handleDeleteCareerRole(job.id)}
+                      className="p-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-all"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setEditingCareerRoleModal({ ...job })}
+                      className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center space-x-1"
+                    >
+                      <Edit3 className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Edit Role</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -2886,6 +3008,105 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 Close Preview
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Career Open Role Editor Modal */}
+      {editingCareerRoleModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fadeIn text-left">
+          <div className="relative w-full max-w-lg bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <div className="flex items-center space-x-2">
+                <Briefcase className="w-5 h-5 text-indigo-600" />
+                <h3 className="text-base font-bold text-slate-900">
+                  {careerRolesList.some(r => r.id === editingCareerRoleModal.id) ? 'Edit Open Role' : 'Add New Open Role'}
+                </h3>
+              </div>
+              <button onClick={() => setEditingCareerRoleModal(null)} className="text-slate-400 hover:text-slate-700">✕</button>
+            </div>
+
+            <form onSubmit={handleSaveCareerRole} className="space-y-4 text-xs font-medium">
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700 block">Job Title</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Senior Cryptography Engineer (C2PA & Rust)"
+                  value={editingCareerRoleModal.title}
+                  onChange={(e) => setEditingCareerRoleModal({ ...editingCareerRoleModal, title: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700 block">Department</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Security & Core Infrastructure"
+                    value={editingCareerRoleModal.dept}
+                    onChange={(e) => setEditingCareerRoleModal({ ...editingCareerRoleModal, dept: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700 block">Location</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Remote (US / EU)"
+                    value={editingCareerRoleModal.location}
+                    onChange={(e) => setEditingCareerRoleModal({ ...editingCareerRoleModal, location: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700 block">Employment Type</label>
+                <select
+                  value={editingCareerRoleModal.type}
+                  onChange={(e) => setEditingCareerRoleModal({ ...editingCareerRoleModal, type: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-500"
+                >
+                  <option value="Full-Time">Full-Time</option>
+                  <option value="Part-Time">Part-Time</option>
+                  <option value="Contract">Contract</option>
+                  <option value="Internship">Internship</option>
+                </select>
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700 block">Job Description</label>
+                <textarea
+                  rows={3}
+                  required
+                  placeholder="Summary of responsibilities and technical scope..."
+                  value={editingCareerRoleModal.desc}
+                  onChange={(e) => setEditingCareerRoleModal({ ...editingCareerRoleModal, desc: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-medium text-slate-900 focus:outline-none focus:border-indigo-500 leading-relaxed"
+                />
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 pt-3 border-t border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setEditingCareerRoleModal(null)}
+                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs shadow-md"
+                >
+                  Save Open Role
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

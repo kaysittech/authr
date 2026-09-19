@@ -160,4 +160,14 @@ export interface ManagedPage {
   lastUpdated: string;
 }
 
+export interface CareerOpenRole {
+  id: string;
+  title: string;
+  dept: string;
+  location: string;
+  type: string;
+  desc: string;
+}
+
+
 

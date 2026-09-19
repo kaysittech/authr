@@ -1,4 +1,4 @@
-import { DigitalTwin, ProtectedAsset, DetectionMatch, SettlementClaim, FinancialTransaction, CustomerReview, PricingPlan, TrialConfig, UserAccount, HeroStatRow, ManagedPage } from '../types';
+import { DigitalTwin, ProtectedAsset, DetectionMatch, SettlementClaim, FinancialTransaction, CustomerReview, PricingPlan, TrialConfig, UserAccount, HeroStatRow, ManagedPage, CareerOpenRole } from '../types';
 
 export const INITIAL_HERO_STAT_ROWS: HeroStatRow[] = [
   {
@@ -762,4 +762,40 @@ export const INITIAL_MANAGED_PAGES: ManagedPage[] = [
     ]
   }
 ];
+
+export const INITIAL_CAREER_ROLES: CareerOpenRole[] = [
+  {
+    id: 'job_1',
+    title: 'Senior Cryptography Engineer (C2PA & Rust)',
+    dept: 'Security & Core Infrastructure',
+    location: 'Remote (US / EU)',
+    type: 'Full-Time',
+    desc: 'Lead the development of our high-performance C2PA manifest embed engine and zero-knowledge timestamp proofs on Polygon L2.'
+  },
+  {
+    id: 'job_2',
+    title: 'Biometric & IP Litigation Counsel',
+    dept: 'Legal & Regulatory Compliance',
+    location: 'Chicago / Remote',
+    type: 'Full-Time',
+    desc: 'Oversee statutory filings under Illinois BIPA (740 ILCS 14/) and federal 17 U.S.C. § 512 notice-and-takedown court proceedings.'
+  },
+  {
+    id: 'job_3',
+    title: 'Computer Vision Lead (Web Scrape Radar)',
+    dept: 'Machine Learning & Perception',
+    location: 'Remote',
+    type: 'Full-Time',
+    desc: 'Train sub-second perceptual hashing networks and distributed honeypot crawlers across YouTube, TikTok, and Meta feeds.'
+  },
+  {
+    id: 'job_4',
+    title: 'Full-Stack SDK Architect (TypeScript & Python)',
+    dept: 'Developer Experience',
+    location: 'Remote',
+    type: 'Full-Time',
+    desc: 'Design zero-dependency client SDKs for voice actors, visual artists, and enterprise AI model training platforms.'
+  }
+];
+
 

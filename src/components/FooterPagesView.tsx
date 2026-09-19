@@ -26,8 +26,8 @@ import {
   Globe,
   BookOpen
 } from 'lucide-react';
-import { ManagedPage } from '../types';
-import { INITIAL_MANAGED_PAGES } from '../services/mockData';
+import { ManagedPage, CareerOpenRole } from '../types';
+import { INITIAL_MANAGED_PAGES, INITIAL_CAREER_ROLES } from '../services/mockData';
 
 interface FooterPagesViewProps {
   pageId: string;
@@ -64,6 +64,26 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
     };
     window.addEventListener('rg_page_content_updated', handleSync);
     return () => window.removeEventListener('rg_page_content_updated', handleSync);
+  }, []);
+
+  // Career Open Roles State (Admin Sync)
+  const [careerRoles, setCareerRoles] = useState<CareerOpenRole[]>(() => {
+    const saved = localStorage.getItem('rg_career_roles');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return INITIAL_CAREER_ROLES;
+  });
+
+  useEffect(() => {
+    const handleSyncRoles = () => {
+      const saved = localStorage.getItem('rg_career_roles');
+      if (saved) {
+        try { setCareerRoles(JSON.parse(saved)); } catch (e) {}
+      }
+    };
+    window.addEventListener('rg_career_roles_updated', handleSyncRoles);
+    return () => window.removeEventListener('rg_career_roles_updated', handleSyncRoles);
   }, []);
 
   const activeManagedPage = managedPages.find(p => p.id === pageId);
@@ -171,56 +191,33 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
         {pageId === 'careers' && (
           <div className="space-y-8 mt-12 max-w-4xl mx-auto">
             <div className="space-y-6">
-              <h2 className="text-2xl font-extrabold text-slate-900 font-display">Open Roles & Applications</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                  {
-                    title: "Senior Cryptography Engineer (C2PA & Rust)",
-                    dept: "Security & Core Infrastructure",
-                    location: "Remote (US / EU)",
-                    type: "Full-Time",
-                    desc: "Lead the development of our high-performance C2PA manifest embed engine and zero-knowledge timestamp proofs on Polygon L2."
-                  },
-                  {
-                    title: "Biometric & IP Litigation Counsel",
-                    dept: "Legal & Regulatory Compliance",
-                    location: "Chicago / Remote",
-                    type: "Full-Time",
-                    desc: "Oversee statutory filings under Illinois BIPA (740 ILCS 14/) and federal 17 U.S.C. § 512 notice-and-takedown court proceedings."
-                  },
-                  {
-                    title: "Computer Vision Lead (Web Scrape Radar)",
-                    dept: "Machine Learning & Perception",
-                    location: "Remote",
-                    type: "Full-Time",
-                    desc: "Train sub-second perceptual hashing networks and distributed honeypot crawlers across YouTube, TikTok, and Meta feeds."
-                  },
-                  {
-                    title: "Full-Stack SDK Architect (TypeScript & Python)",
-                    dept: "Developer Experience",
-                    location: "Remote",
-                    type: "Full-Time",
-                    desc: "Design zero-dependency client SDKs for voice actors, visual artists, and enterprise AI model training platforms."
-                  }
-                ].map((job, idx) => (
-                  <div key={idx} className="bg-white p-6 rounded-xl border border-[#e9eaf0] shadow-2xs space-y-4 hover:border-[#0144e4] transition-all flex flex-col justify-between">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between text-xs font-mono text-slate-500">
-                        <span className="text-[#0144e4] font-bold">{job.dept}</span>
-                        <span>{job.location} • {job.type}</span>
+              <h2 className="text-2xl font-extrabold text-slate-900 font-display">Open Roles & Applications ({careerRoles.length})</h2>
+              {careerRoles.length === 0 ? (
+                <div className="p-8 text-center bg-slate-50 border border-slate-200 rounded-xl text-slate-500 font-medium text-xs">
+                  There are currently no open roles. Please check back later.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {careerRoles.map((job, idx) => (
+                    <div key={job.id || idx} className="bg-white p-6 rounded-xl border border-[#e9eaf0] shadow-2xs space-y-4 hover:border-[#0144e4] transition-all flex flex-col justify-between">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-xs font-mono text-slate-500">
+                          <span className="text-[#0144e4] font-bold">{job.dept}</span>
+                          <span>{job.location} • {job.type}</span>
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-900 font-display">{job.title}</h3>
+                        <p className="text-xs text-slate-600 leading-relaxed font-medium">{job.desc}</p>
                       </div>
-                      <h3 className="text-lg font-bold text-slate-900 font-display">{job.title}</h3>
-                      <p className="text-xs text-slate-600 leading-relaxed font-medium">{job.desc}</p>
+                      <button
+                        onClick={() => { setApplyingJob(job.title); setAppliedSuccess(false); }}
+                        className="w-full py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white text-xs font-bold transition-all text-center"
+                      >
+                        Apply Now
+                      </button>
                     </div>
-                    <button
-                      onClick={() => { setApplyingJob(job.title); setAppliedSuccess(false); }}
-                      className="w-full py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white text-xs font-bold transition-all text-center"
-                    >
-                      Apply Now
-                    </button>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
