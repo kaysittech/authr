@@ -49,5 +49,26 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #f59e0b;
+  background: #0144e4;
+}
+
+/* Infinite Left Scrolling Ticker (Krazy Logo Slider) */
+@keyframes marqueeLeft {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marqueeLeft 25s linear infinite;
+}
+
+.animate-marquee-left:hover {
+  animation-play-state: paused;
 }

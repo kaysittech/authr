@@ -185,21 +185,43 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
         </section>
 
         {/* SECTION 2: LOGO SLIDER / COMPLIANCE STRIP (kz-logo-slider) */}
-        <section className="bg-[#f7f8fa] border border-[#e9eaf0] rounded-xl p-6">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-center justify-items-center opacity-85">
-            {[
-              { label: "C2PA Provenance", desc: "Cryptographic Standard" },
-              { label: "BIPA Privacy", desc: "100% Law Compliant" },
-              { label: "17 U.S.C. § 512", desc: "DMCA Takedown Engine" },
-              { label: "Stripe Connect", desc: "Instant Direct Payouts" },
-              { label: "Polygon L2", desc: "On-Chain Ledger" },
-              { label: "SendGrid Webhook", desc: "Court Notice Sync" }
-            ].map((partner, index) => (
-              <div key={index} className="flex flex-col items-center text-center space-y-0.5 font-sans">
-                <span className="text-xs font-extrabold text-slate-800 font-display uppercase tracking-wider">{partner.label}</span>
-                <span className="text-[10px] text-slate-400 font-mono">{partner.desc}</span>
-              </div>
-            ))}
+        <section className="bg-[#f7f8fa] border border-[#e9eaf0] rounded-xl py-6 px-4 overflow-hidden relative group">
+          <div className="flex animate-marquee-left items-center opacity-85 group-hover:[animation-play-state:paused]">
+            
+            {/* Track 1 */}
+            <div className="flex items-center gap-12 shrink-0 pr-12">
+              {[
+                { label: "C2PA PROVENANCE", desc: "Cryptographic Standard" },
+                { label: "BIPA PRIVACY", desc: "100% Law Compliant" },
+                { label: "17 U.S.C. § 512", desc: "DMCA Takedown Engine" },
+                { label: "STRIPE CONNECT", desc: "Instant Direct Payouts" },
+                { label: "POLYGON L2", desc: "On-Chain Ledger" },
+                { label: "SENDGRID WEBHOOK", desc: "Court Notice Sync" }
+              ].map((partner, index) => (
+                <div key={index} className="flex flex-col items-start min-w-[200px] text-left space-y-0.5 font-sans shrink-0">
+                  <span className="text-xs font-extrabold text-slate-800 font-display uppercase tracking-wider">{partner.label}</span>
+                  <span className="text-[11px] text-slate-400 font-mono font-medium">{partner.desc}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Track 2 (Duplicate for seamless infinite left scroll loop) */}
+            <div className="flex items-center gap-12 shrink-0 pr-12" aria-hidden="true">
+              {[
+                { label: "C2PA PROVENANCE", desc: "Cryptographic Standard" },
+                { label: "BIPA PRIVACY", desc: "100% Law Compliant" },
+                { label: "17 U.S.C. § 512", desc: "DMCA Takedown Engine" },
+                { label: "STRIPE CONNECT", desc: "Instant Direct Payouts" },
+                { label: "POLYGON L2", desc: "On-Chain Ledger" },
+                { label: "SENDGRID WEBHOOK", desc: "Court Notice Sync" }
+              ].map((partner, index) => (
+                <div key={`dup-${index}`} className="flex flex-col items-start min-w-[200px] text-left space-y-0.5 font-sans shrink-0">
+                  <span className="text-xs font-extrabold text-slate-800 font-display uppercase tracking-wider">{partner.label}</span>
+                  <span className="text-[11px] text-slate-400 font-mono font-medium">{partner.desc}</span>
+                </div>
+              ))}
+            </div>
+
           </div>
         </section>
 
