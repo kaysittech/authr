@@ -13,6 +13,8 @@ import { AuthGuard } from './components/AuthGuard';
 import { AdminPanel } from './components/AdminPanel';
 import { WebServicesDashboard } from './components/WebServicesDashboard';
 import { BlogView } from './components/BlogView';
+import { FooterPagesView } from './components/FooterPagesView';
+import { Footer } from './components/Footer';
 
 import { 
   DigitalTwin, 
@@ -213,6 +215,7 @@ export function App() {
                 onOpenRegister={() => setIsAuthModalOpen(true)}
                 onOpenLogin={() => setIsAuthModalOpen(true)}
                 onNavigateToBlog={() => setActiveTab('blog')}
+                onSelectTab={(tab) => setActiveTab(tab)}
               />
             )}
 
@@ -265,6 +268,14 @@ export function App() {
                 title="Royalty Ledger & Financials Protected"
                 description="Sign in to view private royalty earnings, transaction histories, and execute Stripe Connect bank payouts."
                 onOpenAuthModal={() => setIsAuthModalOpen(true)}
+              />
+            )}
+
+            {['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search'].includes(activeTab) && (
+              <FooterPagesView 
+                pageId={activeTab} 
+                onNavigateHome={() => setActiveTab('dashboard')} 
+                onOpenRegister={() => setIsAuthModalOpen(true)} 
               />
             )}
           </>
@@ -351,6 +362,14 @@ export function App() {
             {activeTab === 'blog' && (
               <BlogView onOpenRegister={() => setIsAuthModalOpen(true)} />
             )}
+
+            {['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search'].includes(activeTab) && (
+              <FooterPagesView 
+                pageId={activeTab} 
+                onNavigateHome={() => setActiveTab('dashboard')} 
+                onOpenRegister={() => setIsAuthModalOpen(true)} 
+              />
+            )}
           </>
         )}
       </main>
@@ -361,6 +380,14 @@ export function App() {
         onClose={() => setIsAuthModalOpen(false)}
         onLoginSuccess={handleLoginSuccess}
       />
+
+      {/* Global Krazy Footer */}
+      {activeTab !== 'dashboard' && (
+        <Footer 
+          onSelectTab={(tab) => setActiveTab(tab)} 
+          onOpenRegister={() => setIsAuthModalOpen(true)} 
+        />
+      )}
 
     </div>
   );

@@ -37,12 +37,14 @@ interface PublicLandingProps {
   onOpenRegister: () => void;
   onOpenLogin: () => void;
   onNavigateToBlog?: () => void;
+  onSelectTab?: (tab: string) => void;
 }
 
 export const PublicLanding: React.FC<PublicLandingProps> = ({
   onOpenRegister,
   onOpenLogin,
-  onNavigateToBlog
+  onNavigateToBlog,
+  onSelectTab
 }) => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isTestimonialHovered, setIsTestimonialHovered] = useState(false);
@@ -712,7 +714,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
       </main>
 
       {/* KRAZY FOOTER */}
-      <Footer />
+      <Footer onSelectTab={onSelectTab || (() => {})} onOpenRegister={onOpenRegister} />
 
     </div>
   );
