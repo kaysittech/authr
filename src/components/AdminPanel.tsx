@@ -179,7 +179,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
   const [editingPageModal, setEditingPageModal] = useState<ManagedPage | null>(null);
   const [previewPageModal, setPreviewPageModal] = useState<ManagedPage | null>(null);
-  const [pageCategoryFilter, setPageCategoryFilter] = useState<'all' | 'COMPANY' | 'FEATURES' | 'LEGAL & SECURITY'>('all');
+  const [pageCategoryFilter, setPageCategoryFilter] = useState<string>('all');
 
   const saveManagedPagesList = (newList: ManagedPage[]) => {
     setManagedPagesList(newList);
@@ -859,9 +859,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           <div className="flex items-center space-x-2 overflow-x-auto pb-2 font-mono text-xs">
             {[
               { id: 'all', label: `All Pages (${managedPagesList.length})` },
-              { id: 'COMPANY', label: `Company (${managedPagesList.filter(p => p.category === 'COMPANY').length})` },
-              { id: 'FEATURES', label: `Features (${managedPagesList.filter(p => p.category === 'FEATURES').length})` },
-              { id: 'LEGAL & SECURITY', label: `Legal & Security (${managedPagesList.filter(p => p.category === 'LEGAL & SECURITY').length})` }
+              { id: 'HOME & LANDING', label: `Home & Landing (${managedPagesList.filter(p => p.category === 'HOME & LANDING').length})` },
+              { id: 'FEATURES MENU', label: `Features Menu (${managedPagesList.filter(p => p.category === 'FEATURES MENU' || p.category === 'FEATURES').length})` },
+              { id: 'ABOUT MENU', label: `About Menu (${managedPagesList.filter(p => p.category === 'ABOUT MENU').length})` },
+              { id: 'PRICING MENU', label: `Pricing & Blog (${managedPagesList.filter(p => p.category === 'PRICING MENU' || p.category === 'BLOG MENU').length})` },
+              { id: 'COMPANY & CAREERS', label: `Company (${managedPagesList.filter(p => p.category === 'COMPANY & CAREERS' || p.category === 'COMPANY').length})` },
+              { id: 'LEGAL & COMPLIANCE', label: `Legal & Security (${managedPagesList.filter(p => p.category === 'LEGAL & COMPLIANCE' || p.category === 'LEGAL & SECURITY').length})` }
             ].map(filter => (
               <button
                 key={filter.id}
@@ -880,16 +883,25 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           {/* Pages Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {managedPagesList
-              .filter(p => pageCategoryFilter === 'all' || p.category === pageCategoryFilter)
+              .filter(p => {
+                if (pageCategoryFilter === 'all') return true;
+                if (pageCategoryFilter === 'FEATURES MENU') return p.category === 'FEATURES MENU' || p.category === 'FEATURES';
+                if (pageCategoryFilter === 'PRICING MENU') return p.category === 'PRICING MENU' || p.category === 'BLOG MENU';
+                if (pageCategoryFilter === 'COMPANY & CAREERS') return p.category === 'COMPANY & CAREERS' || p.category === 'COMPANY';
+                if (pageCategoryFilter === 'LEGAL & COMPLIANCE') return p.category === 'LEGAL & COMPLIANCE' || p.category === 'LEGAL & SECURITY';
+                return p.category === pageCategoryFilter;
+              })
               .map((page) => (
                 <div key={page.id} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-amber-400 transition-all flex flex-col justify-between space-y-4">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border uppercase ${
-                        page.category === 'COMPANY'
+                        ['HOME & LANDING', 'PRICING MENU', 'BLOG MENU'].includes(page.category)
                           ? 'bg-blue-50 text-blue-800 border-blue-200'
-                          : page.category === 'FEATURES'
+                          : page.category.includes('FEATURES')
                           ? 'bg-purple-50 text-purple-800 border-purple-200'
+                          : page.category.includes('ABOUT')
+                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
                           : 'bg-amber-50 text-amber-900 border-amber-200'
                       }`}>
                         {page.category}

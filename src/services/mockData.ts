@@ -435,67 +435,183 @@ export const INITIAL_TRANSACTIONS: FinancialTransaction[] = [
 
 export const INITIAL_MANAGED_PAGES: ManagedPage[] = [
   {
-    id: 'get_started',
-    title: 'Get Started with Authr',
-    category: 'COMPANY',
-    badge: 'Onboarding & Account',
-    summary: 'Join the world\'s leading biometric identity, C2PA watermarking, and statutory royalty clearing platform for independent creators.',
-    actionButtonText: 'Create Your Free Account',
+    id: 'home_landing',
+    title: 'Home Landing Page - Hero & Rights Protection',
+    category: 'HOME & LANDING',
+    badge: 'Home Navigation Menu',
+    summary: 'Main homepage hero banner, value propositions, rightsholder protections, and interactive workflow demo.',
+    actionButtonText: 'Protect Your Work & Claim Royalties',
     lastUpdated: '2026-09-19',
     sections: [
       {
         id: 'sec_1',
-        title: '1. Create Your Account',
-        content: 'Register your creator identity in under 2 minutes with instant 128-landmark biometric facial mesh hashing and private key generation.'
+        title: 'Hero Banner Headline',
+        content: 'Protect Your Work. Claim Your Royalties. Automated identity, voice, face, text manuscript, and digital artwork clearinghouse.'
       },
       {
         id: 'sec_2',
-        title: '2. Protect Your Media Assets',
-        content: 'Upload audio, visual, and literary assets to attach tamper-evident C2PA cryptographic signatures and invisible steganographic watermarks.'
+        title: 'Monetization Strategy',
+        content: 'Empower creators with instant Illinois BIPA statutory protection or commercial micro-licensing ($0.08/query, $250/ad).'
       },
       {
         id: 'sec_3',
-        title: '3. Automate Scrape Defense & Payouts',
-        content: 'Set your policy to automatically issue 17 U.S.C. § 512 statutory takedowns or collect micro-royalty licensing payments via Stripe Connect.'
+        title: 'Automated Detection & Settlement',
+        content: 'Real-time crawler swarms monitoring 1,420 nodes across YouTube, TikTok, Meta, and AI model datasets.'
       }
     ]
   },
   {
-    id: 'about',
-    title: 'Protecting & Monetizing Independent Creator Identity',
-    category: 'COMPANY',
-    badge: 'About Authr Platform',
-    summary: 'Authr was founded to bridge the critical gap between rapid generative AI advancements and creator intellectual property enforcement.',
-    actionButtonText: 'Create Your Free Account',
+    id: 'biometrics',
+    title: 'Biometric & Likeness Vault',
+    category: 'FEATURES MENU',
+    badge: 'Features Navigation Menu',
+    summary: '128-node face & voice prints under Illinois BIPA statutory standards (740 ILCS 14/).',
+    actionButtonText: 'Register Biometrics',
     lastUpdated: '2026-09-19',
     sections: [
       {
         id: 'sec_1',
-        title: 'Statutory Defense',
-        content: 'Anchored in Illinois BIPA biometrics law (740 ILCS 14/) and federal 17 U.S.C. § 512 statutory takedown mandates.'
+        title: 'Non-Reversible Vector Hashing',
+        content: 'Raw facial scans are instantly converted into 128-node mathematical vectors (fvec_...), ensuring raw imagery is never stored on servers.'
       },
       {
         id: 'sec_2',
-        title: 'C2PA Standard',
-        content: 'SHA-256 cryptographic provenance certificates signed by sovereign private keys.'
+        title: 'Spectral Voice Fingerprinting',
+        content: 'Extracts 44.1kHz FFT acoustic harmonics to identify unauthorized synthetic voice clones and AI deepfakes.'
+      }
+    ]
+  },
+  {
+    id: 'assets',
+    title: 'C2PA Watermarking & Provenance Vault',
+    category: 'FEATURES MENU',
+    badge: 'Features Navigation Menu',
+    summary: 'SHA-256 cryptographic provenance signatures and invisible steganographic watermarks.',
+    actionButtonText: 'Protect Media Assets',
+    lastUpdated: '2026-09-19',
+    sections: [
+      {
+        id: 'sec_1',
+        title: 'Tamper-Evident C2PA Manifests',
+        content: 'Attaches cryptographically signed metadata directly into media header files, preserving proof of origin.'
       },
       {
-        id: 'sec_3',
-        title: 'Automated Payouts',
-        content: 'Direct Stripe Connect settlement gates that convert web scrape hits into instant royalties.'
+        id: 'sec_2',
+        title: 'Steganographic Watermarking',
+        content: 'Invisible pixel and audio payload embeds that survive compression, re-encoding, and cropping.'
+      }
+    ]
+  },
+  {
+    id: 'detection',
+    title: 'Web Scrape Radar & AI Monitor',
+    category: 'FEATURES MENU',
+    badge: 'Features Navigation Menu',
+    summary: 'YouTube, TikTok & Meta monitoring with sub-second perceptual hashing.',
+    actionButtonText: 'Launch Radar Monitor',
+    lastUpdated: '2026-09-19',
+    sections: [
+      {
+        id: 'sec_1',
+        title: 'Distributed Honeypot Crawlers',
+        content: 'Scans public social feeds and AI dataset dumps 24/7 for matching biometric vector signatures and asset hashes.'
       },
       {
-        id: 'sec_4',
-        title: 'Our Mission Statement',
-        content: 'Every independent artist, musician, voice actor, writer, and brand deserves total sovereignty over their biometric identity and creative outputs. Authr equips creators with institutional-grade detection, legal filing automation, and direct monetization tools.'
+        id: 'sec_2',
+        title: 'Visual & Acoustic Match Scoring',
+        content: 'Provides precision similarity percentages (e.g. 98.7% match) and timestamp logs for instant evidence preservation.'
+      }
+    ]
+  },
+  {
+    id: 'legal',
+    title: 'DMCA Notice Studio & Legal Filings',
+    category: 'FEATURES MENU',
+    badge: 'Features Navigation Menu',
+    summary: '17 U.S.C. § 512 legal filings and statutory takedown demands with automated designated agent representation.',
+    actionButtonText: 'Open Takedown Studio',
+    lastUpdated: '2026-09-19',
+    sections: [
+      {
+        id: 'sec_1',
+        title: 'Automated Takedown Generation',
+        content: 'Drafts 17 U.S.C. § 512(c) compliant notices formatted for YouTube, TikTok, Meta, and web host ISPs.'
+      },
+      {
+        id: 'sec_2',
+        title: 'BIPA Enforcement Actions',
+        content: 'Dispatches formal statutory violation notices under Illinois 740 ILCS 14/ for unauthorized biometric scraping.'
+      }
+    ]
+  },
+  {
+    id: 'settlement',
+    title: 'Stripe Licensing Gate & Settlement',
+    category: 'FEATURES MENU',
+    badge: 'Features Navigation Menu',
+    summary: 'Automated settlement invoicing and direct Stripe Connect payout gates.',
+    actionButtonText: 'View Settlement Portal',
+    lastUpdated: '2026-09-19',
+    sections: [
+      {
+        id: 'sec_1',
+        title: 'Automated Demand Invoicing',
+        content: 'Dispatches 48-hour grace period invoices to unauthorized scrapers and commercial re-uploaders.'
+      },
+      {
+        id: 'sec_2',
+        title: 'Direct Bank Settlement',
+        content: '92% of collected royalties are deposited directly into creator Stripe accounts, retaining an 8% network fee.'
+      }
+    ]
+  },
+  {
+    id: 'provenance',
+    title: 'Polygon L2 Provenance & On-Chain Ledger',
+    category: 'FEATURES MENU',
+    badge: 'Features Navigation Menu',
+    summary: 'On-chain zero-knowledge royalty ledger and immutable creation timestamp proofs.',
+    actionButtonText: 'Explore L2 Ledger',
+    lastUpdated: '2026-09-19',
+    sections: [
+      {
+        id: 'sec_1',
+        title: 'Immutable Timestamping',
+        content: 'Anchors asset SHA-256 manifests to Polygon mainnet for verifiable, court-admissible creation timestamps.'
+      },
+      {
+        id: 'sec_2',
+        title: 'Royalty Audit Trail',
+        content: 'Transparent, decentralized record of all micro-licensing transactions and settlement fee distribution.'
+      }
+    ]
+  },
+  {
+    id: 'pricing',
+    title: 'Plans & Pricing Overview Page',
+    category: 'PRICING MENU',
+    badge: 'Pricing Navigation Menu',
+    summary: 'Subscription plans, free trial details, and commercial take-rate configurations.',
+    actionButtonText: 'View Pricing Tiers',
+    lastUpdated: '2026-09-19',
+    sections: [
+      {
+        id: 'sec_1',
+        title: 'Creator Protection Tiers',
+        content: 'Choose between Free Starter, Creator Pro, and Enterprise Rights Management plans with 14-day risk-free trials.'
+      },
+      {
+        id: 'sec_2',
+        title: 'Settlement Take-Rate',
+        content: 'Authr retains a 8% network fee on recovered royalties, guaranteeing creators receive 92% of all settlements.'
       }
     ]
   },
   {
     id: 'blog',
-    title: 'Blog & Creator Rights Insights',
-    category: 'COMPANY',
-    badge: 'Industry Telemetry & Precedents',
+    title: 'Blog & Creator Rights Insights Journal',
+    category: 'BLOG MENU',
+    badge: 'Blog Navigation Menu',
     summary: 'In-depth research, legal precedents, and technical guides on biometric likeness, C2PA standards, and AI scrape defense.',
     actionButtonText: 'Read Creator Insights',
     lastUpdated: '2026-09-19',
@@ -509,206 +625,140 @@ export const INITIAL_MANAGED_PAGES: ManagedPage[] = [
         id: 'sec_2',
         title: 'C2PA Manifest Technical Breakdown',
         content: 'How SHA-256 metadata signatures prevent unauthorized generative AI training and preserve origin chain of trust.'
+      }
+    ]
+  },
+  {
+    id: 'about',
+    title: 'About Authr Platform & Mission',
+    category: 'ABOUT MENU',
+    badge: 'About Navigation Menu',
+    summary: 'Authr was founded to bridge the critical gap between rapid generative AI advancements and creator intellectual property enforcement.',
+    actionButtonText: 'Create Your Free Account',
+    lastUpdated: '2026-09-19',
+    sections: [
+      {
+        id: 'sec_1',
+        title: 'Statutory Defense',
+        content: 'Anchored in Illinois BIPA biometrics law (740 ILCS 14/) and federal 17 U.S.C. § 512 statutory takedown mandates.'
       },
       {
-        id: 'sec_3',
-        title: 'Monetizing Scrape Telemetry',
-        content: 'Strategies for independent voice actors and visual artists to convert web crawler hits into recurring micro-licensing revenues.'
+        id: 'sec_2',
+        title: 'Our Mission Statement',
+        content: 'Every independent artist, musician, voice actor, writer, and brand deserves total sovereignty over their biometric identity and creative outputs.'
+      }
+    ]
+  },
+  {
+    id: 'compliance',
+    title: 'Statutory Compliance - BIPA & DMCA 17 U.S.C. § 512',
+    category: 'ABOUT MENU',
+    badge: 'About Navigation Menu',
+    summary: 'Comprehensive legal documentation on Illinois BIPA 740 ILCS 14/ compliance and 17 U.S.C. § 512 designated agent representation.',
+    actionButtonText: 'Review Legal Framework',
+    lastUpdated: '2026-09-19',
+    sections: [
+      {
+        id: 'sec_1',
+        title: 'Illinois BIPA Section 15 Compliance',
+        content: 'Guarantees raw facial imagery is never saved. Only non-reversible 128-node vector hashes are stored.'
+      },
+      {
+        id: 'sec_2',
+        title: 'Designated Agent Takedown Mandates',
+        content: 'Statutory 17 U.S.C. § 512 notice-and-takedown dispatches to major search engines, social networks, and hosting ISPs.'
+      }
+    ]
+  },
+  {
+    id: 'developers',
+    title: 'Developer API & REST Telemetry',
+    category: 'ABOUT MENU',
+    badge: 'About Navigation Menu',
+    summary: 'FastAPI REST Telemetry endpoints and client SDKs for real-time scrape telemetry and C2PA manifest verification.',
+    actionButtonText: 'Explore API Docs',
+    lastUpdated: '2026-09-19',
+    sections: [
+      {
+        id: 'sec_1',
+        title: 'FastAPI Microservice Architecture',
+        content: 'Sub-second API response times for biometric hashing, C2PA manifest verification, and scrape detection webhooks.'
+      },
+      {
+        id: 'sec_2',
+        title: 'SDK Integrations',
+        content: 'TypeScript and Python SDK libraries available for seamless integration into digital asset production pipelines.'
+      }
+    ]
+  },
+  {
+    id: 'counsel',
+    title: 'Contact Counsel & 24/7 Legal Rights Support',
+    category: 'ABOUT MENU',
+    badge: 'About Navigation Menu',
+    summary: 'Direct connection to IP litigation counsel for emergency BIPA cease-and-desist filings and court evidence dossiers.',
+    actionButtonText: 'Contact Legal Team',
+    lastUpdated: '2026-09-19',
+    sections: [
+      {
+        id: 'sec_1',
+        title: '24/7 Rights Enforcement Support',
+        content: 'Instant escalation to specialized biometric and copyright attorneys for high-value infringement cases.'
+      },
+      {
+        id: 'sec_2',
+        title: 'Court Evidence Dossier Generation',
+        content: 'Export court-admissible PDF dossiers complete with SHA-256 asset hashes, timestamp logs, and infringer IP addresses.'
+      }
+    ]
+  },
+  {
+    id: 'get_started',
+    title: 'Get Started with Authr Onboarding',
+    category: 'COMPANY & CAREERS',
+    badge: 'Onboarding & Account',
+    summary: 'Join the world\'s leading biometric identity, C2PA watermarking, and statutory royalty clearing platform for independent creators.',
+    actionButtonText: 'Create Your Free Account',
+    lastUpdated: '2026-09-19',
+    sections: [
+      {
+        id: 'sec_1',
+        title: '1. Create Your Account',
+        content: 'Register your creator identity in under 2 minutes with instant 128-landmark biometric facial mesh hashing.'
+      },
+      {
+        id: 'sec_2',
+        title: '2. Protect Your Media Assets',
+        content: 'Upload audio, visual, and literary assets to attach tamper-evident C2PA cryptographic signatures.'
       }
     ]
   },
   {
     id: 'careers',
-    title: 'Architect the Infrastructure for Creator Rights',
-    category: 'COMPANY',
-    badge: 'Join Our Engineering & Legal Team',
-    summary: 'We are building the world\'s first biometric likeness registry, C2PA cryptographic watermarking engine, and automated statutory settlement gates.',
+    title: 'Architect the Infrastructure for Creator Rights (Careers)',
+    category: 'COMPANY & CAREERS',
+    badge: 'Engineering & Legal Roles',
+    summary: 'We are building the world\'s first biometric likeness registry, C2PA cryptographic watermarking engine, and settlement gates.',
     actionButtonText: 'Apply for Open Roles',
     lastUpdated: '2026-09-19',
     sections: [
       {
         id: 'sec_1',
         title: 'Senior Cryptography Engineer (C2PA & Rust)',
-        content: 'Lead the development of our high-performance C2PA manifest embed engine and zero-knowledge timestamp proofs on Polygon L2.'
+        content: 'Lead the development of our high-performance C2PA manifest embed engine and zero-knowledge timestamp proofs.'
       },
       {
         id: 'sec_2',
         title: 'Biometric & IP Litigation Counsel',
-        content: 'Oversee statutory filings under Illinois BIPA (740 ILCS 14/) and federal 17 U.S.C. § 512 notice-and-takedown court proceedings.'
-      },
-      {
-        id: 'sec_3',
-        title: 'Computer Vision Lead (Web Scrape Radar)',
-        content: 'Train sub-second perceptual hashing networks and distributed honeypot crawlers across YouTube, TikTok, and Meta feeds.'
-      },
-      {
-        id: 'sec_4',
-        title: 'Full-Stack SDK Architect (TypeScript & Python)',
-        content: 'Design zero-dependency client SDKs for voice actors, visual artists, and enterprise AI model training platforms.'
-      }
-    ]
-  },
-  {
-    id: 'detection',
-    title: 'AI Radar & Web Scrape Monitor',
-    category: 'FEATURES',
-    badge: 'Real-Time Perception Network',
-    summary: 'Sub-second perceptual hashing across YouTube, TikTok, Instagram, and web scrapers to detect unauthorized usage of your face, voice, or art.',
-    actionButtonText: 'Launch Radar Monitor',
-    lastUpdated: '2026-09-19',
-    sections: [
-      {
-        id: 'sec_1',
-        title: 'Distributed Honeypot Crawlers',
-        content: 'Scans public social feeds and AI dataset dumps 24/7 for matching biometric vector signatures and asset hashes.'
-      },
-      {
-        id: 'sec_2',
-        title: 'Visual & Acoustic Match Scoring',
-        content: 'Provides precision similarity percentages (e.g. 98.7% match) and timestamp logs for instant evidence preservation.'
-      },
-      {
-        id: 'sec_3',
-        title: 'Automated Evidence Dossiers',
-        content: 'Generates court-ready PDF dossiers complete with URL history, metadata logs, and screenshot captures.'
-      }
-    ]
-  },
-  {
-    id: 'biometrics',
-    title: 'Biometric Likeness Registry',
-    category: 'FEATURES',
-    badge: '128-Node Vector Encryption',
-    summary: 'Register your facial geometry and acoustic voice spectrum in an encrypted vault under Illinois BIPA standards.',
-    actionButtonText: 'Register Biometrics',
-    lastUpdated: '2026-09-19',
-    sections: [
-      {
-        id: 'sec_1',
-        title: 'Non-Reversible Vector Hashing',
-        content: 'Raw facial scans are instantly converted into 128-node mathematical vectors (fvec_...), ensuring raw imagery is never stored on servers.'
-      },
-      {
-        id: 'sec_2',
-        title: 'Spectral Voice Fingerprinting',
-        content: 'Extracts 44.1kHz FFT acoustic harmonics to identify unauthorized synthetic voice clones and AI deepfakes.'
-      },
-      {
-        id: 'sec_3',
-        title: 'Account & Rights Governance',
-        content: 'Revoke or update your biometric hashes at any time directly through your private security vault.'
-      }
-    ]
-  },
-  {
-    id: 'assets',
-    title: 'C2PA Vault & Cryptographic Watermarking',
-    category: 'FEATURES',
-    badge: 'Provenance & Tamper-Evident Signatures',
-    summary: 'Embed SHA-256 C2PA manifest signatures into images, audio, and video files to prove original authorship.',
-    actionButtonText: 'Protect Media Assets',
-    lastUpdated: '2026-09-19',
-    sections: [
-      {
-        id: 'sec_1',
-        title: 'Tamper-Evident C2PA Manifests',
-        content: 'Attaches cryptographically signed metadata directly into media header files, preserving proof of origin.'
-      },
-      {
-        id: 'sec_2',
-        title: 'Steganographic Watermarking',
-        content: 'Invisible pixel and audio payload embeds that survive compression, re-encoding, and cropping.'
-      },
-      {
-        id: 'sec_3',
-        title: 'Polygon L2 Timestamping',
-        content: 'Anchors asset hashes to Polygon mainnet for immutable proof of creation timestamp.'
-      }
-    ]
-  },
-  {
-    id: 'settlement',
-    title: 'Royalty Settlement & Licensing Portal',
-    category: 'FEATURES',
-    badge: 'Automated Micro-Licensing',
-    summary: 'Transform unauthorized scrape detections into paid licensing invoices with Stripe Connect checkout gates.',
-    actionButtonText: 'View Settlement Portal',
-    lastUpdated: '2026-09-19',
-    sections: [
-      {
-        id: 'sec_1',
-        title: 'Automated Demand Invoicing',
-        content: 'Dispatches 48-hour grace period invoices to unauthorized scrapers and commercial re-uploaders.'
-      },
-      {
-        id: 'sec_2',
-        title: 'Flexible Monetization Policy',
-        content: 'Choose between Micro-Monetization ($0.08/query), Strict Takedowns, or Commercial Brand Licensing.'
-      },
-      {
-        id: 'sec_3',
-        title: 'Direct Bank Settlement',
-        content: '92% of collected royalties are deposited directly into creator Stripe accounts, retaining an 8% network fee.'
-      }
-    ]
-  },
-  {
-    id: 'legal',
-    title: 'DMCA & Statutory Takedown Studio',
-    category: 'LEGAL & SECURITY',
-    badge: '17 U.S.C. § 512 Compliance',
-    summary: 'Generate legal notices and statutory takedown demands with automated designated agent representation.',
-    actionButtonText: 'Open Takedown Studio',
-    lastUpdated: '2026-09-19',
-    sections: [
-      {
-        id: 'sec_1',
-        title: 'Automated Takedown Generation',
-        content: 'Drafts 17 U.S.C. § 512(c) compliant notices formatted for YouTube, TikTok, Meta, and web host ISPs.'
-      },
-      {
-        id: 'sec_2',
-        title: 'BIPA Enforcement Actions',
-        content: 'Dispatches formal statutory violation notices under Illinois 740 ILCS 14/ for unauthorized biometric scraping.'
-      },
-      {
-        id: 'sec_3',
-        title: 'Court Evidence Dossiers',
-        content: 'Exports zip archives containing cryptographic signatures, timestamps, and scrape receipts for legal counsel.'
-      }
-    ]
-  },
-  {
-    id: 'financials',
-    title: 'Statutory Earnings & Royalty Ledger',
-    category: 'LEGAL & SECURITY',
-    badge: 'Financial Auditing & Payouts',
-    summary: 'Track gross settlement collections, network telemetry fees, and net payouts in real time.',
-    actionButtonText: 'View Financial Ledger',
-    lastUpdated: '2026-09-19',
-    sections: [
-      {
-        id: 'sec_1',
-        title: 'Transparent Accounting',
-        content: 'Detailed line items for every settlement fee, platform deduction, micro-license query, and net payout.'
-      },
-      {
-        id: 'sec_2',
-        title: 'Stripe Connect Integration',
-        content: 'Secure, direct-to-bank electronic transfers with instant withdrawal triggers.'
-      },
-      {
-        id: 'sec_3',
-        title: 'Tax & Compliance Statements',
-        content: 'Export 1099-MISC and statutory earnings statements for accounting and audit purposes.'
+        content: 'Oversee statutory filings under Illinois BIPA (740 ILCS 14/) and federal 17 U.S.C. § 512 notice proceedings.'
       }
     ]
   },
   {
     id: 'privacy',
     title: 'Privacy Policy & BIPA Biometric Disclosure',
-    category: 'LEGAL & SECURITY',
-    badge: 'Legal & Compliance Document',
+    category: 'LEGAL & COMPLIANCE',
+    badge: 'Legal Document',
     summary: 'Complete breakdown of data handling practices, Illinois BIPA Section 15 compliance, and biometric hash protection.',
     actionButtonText: 'Manage Security Vault',
     lastUpdated: '2026-09-19',
@@ -716,29 +766,19 @@ export const INITIAL_MANAGED_PAGES: ManagedPage[] = [
       {
         id: 'sec_1',
         title: 'Illinois BIPA Section 15 Compliance Notice',
-        content: 'Authr converts facial landmarks into 128-node non-reversible mathematical vector hashes (fvec_...). Authr NEVER stores raw unhashed facial scans or unencrypted voice recordings.'
+        content: 'Authr converts facial landmarks into 128-node non-reversible mathematical vector hashes (fvec_...).'
       },
       {
         id: 'sec_2',
-        title: 'Information We Collect',
-        content: 'We collect identity verification data provided directly by you during Government ID onboarding, including name, email address, biometric hash vectors, and registered media asset signatures.'
-      },
-      {
-        id: 'sec_3',
-        title: 'Use of Biometric Data',
-        content: 'Biometric vector fingerprints are maintained solely for matching unauthorized deepfake impersonations and dispatches of 17 U.S.C. § 512 legal takedown notices.'
-      },
-      {
-        id: 'sec_4',
         title: 'Right to Erasure & Hash Revocation',
-        content: 'Under GDPR Article 17 and CCPA, creators may permanently delete their biometric vector records and registered asset signatures at any time.'
+        content: 'Under GDPR Article 17 and CCPA, creators may permanently delete their biometric vector records at any time.'
       }
     ]
   },
   {
     id: 'terms',
     title: 'Terms of Service & Statutory Authorization',
-    category: 'LEGAL & SECURITY',
+    category: 'LEGAL & COMPLIANCE',
     badge: 'Legal Contract',
     summary: 'Agreement defining authorized designated agent status, settlement fee splits, and Polygon L2 ledger verification.',
     actionButtonText: 'Accept Terms & Continue',
@@ -752,12 +792,7 @@ export const INITIAL_MANAGED_PAGES: ManagedPage[] = [
       {
         id: 'sec_2',
         title: 'Royalty Settlement & Stripe Payouts',
-        content: 'Settlement fees collected from unauthorized scrapers are processed via Stripe Connect. Authr routes 92% of statutory micro-licensing revenues directly to creator linked accounts.'
-      },
-      {
-        id: 'sec_3',
-        title: 'Polygon L2 Ledger Verification',
-        content: 'All registered asset manifests generate zero-knowledge cryptographic hashes committed to Polygon L2 mainnet.'
+        content: 'Settlement fees collected from unauthorized scrapers are processed via Stripe Connect. Authr routes 92% of statutory revenues to creators.'
       }
     ]
   }

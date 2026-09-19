@@ -152,7 +152,7 @@ export interface ManagedPageSection {
 export interface ManagedPage {
   id: string;
   title: string;
-  category: 'COMPANY' | 'FEATURES' | 'LEGAL & SECURITY';
+  category: 'HOME & LANDING' | 'FEATURES' | 'FEATURES MENU' | 'ABOUT' | 'ABOUT MENU' | 'PRICING' | 'PRICING MENU' | 'BLOG' | 'BLOG MENU' | 'COMPANY' | 'COMPANY & CAREERS' | 'LEGAL & SECURITY' | 'LEGAL & COMPLIANCE';
   badge: string;
   summary: string;
   sections: ManagedPageSection[];
