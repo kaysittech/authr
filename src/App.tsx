@@ -40,6 +40,11 @@ export function App() {
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [policyMode, setPolicyMode] = useState<PolicyMode>('micro_monetization');
 
+  // Scroll to top of page on activeTab change
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [activeTab]);
+
   // State Management
   const [digitalTwin, setDigitalTwin] = useState<DigitalTwin>(() => {
     const saved = localStorage.getItem('rg_digital_twin');

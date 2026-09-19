@@ -7,6 +7,11 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) => {
+  const handleSelect = (tab: string) => {
+    onSelectTab(tab);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  };
+
   return (
     <footer className="bg-white border-t border-[#e9eaf0] pt-12 text-slate-700 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
@@ -14,7 +19,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
           
           {/* Column 1: Brand Logo & Info */}
           <div className="lg:col-span-3 space-y-4">
-            <div className="flex items-center space-x-2.5 cursor-pointer" onClick={() => onSelectTab('dashboard')}>
+            <div className="flex items-center space-x-2.5 cursor-pointer" onClick={() => handleSelect('dashboard')}>
               <div className="w-9 h-9 rounded-xl bg-[#0144e4] text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20">
                 <ShieldCheck className="w-5.5 h-5.5 stroke-[2.5]" />
               </div>
@@ -30,22 +35,22 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
             <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Company</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
-                <button onClick={() => onSelectTab('get_started')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('get_started')} className="hover:text-[#0144e4] transition-colors text-left">
                   Get Started
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('about')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('about')} className="hover:text-[#0144e4] transition-colors text-left">
                   About Authr
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('blog')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('blog')} className="hover:text-[#0144e4] transition-colors text-left">
                   Blog &amp; Creator Insights
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('careers')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('careers')} className="hover:text-[#0144e4] transition-colors text-left">
                   Careers &amp; Open Roles
                 </button>
               </li>
@@ -57,22 +62,22 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
             <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Features</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
-                <button onClick={() => onSelectTab('detection')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('detection')} className="hover:text-[#0144e4] transition-colors text-left">
                   AI Radar &amp; Scrape Monitor
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('biometrics')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('biometrics')} className="hover:text-[#0144e4] transition-colors text-left">
                   Biometric Likeness Registry
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('assets')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('assets')} className="hover:text-[#0144e4] transition-colors text-left">
                   C2PA Vault &amp; Watermarking
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('settlement')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('settlement')} className="hover:text-[#0144e4] transition-colors text-left">
                   Royalty Settlement Portal
                 </button>
               </li>
@@ -84,22 +89,22 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
             <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Legal &amp; Security</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
-                <button onClick={() => onSelectTab('legal')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('legal')} className="hover:text-[#0144e4] transition-colors text-left">
                   DMCA &amp; Takedown Studio
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('financials')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('financials')} className="hover:text-[#0144e4] transition-colors text-left">
                   Statutory Earnings Ledger
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('privacy')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('privacy')} className="hover:text-[#0144e4] transition-colors text-left">
                   Privacy Policy &amp; BIPA
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('terms')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('terms')} className="hover:text-[#0144e4] transition-colors text-left">
                   Terms of Service
                 </button>
               </li>
