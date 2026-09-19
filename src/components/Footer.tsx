@@ -13,20 +13,20 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 text-left">
           
           {/* Column 1: Brand Logo & Info */}
-          <div className="lg:col-span-3 space-y-4">
+          <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center space-x-2.5 cursor-pointer" onClick={() => onSelectTab('dashboard')}>
               <div className="w-9 h-9 rounded-xl bg-[#0144e4] text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20">
                 <ShieldCheck className="w-5.5 h-5.5 stroke-[2.5]" />
               </div>
               <span className="text-2xl font-extrabold tracking-tight text-slate-900 font-display">Authr</span>
             </div>
-            <p className="text-xs text-slate-500 leading-relaxed font-medium">
+            <p className="text-xs text-slate-500 leading-relaxed font-medium max-w-sm">
               Sovereign creator identity registration, C2PA cryptographic watermarking, and automated statutory royalty clearing.
             </p>
           </div>
 
           {/* Column 2: Company */}
-          <div className="lg:col-span-3 space-y-3">
+          <div className="lg:col-span-4 space-y-3">
             <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Company</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
@@ -63,7 +63,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
           </div>
 
           {/* Column 3: Features */}
-          <div className="lg:col-span-3 space-y-3">
+          <div className="lg:col-span-4 space-y-3">
             <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Features</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
@@ -94,43 +94,6 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
               <li>
                 <button onClick={() => onSelectTab('dashboard')} className="hover:text-[#0144e4] transition-colors text-left">
                   Customized Dashboard
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 4: System (404 and 500 removed!) */}
-          <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">System</h4>
-            <ul className="space-y-2 text-xs text-slate-600 font-medium">
-              <li>
-                <button onClick={() => onSelectTab('email_preferences')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Email Subscription Preferences
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onSelectTab('unsubscribe')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Unsubscribe Preferences
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onSelectTab('security')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Password &amp; Security
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onSelectTab('search')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Search Results
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onSelectTab('terms')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Terms of Service
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onSelectTab('webservices')} className="hover:text-[#0144e4] transition-colors text-left">
-                  API &amp; Webhook Telemetry
                 </button>
               </li>
             </ul>
