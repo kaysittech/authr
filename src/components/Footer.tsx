@@ -21,13 +21,13 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
               <span className="text-2xl font-extrabold tracking-tight text-slate-900 font-display">Authr</span>
             </div>
             <p className="text-xs text-slate-500 leading-relaxed font-medium max-w-sm">
-              Sovereign creator identity registration, C2PA cryptographic watermarking, and automated statutory royalty clearing.
+              Sovereign creator identity registration, C2PA cryptographic watermarking, AI model scrape radar, and automated statutory royalty clearing.
             </p>
           </div>
 
-          {/* Column 2: Company */}
+          {/* Column 2: Company & Legal */}
           <div className="lg:col-span-4 space-y-3">
-            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Company</h4>
+            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Company &amp; Legal</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
                 <button onClick={onOpenRegister} className="hover:text-[#0144e4] transition-colors text-left">
@@ -35,65 +35,65 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('dashboard')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Pricing
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onSelectTab('careers')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Careers
-                </button>
-              </li>
-              <li>
                 <button onClick={() => onSelectTab('about')} className="hover:text-[#0144e4] transition-colors text-left">
-                  About
+                  About Authr
                 </button>
               </li>
               <li>
                 <button onClick={() => onSelectTab('blog')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Blog
+                  Blog &amp; Creator Insights
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onSelectTab('careers')} className="hover:text-[#0144e4] transition-colors text-left">
+                  Careers &amp; Open Roles
                 </button>
               </li>
               <li>
                 <button onClick={() => onSelectTab('privacy')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Privacy
+                  Privacy Policy &amp; BIPA
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onSelectTab('terms')} className="hover:text-[#0144e4] transition-colors text-left">
+                  Terms of Service
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Features */}
+          {/* Column 3: Platform Features */}
           <div className="lg:col-span-4 space-y-3">
-            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Features</h4>
+            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Platform Features</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
                 <button onClick={() => onSelectTab('detection')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Machine Learning &amp; Radar
+                  AI Radar &amp; Scrape Monitor
                 </button>
               </li>
               <li>
                 <button onClick={() => onSelectTab('biometrics')} className="hover:text-[#0144e4] transition-colors text-left">
-                  User Journey &amp; Biometrics
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onSelectTab('legal')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Automated Legal Reports
-                </button>
-              </li>
-              <li>
-                <button onClick={() => onSelectTab('financials')} className="hover:text-[#0144e4] transition-colors text-left">
-                  User Analytics &amp; Ledger
+                  Biometric Likeness Registry
                 </button>
               </li>
               <li>
                 <button onClick={() => onSelectTab('assets')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Adaptive C2PA Testing
+                  C2PA Vault &amp; Watermarking
                 </button>
               </li>
               <li>
-                <button onClick={() => onSelectTab('dashboard')} className="hover:text-[#0144e4] transition-colors text-left">
-                  Customized Dashboard
+                <button onClick={() => onSelectTab('legal')} className="hover:text-[#0144e4] transition-colors text-left">
+                  DMCA &amp; Takedown Studio
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onSelectTab('settlement')} className="hover:text-[#0144e4] transition-colors text-left">
+                  Royalty Settlement Portal
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onSelectTab('financials')} className="hover:text-[#0144e4] transition-colors text-left">
+                  Statutory Earnings Ledger
                 </button>
               </li>
             </ul>
