@@ -92,7 +92,7 @@ export const registerAdminInFirestore = async (email: string, fullName: string, 
  * Seed default Site Admins into Firestore
  */
 export const seedDefaultAdminsInFirestore = async () => {
-  await registerAdminInFirestore('christiana.obafunwa@gmail.com', 'Christiana Obafunwa', 'admin');
+  await registerAdminInFirestore('christiana.obafunwa@gmail.com', 'Authr Site Admin', 'admin');
   await registerAdminInFirestore('admin@authr.id', 'Authr Master Ops Admin', 'admin');
   await registerAdminInFirestore('kaysitsolutions@gmail.com', 'KaysIT Solutions Admin', 'admin');
 };
@@ -116,7 +116,7 @@ export const signInWithGoogleFirebase = async () => {
     const userData = {
       uid: user.uid,
       email: user.email || '',
-      displayName: user.displayName || (isAdmin ? 'Christiana Obafunwa (Site Admin)' : 'Google Creator'),
+      displayName: user.displayName || (isAdmin ? 'Authr Site Admin' : 'Google Creator'),
       photoURL: user.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
       handle: `@${(user.displayName || 'creator').toLowerCase().replace(/\s+/g, '_')}_${isAdmin ? 'admin' : 'authr'}`,
       lastLogin: serverTimestamp(),

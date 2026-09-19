@@ -107,7 +107,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       const oauthUser: UserSession = {
         id: fbUser.uid,
         email: fbUser.email || 'creator.google@authr.id',
-        fullName: emailLower === 'christiana.obafunwa@gmail.com' ? 'Christiana Obafunwa (Site Admin)' : (fbUser.displayName || 'Google Verified Creator'),
+        fullName: (isAdmin ? 'Authr Site Admin' : (fbUser.displayName || 'Google Verified Creator')),
         handle: `@${(fbUser.displayName || 'creator').toLowerCase().replace(/\s+/g, '_')}_${isAdmin ? 'admin' : 'authr'}`,
         discipline: 'Musicians & Composers',
         avatarUrl: fbUser.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
@@ -144,7 +144,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       const oauthUser: UserSession = {
         id: `usr_google_${Math.floor(100000 + Math.random() * 900000)}`,
         email: selectedEmail,
-        fullName: emailLower === 'christiana.obafunwa@gmail.com' ? 'Christiana Obafunwa (Site Admin)' : selectedName,
+        fullName: (isAdmin ? 'Authr Site Admin' : selectedName),
         handle: `@${handleName}_${isAdmin ? 'admin' : 'authr'}`,
         discipline: 'Musicians & Composers',
         avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
@@ -294,10 +294,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       // Master Admin Account Credentials
       if ((cleanEmail === 'admin@authr.id' || cleanEmail === 'kaysitsolutions@gmail.com' || cleanEmail === 'christiana.obafunwa@gmail.com') && (password === 'Authr2026!Master' || password === 'Authr2026!' || password === 'admin123' || password === 'password123')) {
         const adminUser: UserSession = {
-          id: 'usr_admin_christiana_01',
+          id: 'usr_admin_master_01',
           email: cleanEmail,
-          fullName: cleanEmail === 'christiana.obafunwa@gmail.com' ? 'Christiana Obafunwa (Site Admin)' : 'Authr Master Admin',
-          handle: '@christiana_admin',
+          fullName: 'Authr Site Admin',
+          handle: '@site_admin',
           discipline: 'Musicians & Composers',
           avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
           token: 'token_master_admin_2026',
@@ -531,13 +531,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     type="button"
                     onClick={() => {
                       onLoginSuccess({
-                        id: 'usr_admin_christiana_01',
-                        email: 'christiana.obafunwa@gmail.com',
-                        fullName: 'Christiana Obafunwa (Site Admin)',
-                        handle: '@christiana_admin',
+                        id: 'usr_admin_master_01',
+                        email: 'admin@authr.id',
+                        fullName: 'Authr Site Admin',
+                        handle: '@site_admin',
                         discipline: 'Musicians & Composers',
                         avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250',
-                        token: 'jwt_admin_christiana_2026',
+                        token: 'jwt_admin_site_2026',
                         kycStatus: 'verified',
                         idDocumentType: 'Government Master Key (SITE ADMIN)',
                         idMatchScore: 100.0,
@@ -548,7 +548,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs border border-slate-800 shadow-sm transition-all flex items-center justify-center space-x-2"
                   >
                     <ShieldCheck className="w-4 h-4 text-amber-400" />
-                    <span>👑 1-Click Site Admin Login (Christiana Obafunwa)</span>
+                    <span>👑 1-Click Site Admin Login</span>
                   </button>
 
                   <button
@@ -923,15 +923,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             {/* Account List */}
             <div className="space-y-2.5">
               <button
-                onClick={() => handleSelectGoogleAccount('christiana.obafunwa@gmail.com', 'Christiana Obafunwa')}
+                onClick={() => handleSelectGoogleAccount('admin@authr.id', 'Authr Master Admin')}
                 className="w-full p-3.5 rounded-2xl bg-amber-50/80 hover:bg-amber-100/80 border border-amber-200 hover:border-amber-400 text-left flex items-center space-x-3 transition-all group"
               >
                 <div className="w-10 h-10 rounded-full bg-slate-900 text-amber-400 flex items-center justify-center font-extrabold text-sm border border-slate-700 shadow-sm">
-                  CO
+                  SA
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs font-extrabold text-slate-900 group-hover:text-[#0144e4]">Christiana Obafunwa</div>
-                  <div className="text-[11px] text-slate-600 truncate font-mono">christiana.obafunwa@gmail.com</div>
+                  <div className="text-xs font-extrabold text-slate-900 group-hover:text-[#0144e4]">Site Admin Account</div>
+                  <div className="text-[11px] text-slate-600 truncate font-mono">admin@authr.id</div>
                 </div>
                 <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-slate-900 text-amber-400 border border-slate-700">Site Admin</span>
               </button>
