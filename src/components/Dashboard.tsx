@@ -124,54 +124,42 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
           <button onClick={() => setToastMessage(null)} className="text-[#0144e4] hover:text-blue-950 font-bold">✕</button>
         </div>
-      )}
+      )}      {/* Hero Welcome Banner */}
+      <div className="relative overflow-hidden rounded-2xl bg-white p-6 sm:p-8 border border-slate-200/80 shadow-xs">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <div className="flex items-center space-x-2.5">
+              <span className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full flex items-center gap-1.5 ${
+                policyMode === 'strict_privacy'
+                  ? 'bg-rose-50 text-rose-800 border border-rose-200'
+                  : 'bg-blue-50 text-[#0144e4] border border-blue-200/60'
+              }`}>
+                <ShieldCheck className="w-3.5 h-3.5" />
+                {policyMode === 'strict_privacy' ? 'Strict Privacy Mode' : 'Royalty Monetization Active'}
+              </span>
+            </div>
+            
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-display">
+              {policyMode === 'strict_privacy' ? (
+                <span>Lock Down Your Work. <span className="text-rose-600">Enforce Rights</span>.</span>
+              ) : (
+                <span>Protect Your Work & Claim <span className="text-[#0144e4]">Royalties</span></span>
+              )}
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 font-normal leading-relaxed">
+              Automated identity, voice, face, text manuscript, and digital artwork clearinghouse. Built for creators and commercial licensees.
+            </p>
+          </div>
 
-      {/* Hero Welcome Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-white p-6 sm:p-10 border border-slate-200/80 shadow-sm">
-        <div className="absolute top-0 right-0 -mt-16 -mr-16 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-0 left-1/3 -mb-16 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div className="relative z-10 space-y-4 max-w-3xl">
-          {/* Dynamic Policy Mode Banner & Headline */}
-          {policyMode === 'strict_privacy' ? (
-            <>
-              <div className="flex items-center space-x-3 flex-wrap gap-y-2">
-                <span className="px-3.5 py-1 text-xs font-bold uppercase tracking-wider bg-rose-50 text-rose-800 border border-rose-300 rounded-full flex items-center gap-2 font-mono">
-                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-                  Strict Privacy Lockdown Mode Active
-                </span>
-                <span className="text-xs text-slate-500 font-mono">
-                  Zero-Tolerance Cease & Desist • Automated DMCA / BIPA Takedowns
-                </span>
-              </div>
-              
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight font-display">
-                Lock Down Your Work. Enforce Legal <span className="text-rose-600 font-black">Takedowns</span>.
-              </h1>
-              <p className="text-sm sm:text-base text-slate-600 font-medium leading-relaxed">
-                Zero-tolerance statutory lockdown mode. Any detected web scrape, unauthorized voice clone, face swap, or stolen artwork immediately triggers an automated Cease & Desist and DMCA / BIPA legal takedown notice.
-              </p>
-            </>
-          ) : (
-            <>
-              <div className="flex items-center space-x-3 flex-wrap gap-y-2">
-                <span className="px-3.5 py-1 text-xs font-bold uppercase tracking-wider bg-blue-50 text-[#0144e4] border border-blue-300 rounded-full flex items-center gap-2 font-mono">
-                  <span className="w-2 h-2 rounded-full bg-[#0144e4] animate-ping"></span>
-                  Independent Rights & Royalty Network Active
-                </span>
-                <span className="text-xs text-slate-500 font-mono">
-                  Commercial Micro-Monetization Network
-                </span>
-              </div>
-              
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight font-display">
-                Protect Your Work. Claim Your <span className="text-[#0144e4] font-black">Royalties</span>.
-              </h1>
-              <p className="text-sm sm:text-base text-slate-600 font-medium leading-relaxed">
-                Automated identity, voice, face, text manuscript, and digital artwork clearinghouse. Built for musicians, fine artists, authors, short-form creators, and commercial media licensees.
-              </p>
-            </>
-          )}
+          <div className="flex items-center space-x-3 self-start md:self-auto">
+            <button
+              onClick={onSimulateScan}
+              className="px-5 py-2.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-bold text-xs shadow-xs transition-all flex items-center space-x-2 whitespace-nowrap"
+            >
+              <Radar className="w-4 h-4 text-white" />
+              <span>Run Quick Scan</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -179,150 +167,145 @@ export const Dashboard: React.FC<DashboardProps> = ({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <button
           onClick={() => setActiveTab('assets')}
-          className="p-3.5 rounded-2xl bg-white hover:bg-blue-50/50 border border-slate-200/80 hover:border-[#0144e4] text-left transition-all shadow-xs group"
+          className="p-4 rounded-xl bg-white hover:bg-blue-50/40 border border-slate-200/80 hover:border-[#0144e4]/50 text-left transition-all shadow-xs group"
         >
-          <div className="flex items-center justify-between text-[#0144e4] mb-1">
+          <div className="flex items-center justify-between text-[#0144e4] mb-1.5">
             <div className="flex items-center space-x-2">
-              <ShieldCheck className="w-4 h-4" />
+              <div className="p-2 rounded-lg bg-blue-50 text-[#0144e4]">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
               <span className="text-xs font-extrabold text-slate-900">Protect Work</span>
             </div>
-            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0144e4] group-hover:translate-x-0.5 transition-all" />
           </div>
-          <p className="text-[11px] text-slate-500 line-clamp-1">Add media, pHash & C2PA watermark</p>
+          <p className="text-[11px] text-slate-500 font-medium">Add media & C2PA watermark</p>
         </button>
 
         <button
           onClick={onSimulateScan}
-          className="p-3.5 rounded-2xl bg-white hover:bg-indigo-50/50 border border-slate-200/80 hover:border-indigo-300 text-left transition-all shadow-xs group"
+          className="p-4 rounded-xl bg-white hover:bg-blue-50/40 border border-slate-200/80 hover:border-[#0144e4]/50 text-left transition-all shadow-xs group"
         >
-          <div className="flex items-center justify-between text-indigo-600 mb-1">
+          <div className="flex items-center justify-between text-[#0144e4] mb-1.5">
             <div className="flex items-center space-x-2">
-              <Radar className="w-4 h-4" />
+              <div className="p-2 rounded-lg bg-blue-50 text-[#0144e4]">
+                <Radar className="w-4 h-4" />
+              </div>
               <span className="text-xs font-extrabold text-slate-900">Scan Networks</span>
             </div>
-            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0144e4] group-hover:translate-x-0.5 transition-all" />
           </div>
-          <p className="text-[11px] text-slate-500 line-clamp-1">Trigger 1,420-node crawler sweep</p>
+          <p className="text-[11px] text-slate-500 font-medium">1,420-node crawler sweep</p>
         </button>
 
         <button
           onClick={() => setActiveTab('settlement')}
-          className="p-3.5 rounded-2xl bg-white hover:bg-emerald-50/50 border border-slate-200/80 hover:border-emerald-300 text-left transition-all shadow-xs group"
+          className="p-4 rounded-xl bg-white hover:bg-blue-50/40 border border-slate-200/80 hover:border-[#0144e4]/50 text-left transition-all shadow-xs group"
         >
-          <div className="flex items-center justify-between text-emerald-600 mb-1">
+          <div className="flex items-center justify-between text-[#0144e4] mb-1.5">
             <div className="flex items-center space-x-2">
-              <Scale className="w-4 h-4" />
+              <div className="p-2 rounded-lg bg-blue-50 text-[#0144e4]">
+                <Scale className="w-4 h-4" />
+              </div>
               <span className="text-xs font-extrabold text-slate-900">Settle Claims</span>
             </div>
-            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0144e4] group-hover:translate-x-0.5 transition-all" />
           </div>
-          <p className="text-[11px] text-slate-500 line-clamp-1">Settle & license flagged uses</p>
+          <p className="text-[11px] text-slate-500 font-medium">Review & license flagged uses</p>
         </button>
 
         <button
           onClick={() => setActiveTab('financials')}
-          className="p-3.5 rounded-2xl bg-white hover:bg-purple-50/50 border border-slate-200/80 hover:border-purple-300 text-left transition-all shadow-xs group"
+          className="p-4 rounded-xl bg-white hover:bg-blue-50/40 border border-slate-200/80 hover:border-[#0144e4]/50 text-left transition-all shadow-xs group"
         >
-          <div className="flex items-center justify-between text-purple-600 mb-1">
+          <div className="flex items-center justify-between text-[#0144e4] mb-1.5">
             <div className="flex items-center space-x-2">
-              <DollarSign className="w-4 h-4" />
+              <div className="p-2 rounded-lg bg-blue-50 text-[#0144e4]">
+                <DollarSign className="w-4 h-4" />
+              </div>
               <span className="text-xs font-extrabold text-slate-900">Stripe Payouts</span>
             </div>
-            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0144e4] group-hover:translate-x-0.5 transition-all" />
           </div>
-          <p className="text-[11px] text-slate-500 line-clamp-1">Connect bank account for payouts</p>
+          <p className="text-[11px] text-slate-500 font-medium">Bank account & revenue</p>
         </button>
       </div>
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-[#0144e4]/50 transition-all">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Protected Catalog</span>
-            <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-[#0144e4]">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Protected Catalog</span>
+            <div className="p-2.5 rounded-xl bg-blue-50 text-[#0144e4] border border-blue-100">
               <ShieldCheck className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-black text-slate-900 font-mono flex items-baseline space-x-2">
-              <span>{assets.length}</span>
-              <span className="text-xs font-sans font-normal text-slate-500">Registered Works</span>
+            <div className="text-2xl font-extrabold text-slate-900">
+              {assets.length} <span className="text-xs font-normal text-slate-500">Registered Works</span>
             </div>
-            <p className="text-[10px] text-slate-500 font-mono mt-0.5">{catalogSub}</p>
+            <p className="text-xs text-slate-500 mt-1">{catalogSub}</p>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-[#0144e4]/50 transition-all">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Detection Nodes</span>
-            <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700">
-              <Radar className="w-5 h-5 animate-pulse" />
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Detection Nodes</span>
+            <div className="p-2.5 rounded-xl bg-blue-50 text-[#0144e4] border border-blue-100">
+              <Radar className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-black text-slate-900 font-mono flex items-baseline space-x-2">
-              <span>{activeScansCount.toLocaleString()}</span>
-              <span className="text-xs font-sans font-normal text-slate-500">Nodes</span>
+            <div className="text-2xl font-extrabold text-slate-900">
+              {activeScansCount.toLocaleString()} <span className="text-xs font-normal text-slate-500">Nodes</span>
             </div>
-            <p className="text-[11px] text-slate-600 mt-1.5 flex items-center space-x-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>YT, IG, TikTok & AI Training Sets</span>
-            </p>
+            <p className="text-xs text-emerald-600 font-semibold mt-1">● Active Crawl Networks</p>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-[#0144e4]/50 transition-all">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Licensing Claims</span>
-            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Licensing Claims</span>
+            <div className="p-2.5 rounded-xl bg-blue-50 text-[#0144e4] border border-blue-100">
               <Scale className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-black text-slate-900 font-mono flex items-baseline space-x-2">
-              {pendingClaims.length} <span className="text-xs font-sans font-normal text-slate-500">Claim(s)</span>
+            <div className="text-2xl font-extrabold text-slate-900">
+              {pendingClaims.length} <span className="text-xs font-normal text-slate-500">Pending Claims</span>
             </div>
-            <p className="text-[11px] text-slate-600 mt-1.5 flex items-center space-x-1.5">
-              <AlertTriangle className="w-3.5 h-3.5 text-[#0144e4]" />
-              <span>Settlement Gates Active</span>
-            </p>
+            <p className="text-xs text-blue-600 font-semibold mt-1">Settlement Gates Active</p>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:border-[#0144e4]/50 transition-all">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Collected Royalties</span>
-            <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-[#0144e4]">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Collected Royalties</span>
+            <div className="p-2.5 rounded-xl bg-blue-50 text-[#0144e4] border border-blue-100">
               <DollarSign className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-4">
-            <div className="text-2xl font-black text-[#0144e4] font-mono">
+            <div className="text-2xl font-extrabold text-[#0144e4]">
               ${totalRecovered.toFixed(2)}
             </div>
-            <p className="text-[11px] text-slate-600 mt-1.5 flex items-center space-x-1.5">
-              <TrendingUp className="w-3.5 h-3.5 text-[#0144e4]" />
-              <span>+18.4% via Stripe Connect</span>
-            </p>
+            <p className="text-xs text-emerald-600 font-semibold mt-1">✓ Connected via Stripe</p>
           </div>
         </div>
       </div>
 
-      {/* Full-Width Creative Discipline Filter Bar */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+      {/* Creative Discipline Workspace Bar */}
+      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">
-              Active Discipline Workspace:
-            </span>
-            <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold rounded-md bg-blue-100 text-[#0144e4] border border-blue-300">
-              {activeDisciplineName} (Registered Vault)
-            </span>
-          </div>
+          <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+            Discipline Workspace
+          </span>
+          <span className="px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-blue-50 text-[#0144e4] border border-blue-200/60">
+            {activeDisciplineName}
+          </span>
         </div>
 
-        <div className="flex items-center space-x-2.5 flex-wrap gap-y-2">
+        <div className="flex items-center space-x-2 flex-wrap gap-y-2">
           {[
             { id: 'all', label: 'All Creative Disciplines', icon: Sparkles },
             { id: 'likeness', label: 'Likeness & Voice', icon: UserCheck },
@@ -349,12 +332,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <button
                 key={discipline.id}
                 onClick={handleClick}
-                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all shadow-sm ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all shadow-2xs ${
                   isSelected
-                    ? 'bg-[#0144e4] text-white font-extrabold border border-[#0144e4]'
+                    ? 'bg-[#0144e4] text-white border border-[#0144e4]'
                     : isUnlocked
-                    ? 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100 hover:text-slate-900'
-                    : 'bg-slate-100 text-slate-500 border border-slate-200/80 hover:bg-slate-200/60'
+                    ? 'bg-slate-50 text-slate-700 border border-slate-200/80 hover:bg-blue-50/50 hover:text-[#0144e4]'
+                    : 'bg-slate-100 text-slate-400 border border-slate-200/60'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -378,23 +361,23 @@ export const Dashboard: React.FC<DashboardProps> = ({
           const strategy = getDisciplineStrategy(fullDisciplineName);
 
           return (
-            <div className="p-4 rounded-xl bg-blue-50/60 border border-blue-200 space-y-2 animate-fadeIn font-mono">
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 animate-fadeIn text-xs">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center space-x-2">
-                  <span className={`px-2.5 py-0.5 text-[10px] font-extrabold uppercase rounded-md ${strategy.badgeColor}`}>
+                  <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-blue-50 text-[#0144e4] border border-blue-200/60">
                     {strategy.shortLabel}
                   </span>
-                  <span className="text-xs font-bold text-slate-900">{strategy.primaryMonetization}</span>
+                  <span className="font-bold text-slate-900">{strategy.primaryMonetization}</span>
                 </div>
-                <div className="text-[11px] font-bold text-slate-700">
-                  Default Rate: <span className="text-[#0144e4] font-extrabold">${strategy.defaultAiRate}/query</span> • <span className="text-[#0144e4] font-extrabold">${strategy.defaultLicenseRate}/ad</span>
+                <div className="font-semibold text-slate-600">
+                  Default Rate: <span className="text-[#0144e4] font-bold">${strategy.defaultAiRate}/query</span> • <span className="text-[#0144e4] font-bold">${strategy.defaultLicenseRate}/ad</span>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-2 text-[11px] text-slate-600 flex-wrap gap-y-1">
-                <span className="text-slate-400 font-bold">MONITORED RIGHTS:</span>
+              <div className="flex items-center space-x-2 text-slate-600 flex-wrap gap-y-1">
+                <span className="text-slate-400 font-semibold text-[11px]">Monitored Rights:</span>
                 {strategy.rightsMonitored.map((right, idx) => (
-                  <span key={idx} className="px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-bold">
+                  <span key={idx} className="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-800 text-[11px] font-medium">
                     ✓ {right}
                   </span>
                 ))}
@@ -404,39 +387,35 @@ export const Dashboard: React.FC<DashboardProps> = ({
         })()}
       </div>
 
-      {/* Main Grid Section: Live Scrape Feed (2/3) & Sovereign Creator Vault (1/3) */}
+      {/* Main Grid Section: Live Scrape Feed (2/3) & Creator Vault (1/3) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Left Column (2/3): Live Matches Feed */}
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Radar className="w-5 h-5 text-[#0144e4] animate-pulse" />
-              <h2 className="text-lg font-bold text-slate-900">Live Infringement & Royalty Licensing Feed</h2>
+            <div className="flex items-center space-x-2.5">
+              <div className="p-2 rounded-lg bg-blue-50 text-[#0144e4]">
+                <Radar className="w-4 h-4" />
+              </div>
+              <h2 className="text-base font-extrabold text-slate-900">Live Infringement Feed</h2>
             </div>
             <button
               onClick={() => setActiveTab('detection')}
-              className="text-xs text-[#0144e4] hover:underline flex items-center space-x-1.5 font-bold"
+              className="text-xs text-[#0144e4] hover:underline flex items-center space-x-1 font-bold"
             >
               <span>View All Matches</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="space-y-3.5">
+          <div className="space-y-3">
             {filteredMatches.map((match) => (
               <div 
                 key={match.id} 
-                className="bg-white p-5 sm:px-6 sm:py-5 rounded-2xl border border-slate-200/80 shadow-sm hover:border-[#0144e4]/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5"
+                className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:border-[#0144e4]/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
               >
-                <div className="flex items-start space-x-4">
-                  <div className={`p-3 rounded-xl border mt-0.5 flex-shrink-0 ${
-                    match.matchCategory === 'brand_commercial'
-                      ? 'bg-blue-50 border-blue-200 text-[#0144e4]'
-                      : match.matchCategory === 'ai_training_scraping'
-                      ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
-                      : 'bg-rose-50 border-rose-200 text-rose-700'
-                  }`}>
+                <div className="flex items-start space-x-3.5">
+                  <div className="p-2.5 rounded-xl bg-blue-50 border border-blue-100 text-[#0144e4] flex-shrink-0 mt-0.5">
                     {match.assetType.startsWith('biometric') ? (
                       <Fingerprint className="w-5 h-5" />
                     ) : (
@@ -444,40 +423,40 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     )}
                   </div>
                   <div>
-                    <div className="flex items-center space-x-2.5 flex-wrap gap-y-1">
-                      <span className="text-sm font-bold text-slate-900">{match.assetTitle}</span>
-                      <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+                    <div className="flex items-center space-x-2 flex-wrap gap-y-1">
+                      <span className="text-xs font-extrabold text-slate-900">{match.assetTitle}</span>
+                      <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-blue-50 text-[#0144e4] border border-blue-200/60">
                         {match.targetPlatform}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-600 mt-1.5 flex items-center space-x-2">
-                      <span>Uploader / Brand: <strong className="text-slate-900 font-mono">{match.uploaderName}</strong></span>
+                    <p className="text-xs text-slate-500 mt-1 flex items-center space-x-2">
+                      <span>Uploader: <strong className="text-slate-800">{match.uploaderName}</strong></span>
                       <span>•</span>
-                      <span>Similarity: <strong className="text-[#0144e4]">{match.visualSimilarity > 0 ? match.visualSimilarity : match.audioSimilarity}%</strong></span>
+                      <span>Match: <strong className="text-[#0144e4]">{match.visualSimilarity > 0 ? match.visualSimilarity : match.audioSimilarity}%</strong></span>
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-5 self-end sm:self-center">
+                <div className="flex items-center space-x-4 self-end sm:self-center">
                   <div className="text-right">
-                    <div className="text-[11px] font-bold text-slate-500 font-mono uppercase tracking-wider">
-                      {policyMode === 'strict_privacy' ? 'Enforcement Action' : 'Calculated License Fee'}
+                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {policyMode === 'strict_privacy' ? 'Action' : 'Calculated Fee'}
                     </div>
-                    <div className={`text-sm font-black font-mono ${policyMode === 'strict_privacy' ? 'text-rose-600' : 'text-[#0144e4]'}`}>
+                    <div className={`text-xs font-extrabold ${policyMode === 'strict_privacy' ? 'text-rose-600' : 'text-[#0144e4]'}`}>
                       {policyMode === 'strict_privacy' ? 'DMCA TAKEDOWN' : `$${match.estimatedLostRevenue.toFixed(2)}`}
                     </div>
                   </div>
 
                   <button
                     onClick={() => setActiveTab(policyMode === 'strict_privacy' ? 'legal' : 'settlement')}
-                    className={`px-5 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center space-x-2 shadow-sm border whitespace-nowrap ${
+                    className={`px-4 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center space-x-1.5 shadow-2xs whitespace-nowrap ${
                       policyMode === 'strict_privacy'
-                        ? 'bg-rose-50 hover:bg-rose-100 text-rose-800 border-rose-300'
-                        : 'bg-[#0144e4] hover:bg-[#0038c7] text-white border-[#0144e4] font-extrabold'
+                        ? 'bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200'
+                        : 'bg-[#0144e4] hover:bg-[#0038c7] text-white'
                     }`}
                   >
-                    <span>{policyMode === 'strict_privacy' ? 'Enforce DMCA Takedown' : 'Open Settlement Gate'}</span>
-                    <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span>{policyMode === 'strict_privacy' ? 'Enforce Takedown' : 'Open Settlement Gate'}</span>
+                    <ExternalLink className="w-3.5 h-3.5 flex-shrink-0 text-white" />
                   </button>
                 </div>
               </div>
@@ -485,50 +464,52 @@ export const Dashboard: React.FC<DashboardProps> = ({
           </div>
         </div>
 
-        {/* Right Column (1/3): Sovereign Identity Profile */}
+        {/* Right Column (1/3): Sovereign Creator Vault */}
         <div className="space-y-4">
-          <div className="flex items-center space-x-3">
-            <UserCheck className="w-5 h-5 text-indigo-600" />
-            <h2 className="text-lg font-bold text-slate-900">Independent Creator Vault</h2>
+          <div className="flex items-center space-x-2.5">
+            <div className="p-2 rounded-lg bg-blue-50 text-[#0144e4]">
+              <UserCheck className="w-4 h-4" />
+            </div>
+            <h2 className="text-base font-extrabold text-slate-900">Creator Vault Profile</h2>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl space-y-4 border border-slate-200/80 shadow-sm">
-            <div className="flex items-center space-x-4 pb-4 border-slate-200 border-b">
+          <div className="bg-white p-5 rounded-2xl space-y-4 border border-slate-200/80 shadow-xs">
+            <div className="flex items-center space-x-3 pb-3 border-slate-200 border-b">
               <img 
                 src={digitalTwin.faceVector?.sampleImageUrl} 
                 alt="Alex Rivera"
-                className="w-14 h-14 rounded-2xl object-cover ring-2 ring-blue-400/40" 
+                className="w-12 h-12 rounded-xl object-cover ring-2 ring-[#0144e4]/30" 
               />
               <div>
-                <h3 className="text-base font-bold text-slate-900">{digitalTwin.userName}</h3>
-                <p className="text-xs text-slate-500 font-mono">{digitalTwin.handle}</p>
+                <h3 className="text-sm font-extrabold text-slate-900">{digitalTwin.userName}</h3>
+                <p className="text-xs text-slate-400">{digitalTwin.handle}</p>
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-700">Licensing Policy:</span>
-                <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded ${
+                <span className="text-xs font-semibold text-slate-600">Licensing Policy:</span>
+                <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded-full ${
                   policyMode === 'micro_monetization'
-                    ? 'bg-blue-100 text-[#0144e4] border border-blue-300'
-                    : 'bg-rose-100 text-rose-900 border border-rose-300'
+                    ? 'bg-blue-50 text-[#0144e4] border border-blue-200/60'
+                    : 'bg-rose-50 text-rose-800 border border-rose-200'
                 }`}>
                   {policyMode === 'micro_monetization' ? 'Royalty Monetization' : 'Strict Privacy'}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-600 leading-relaxed">
+              <p className="text-[11px] text-slate-500 leading-normal">
                 {policyMode === 'micro_monetization'
-                  ? 'AI models & commercial scrapers micro-license your works & biometrics at set rates ($0.08/query, $250/ad).'
-                  : 'Automated statutory DMCA & copyright notices are dispatched instantly upon scrape detection.'}
+                  ? 'Commercial scrapers micro-license works & biometrics ($0.08/query, $250/ad).'
+                  : 'Automated statutory DMCA takedowns dispatched instantly upon detection.'}
               </p>
             </div>
 
-            <div className="space-y-2.5 pt-2">
+            <div className="space-y-2 pt-1">
               <button
                 onClick={() => setActiveTab('biometrics')}
-                className="w-full p-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-900 text-xs font-semibold flex items-center justify-between border border-slate-200 transition-all"
+                className="w-full p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50/50 text-slate-800 hover:text-[#0144e4] text-xs font-bold flex items-center justify-between border border-slate-200 transition-all"
               >
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2.5">
                   <Sparkles className="w-4 h-4 text-[#0144e4]" />
                   <span>{updateButtonLabel}</span>
                 </div>
@@ -537,10 +518,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
               <button
                 onClick={() => setActiveTab('legal')}
-                className="w-full p-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-900 text-xs font-semibold flex items-center justify-between border border-slate-200 transition-all"
+                className="w-full p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50/50 text-slate-800 hover:text-[#0144e4] text-xs font-bold flex items-center justify-between border border-slate-200 transition-all"
               >
-                <div className="flex items-center space-x-3">
-                  <FileCheck2 className="w-4 h-4 text-indigo-600" />
+                <div className="flex items-center space-x-2.5">
+                  <FileCheck2 className="w-4 h-4 text-[#0144e4]" />
                   <span>Generate DMCA & BIPA Notice</span>
                 </div>
                 <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
