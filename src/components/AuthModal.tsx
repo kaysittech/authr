@@ -119,8 +119,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       onLoginSuccess(oauthUser);
       onClose();
     } catch (err: any) {
-      console.info('Firebase popup fallback to picker', err);
-      setShowGooglePicker(true);
+      console.warn('Firebase Google Auth error:', err);
+      if (err.code === 'auth/popup-closed-by-user') {
+        setError('Google sign-in popup was closed before completing authorization.');
+      } else if (err.code === 'auth/cancelled-popup-request') {
+        setError('Multiple popup requests were initiated. Please try again.');
+      } else {
+        setShowGooglePicker(true);
+      }
     } finally {
       setIsLoading(false);
     }

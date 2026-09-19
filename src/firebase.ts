@@ -26,12 +26,12 @@ import {
 
 // Firebase configuration for project authr-506803
 const firebaseConfig = {
-  apiKey: (import.meta as any).env?.VITE_FIREBASE_API_KEY || "AIzaSyAuthr506803DefaultApiKeyForPublicAuth",
+  apiKey: (import.meta as any).env?.VITE_FIREBASE_API_KEY || "AIzaSyAL4SiwIkev1OxwwYmy_lKLnuEzKtYJrAw",
   authDomain: "authr-506803.firebaseapp.com",
   projectId: "authr-506803",
-  storageBucket: "authr-506803.appspot.com",
-  messagingSenderId: "506803123456",
-  appId: "1:506803123456:web:authr506803app"
+  storageBucket: "authr-506803.firebasestorage.app",
+  messagingSenderId: "510481317881",
+  appId: "1:510481317881:web:e8b6ed3c3bc9a0dde90728"
 };
 
 // Initialize Firebase App
