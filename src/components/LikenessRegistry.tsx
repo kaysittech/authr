@@ -466,9 +466,9 @@ export const LikenessRegistry: React.FC<LikenessRegistryProps> = ({
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => setIsRecordVoiceModalOpen(true)}
-                    className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2"
+                    className="px-4 py-2 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2"
                   >
-                    <Mic className="w-4 h-4 text-slate-950" />
+                    <Mic className="w-4 h-4 text-white" />
                     <span>Record Live Voice Print</span>
                   </button>
 
@@ -485,7 +485,7 @@ export const LikenessRegistry: React.FC<LikenessRegistryProps> = ({
                   <div className="flex items-center space-x-4">
                     <button
                       onClick={() => setIsPlayingAudio(!isPlayingAudio)}
-                      className="w-10 h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold hover:bg-amber-300 transition-all shadow-xs"
+                      className="w-10 h-10 rounded-xl bg-[#0144e4] text-white flex items-center justify-center font-bold hover:bg-[#0038c7] transition-all shadow-xs"
                     >
                       {isPlayingAudio ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
                     </button>
@@ -534,9 +534,9 @@ export const LikenessRegistry: React.FC<LikenessRegistryProps> = ({
 
                 <button
                   onClick={() => setIsRecordVoiceModalOpen(true)}
-                  className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2"
+                  className="px-4 py-2 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2"
                 >
-                  <Mic className="w-4 h-4 text-slate-950" />
+                  <Mic className="w-4 h-4 text-white" />
                   <span>Record Vocal Stem</span>
                 </button>
               </div>
@@ -544,7 +544,7 @@ export const LikenessRegistry: React.FC<LikenessRegistryProps> = ({
               <div className="space-y-4">
                 <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200 text-slate-900 flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">
+                    <div className="w-9 h-9 rounded-xl bg-[#0144e4] text-white flex items-center justify-center font-bold">
                       <Play className="w-4 h-4 ml-0.5" />
                     </div>
                     <div>
@@ -755,9 +755,9 @@ export const LikenessRegistry: React.FC<LikenessRegistryProps> = ({
 
                 <button
                   onClick={() => setIsRecordVoiceModalOpen(true)}
-                  className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2"
+                  className="px-4 py-2 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2"
                 >
-                  <Mic className="w-4 h-4 text-slate-950" />
+                  <Mic className="w-4 h-4 text-white" />
                   <span>Record Voice Signature</span>
                 </button>
               </div>
@@ -850,9 +850,9 @@ export const LikenessRegistry: React.FC<LikenessRegistryProps> = ({
 
             <button
               onClick={() => setMessage(`Custom Licensing Rates Saved: $${aiQueryRate}/query • $${adLicenseRate}/ad`)}
-              className="px-4 py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 flex-shrink-0"
+              className="px-4 py-2.5 rounded-2xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 flex-shrink-0"
             >
-              <CheckCircle2 className="w-4 h-4 text-slate-950" />
+              <CheckCircle2 className="w-4 h-4 text-white" />
               <span>Save Custom Rates</span>
             </button>
           </div>
@@ -930,9 +930,9 @@ export const LikenessRegistry: React.FC<LikenessRegistryProps> = ({
 
             <button
               onClick={() => setPolicyMode('micro_monetization')}
-              className="px-4 py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 flex-shrink-0 self-start sm:self-auto"
+              className="px-4 py-2.5 rounded-2xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 flex-shrink-0 self-start sm:self-auto"
             >
-              <DollarSign className="w-4 h-4 text-slate-950" />
+              <DollarSign className="w-4 h-4 text-white" />
               <span>Switch to Royalty Licensing to Monetize</span>
             </button>
           </div>
@@ -969,9 +969,9 @@ export const LikenessRegistry: React.FC<LikenessRegistryProps> = ({
 
           <button
             onClick={() => setIsIdModalOpen(true)}
-            className="px-4 py-2.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 flex-shrink-0 whitespace-nowrap self-start sm:self-auto"
+            className="px-4 py-2.5 rounded-2xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 flex-shrink-0 whitespace-nowrap self-start sm:self-auto"
           >
-            <UploadCloud className="w-4 h-4 text-slate-950 flex-shrink-0" />
+            <UploadCloud className="w-4 h-4 text-white flex-shrink-0" />
             <span className="whitespace-nowrap">Upload Govt ID</span>
           </button>
         </div>
@@ -1201,7 +1201,7 @@ export const LikenessRegistry: React.FC<LikenessRegistryProps> = ({
               <button
                 type="submit"
                 disabled={isVerifyingId || !idFile || !selfieFile}
-                className="w-full py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
+                className="w-full py-3 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
               >
                 {isVerifyingId ? <Loader2 className="w-4 h-4 animate-spin" /> : <ScanFace className="w-4 h-4" />}
                 <span>{isVerifyingId ? 'Verifying ID & Matching Face...' : 'Verify Government ID & Issue KYC Token'}</span>
@@ -1275,9 +1275,9 @@ export const LikenessRegistry: React.FC<LikenessRegistryProps> = ({
                 <button
                   type="button"
                   onClick={startVoiceRecording}
-                  className="w-full py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-md transition-all flex items-center justify-center space-x-2"
+                  className="w-full py-3.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center space-x-2"
                 >
-                  <Mic className="w-4 h-4 text-slate-950" />
+                  <Mic className="w-4 h-4 text-white" />
                   <span>Start Live Voice Recording</span>
                 </button>
               )}

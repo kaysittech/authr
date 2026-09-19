@@ -135,9 +135,9 @@ export const AssetProtection: React.FC<AssetProtectionProps> = ({
 
         <button
           onClick={() => setIsRegisterModalOpen(true)}
-          className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2.5 flex-shrink-0 whitespace-nowrap self-start md:self-auto"
+          className="px-5 py-3 rounded-2xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2.5 flex-shrink-0 whitespace-nowrap self-start md:self-auto"
         >
-          <Plus className="w-4 h-4 text-slate-950 flex-shrink-0" />
+          <Plus className="w-4 h-4 text-white flex-shrink-0" />
           <span className="whitespace-nowrap">Register New Work</span>
         </button>
       </div>
@@ -312,7 +312,7 @@ export const AssetProtection: React.FC<AssetProtectionProps> = ({
               <button
                 type="submit"
                 disabled={isIngesting}
-                className="w-full py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2"
+                className="w-full py-3 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2"
               >
                 {isIngesting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
                 <span>{isIngesting ? 'Embedding C2PA Signature...' : 'Register & Sign Asset'}</span>

@@ -274,7 +274,7 @@ export const WebServicesDashboard: React.FC = () => {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-3.5 py-1.5 rounded-xl font-bold transition-all ${
                 selectedCategory === cat.id
-                  ? 'bg-amber-400 text-slate-950 font-extrabold shadow-xs'
+                  ? 'bg-[#0144e4] text-white font-extrabold shadow-xs'
                   : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
               }`}
             >
@@ -373,9 +373,9 @@ export const WebServicesDashboard: React.FC = () => {
                 <button
                   onClick={() => handleTriggerService(service.id, service.name)}
                   disabled={isExecuting}
-                  className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2 font-mono disabled:opacity-50"
+                  className="px-4 py-2 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2 font-mono disabled:opacity-50"
                 >
-                  <RefreshCw className={`w-3.5 h-3.5 text-slate-950 ${isExecuting ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`w-3.5 h-3.5 text-white ${isExecuting ? 'animate-spin' : ''}`} />
                   <span>{isExecuting ? 'Executing Service...' : 'Trigger Service Sweep'}</span>
                 </button>
               </div>

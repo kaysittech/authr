@@ -240,7 +240,7 @@ export function App() {
                 });
                 setActiveTab('admin');
               }}
-              className="px-3.5 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black transition-all shadow-xs"
+              className="px-3.5 py-1.5 bg-[#0144e4] hover:bg-[#0038c7] text-white rounded-xl text-xs font-black transition-all shadow-xs"
             >
               Return to Admin Panel
             </button>

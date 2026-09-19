@@ -64,7 +64,7 @@ export const Financials: React.FC<FinancialsProps> = ({ transactions }) => {
           <button
             onClick={handleWithdrawPayout}
             disabled={isWithdrawing || netTotal === 0}
-            className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center space-x-2 disabled:opacity-50"
+            className="px-5 py-3 rounded-2xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center space-x-2 disabled:opacity-50"
           >
             <Sparkles className={`w-4 h-4 ${isWithdrawing ? 'animate-spin' : ''}`} />
             <span>{isWithdrawing ? 'Initiating Payout...' : `Withdraw $${netTotal.toFixed(2)} to Payout Account`}</span>

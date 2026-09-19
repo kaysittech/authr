@@ -64,7 +64,7 @@ export const DisciplineUpgradeModal: React.FC<DisciplineUpgradeModalProps> = ({
 
         {/* Header Badge */}
         <div className="flex items-center space-x-3">
-          <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 font-bold shadow-sm">
+          <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-[#0144e4] text-white font-bold shadow-sm">
             <Lock className="w-6 h-6 stroke-[2.5]" />
           </div>
           <div>
@@ -143,7 +143,7 @@ export const DisciplineUpgradeModal: React.FC<DisciplineUpgradeModalProps> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="text-xs font-bold text-slate-900">Independent All-Access Multi-Discipline Pass</span>
-                <span className="text-[10px] font-extrabold bg-amber-400 text-slate-950 px-2 py-0.5 rounded font-mono">BEST VALUE</span>
+                <span className="text-[10px] font-extrabold bg-[#0144e4] text-white px-2 py-0.5 rounded font-mono">BEST VALUE</span>
               </div>
               <p className="text-[11px] text-slate-500 mt-0.5">Unlocks all 4 creative disciplines (Music, Visual, Video & Corporate IP).</p>
             </div>
@@ -159,7 +159,7 @@ export const DisciplineUpgradeModal: React.FC<DisciplineUpgradeModalProps> = ({
           <button
             onClick={handlePayment}
             disabled={isProcessing}
-            className="w-full py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-md transition-all flex items-center justify-center space-x-2.5 disabled:opacity-50"
+            className="w-full py-3.5 rounded-2xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center space-x-2.5 disabled:opacity-50"
           >
             <CreditCard className={`w-4 h-4 ${isProcessing ? 'animate-spin' : ''}`} />
             <span>

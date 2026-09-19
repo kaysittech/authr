@@ -351,7 +351,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 onClick={handleClick}
                 className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all shadow-sm ${
                   isSelected
-                    ? 'bg-amber-400 text-slate-950 font-extrabold border border-amber-400'
+                    ? 'bg-[#0144e4] text-white font-extrabold border border-[#0144e4]'
                     : isUnlocked
                     ? 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100 hover:text-slate-900'
                     : 'bg-slate-100 text-slate-500 border border-slate-200/80 hover:bg-slate-200/60'
@@ -473,7 +473,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                     className={`px-5 py-2.5 rounded-xl font-bold text-xs transition-all flex items-center space-x-2 shadow-sm border whitespace-nowrap ${
                       policyMode === 'strict_privacy'
                         ? 'bg-rose-50 hover:bg-rose-100 text-rose-800 border-rose-300'
-                        : 'bg-amber-400 hover:bg-amber-300 text-slate-950 border-amber-400 font-extrabold'
+                        : 'bg-[#0144e4] hover:bg-[#0038c7] text-white border-[#0144e4] font-extrabold'
                     }`}
                   >
                     <span>{policyMode === 'strict_privacy' ? 'Enforce DMCA Takedown' : 'Open Settlement Gate'}</span>

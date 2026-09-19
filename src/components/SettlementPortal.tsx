@@ -166,7 +166,7 @@ export const SettlementPortal: React.FC<SettlementPortalProps> = ({
                       </button>
                       <button
                         onClick={(e) => { e.stopPropagation(); setSelectedClaim(claim); setIsPayModalOpen(true); }}
-                        className="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-xs transition-all flex items-center space-x-1.5 whitespace-nowrap"
+                        className="px-3.5 py-2 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-xs transition-all flex items-center space-x-1.5 whitespace-nowrap"
                         title="Preview Infringer Checkout Portal"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -222,7 +222,7 @@ export const SettlementPortal: React.FC<SettlementPortalProps> = ({
 
                   <button
                     onClick={() => setIsPayModalOpen(true)}
-                    className="w-full py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2"
+                    className="w-full py-3 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2"
                   >
                     <ExternalLink className="w-4 h-4" />
                     <span>Preview Public Infringer Gate & Test Payment</span>
@@ -305,7 +305,7 @@ export const SettlementPortal: React.FC<SettlementPortalProps> = ({
                 <button
                   type="submit"
                   disabled={isProcessingPay}
-                  className="py-3 px-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-1.5"
+                  className="py-3 px-2 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-1.5"
                 >
                   {isProcessingPay ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-4 h-4" />}
                   <span>Stripe Pay</span>

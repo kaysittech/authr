@@ -420,7 +420,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {/* Brand Header */}
         <div className="flex items-center space-x-3">
-          <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-amber-400 text-slate-950 font-bold shadow-sm">
+          <div className="flex items-center justify-center w-11 h-11 rounded-2xl bg-[#0144e4] text-white font-bold shadow-sm">
             <ShieldCheck className="w-6 h-6 stroke-[2.5]" />
           </div>
           <div>
@@ -528,7 +528,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
+              className="w-full py-3 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
             >
               <Sparkles className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
               <span>{isLoading ? 'Authenticating...' : 'Sign In'}</span>
@@ -544,7 +544,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <div className="flex items-center justify-between pb-2 border-b border-slate-200">
               <div className="flex items-center space-x-2">
                 <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                  regStep === 1 ? 'bg-amber-400 text-slate-950' : 'bg-emerald-500 text-white'
+                  regStep === 1 ? 'bg-[#0144e4] text-white' : 'bg-emerald-500 text-white'
                 }`}>
                   {regStep === 1 ? '1' : '✓'}
                 </span>
@@ -680,7 +680,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2"
+                  className="w-full py-3 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2"
                 >
                   <span>Continue to Biometric Identity Verification</span>
                   <ArrowRight className="w-4 h-4" />
@@ -836,7 +836,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <button
                     type="submit"
                     disabled={isLoading || !kycResult}
-                    className="flex-1 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
+                    className="flex-1 py-3 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 disabled:opacity-50"
                   >
                     <Sparkles className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
                     <span>{isLoading ? 'Registering...' : 'Finalize Creator Account Registration'}</span>

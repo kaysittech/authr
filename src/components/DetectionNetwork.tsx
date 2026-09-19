@@ -259,7 +259,7 @@ export const DetectionNetwork: React.FC<DetectionNetworkProps> = ({
                     className={`px-5 py-2.5 rounded-xl font-bold text-xs shadow-sm transition-all flex items-center space-x-2 border whitespace-nowrap ${
                       policyMode === 'strict_privacy'
                         ? 'bg-rose-50 hover:bg-rose-100 text-rose-800 border-rose-300'
-                        : 'bg-amber-400 hover:bg-amber-300 text-slate-950 border-amber-400 font-extrabold'
+                        : 'bg-[#0144e4] hover:bg-[#0038c7] text-white border-[#0144e4] font-extrabold'
                     }`}
                   >
                     <Scale className="w-4 h-4 flex-shrink-0" />
