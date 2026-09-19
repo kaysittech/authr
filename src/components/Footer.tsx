@@ -30,7 +30,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
             <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Company</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
-                <button onClick={onOpenRegister} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => onSelectTab('get_started')} className="hover:text-[#0144e4] transition-colors text-left">
                   Get Started
                 </button>
               </li>

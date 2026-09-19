@@ -276,55 +276,7 @@ export function App() {
               <BlogView onOpenRegister={() => setIsAuthModalOpen(true)} />
             )}
 
-            {activeTab === 'biometrics' && (
-              <AuthGuard
-                title="Biometric & Likeness Registry Locked"
-                description="Sign in with your verified Government ID to access your 128-landmark facial mesh vectors and spectral voice prints."
-                onOpenAuthModal={() => setIsAuthModalOpen(true)}
-              />
-            )}
-
-            {activeTab === 'assets' && (
-              <AuthGuard
-                title="Art & Asset Vault Protected"
-                description="Sign in to register original media works, embed C2PA cryptographic signatures, and generate steganographic watermarks."
-                onOpenAuthModal={() => setIsAuthModalOpen(true)}
-              />
-            )}
-
-            {activeTab === 'detection' && (
-              <AuthGuard
-                title="Web Scrape Monitor Access Restricted"
-                description="Sign in to view real-time scrape detection alerts across YouTube, TikTok, Instagram, and AI model training datasets."
-                onOpenAuthModal={() => setIsAuthModalOpen(true)}
-              />
-            )}
-
-            {activeTab === 'settlement' && (
-              <AuthGuard
-                title="Licensing & Settlement Portal Protected"
-                description="Sign in to manage settlement claims, issue automated licensing invoices, and execute checkout clearances."
-                onOpenAuthModal={() => setIsAuthModalOpen(true)}
-              />
-            )}
-
-            {activeTab === 'legal' && (
-              <AuthGuard
-                title="DMCA & Legal Notice Studio Locked"
-                description="Sign in to generate 17 U.S.C. § 512(c) statutory takedown notices and BIPA legal enforcement documents."
-                onOpenAuthModal={() => setIsAuthModalOpen(true)}
-              />
-            )}
-
-            {activeTab === 'financials' && (
-              <AuthGuard
-                title="Royalty Ledger & Financials Protected"
-                description="Sign in to view private royalty earnings, transaction histories, and execute Stripe Connect bank payouts."
-                onOpenAuthModal={() => setIsAuthModalOpen(true)}
-              />
-            )}
-
-            {['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search'].includes(activeTab) && (
+            {['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search', 'get_started', 'detection', 'biometrics', 'assets', 'settlement', 'legal', 'financials'].includes(activeTab) && (
               <FooterPagesView 
                 pageId={activeTab} 
                 onNavigateHome={() => setActiveTab('dashboard')} 
@@ -420,7 +372,7 @@ export function App() {
               <BlogView onOpenRegister={() => setIsAuthModalOpen(true)} />
             )}
 
-            {['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search'].includes(activeTab) && (
+            {['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search', 'get_started'].includes(activeTab) && (
               <FooterPagesView 
                 pageId={activeTab} 
                 onNavigateHome={() => setActiveTab('dashboard')} 

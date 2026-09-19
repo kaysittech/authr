@@ -143,3 +143,21 @@ export interface HeroStatRow {
   iconType: 'fingerprint' | 'radio' | 'dollar' | 'shield' | 'zap' | 'check';
 }
 
+export interface ManagedPageSection {
+  id: string;
+  title: string;
+  content: string;
+}
+
+export interface ManagedPage {
+  id: string;
+  title: string;
+  category: 'COMPANY' | 'FEATURES' | 'LEGAL & SECURITY';
+  badge: string;
+  summary: string;
+  sections: ManagedPageSection[];
+  actionButtonText?: string;
+  lastUpdated: string;
+}
+
+

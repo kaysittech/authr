@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, 
   UserCheck, 
@@ -19,11 +19,18 @@ import {
   ArrowLeft,
   Bell,
   Sliders,
-  Check
+  Check,
+  Radar,
+  Fingerprint,
+  Zap,
+  Globe,
+  BookOpen
 } from 'lucide-react';
+import { ManagedPage } from '../types';
+import { INITIAL_MANAGED_PAGES } from '../services/mockData';
 
 interface FooterPagesViewProps {
-  pageId: string; // 'careers' | 'about' | 'privacy' | 'terms' | 'email_preferences' | 'unsubscribe' | 'security' | 'search';
+  pageId: string;
   onNavigateHome: () => void;
   onOpenRegister: () => void;
 }
@@ -33,6 +40,28 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
   onNavigateHome,
   onOpenRegister
 }) => {
+  // Managed Pages State (Admin CMS Sync)
+  const [managedPages, setManagedPages] = useState<ManagedPage[]>(() => {
+    const saved = localStorage.getItem('rg_managed_pages');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return INITIAL_MANAGED_PAGES;
+  });
+
+  useEffect(() => {
+    const handleSync = () => {
+      const saved = localStorage.getItem('rg_managed_pages');
+      if (saved) {
+        try { setManagedPages(JSON.parse(saved)); } catch (e) {}
+      }
+    };
+    window.addEventListener('rg_page_content_updated', handleSync);
+    return () => window.removeEventListener('rg_page_content_updated', handleSync);
+  }, []);
+
+  const activeManagedPage = managedPages.find(p => p.id === pageId);
+
   // Local states for forms
   const [emailNotifs, setEmailNotifs] = useState({
     scrapeAlerts: true,
@@ -92,24 +121,51 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-        {/* 1. CAREERS PAGE */}
-        {pageId === 'careers' && (
-          <div className="space-y-12">
-            <div className="bg-[#0144e4] text-white rounded-2xl p-8 sm:p-14 text-center space-y-4 shadow-xl">
-              <div className="inline-flex items-center space-x-2 bg-blue-600/50 px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-widest text-blue-100 border border-blue-400/30">
-                <Briefcase className="w-3.5 h-3.5" />
-                <span>Join Our Engineering &amp; Legal Team</span>
+        {/* DYNAMIC MANAGED PAGE RENDER (Admin CMS Content) */}
+        {activeManagedPage && (
+          <div className="space-y-10 max-w-4xl mx-auto">
+            <div className="space-y-4 text-center border-b border-[#e9eaf0] pb-8">
+              <div className="inline-flex items-center space-x-2 text-[#0144e4] font-bold text-xs uppercase tracking-widest font-mono bg-blue-50 px-3.5 py-1 rounded-full border border-blue-100">
+                <Building2 className="w-3.5 h-3.5" />
+                <span>{activeManagedPage.category} • {activeManagedPage.badge}</span>
               </div>
-              <h1 className="text-3xl sm:text-5xl font-extrabold font-display">
-                Architect the Infrastructure for Sovereign Creator Rights
+              <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 font-display">
+                {activeManagedPage.title}
               </h1>
-              <p className="text-sm sm:text-base text-blue-100 max-w-2xl mx-auto font-medium">
-                We are building the world's first biometric likeness registry, C2PA cryptographic watermarking engine, and automated statutory settlement gates.
+              <p className="text-sm sm:text-base text-slate-600 font-medium leading-relaxed max-w-3xl mx-auto">
+                {activeManagedPage.summary}
               </p>
             </div>
 
+            {activeManagedPage.sections && activeManagedPage.sections.length > 0 && (
+              <div className="grid grid-cols-1 gap-6">
+                {activeManagedPage.sections.map((sec, idx) => (
+                  <div key={sec.id || idx} className="p-6 bg-white rounded-xl border border-[#e9eaf0] shadow-2xs space-y-2 hover:border-[#0144e4] transition-all">
+                    <h3 className="text-lg font-bold text-slate-900 font-display">{sec.title}</h3>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">{sec.content}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeManagedPage.actionButtonText && pageId !== 'careers' && (
+              <div className="pt-2 text-center">
+                <button
+                  onClick={onOpenRegister}
+                  className="px-6 py-3 rounded-[6px] bg-[#0144e4] text-white text-xs font-bold hover:bg-[#0038c7] transition-all shadow-md"
+                >
+                  {activeManagedPage.actionButtonText}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* 1. CAREERS INTERACTIVE ROLES LIST */}
+        {pageId === 'careers' && (
+          <div className="space-y-8 mt-12 max-w-4xl mx-auto">
             <div className="space-y-6">
-              <h2 className="text-2xl font-extrabold text-slate-900 font-display">Open Roles</h2>
+              <h2 className="text-2xl font-extrabold text-slate-900 font-display">Open Roles & Applications</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   {
@@ -159,128 +215,6 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* 2. ABOUT PAGE */}
-        {pageId === 'about' && (
-          <div className="space-y-12 max-w-4xl mx-auto">
-            <div className="space-y-4 text-center">
-              <div className="inline-flex items-center space-x-2 text-[#0144e4] font-bold text-xs uppercase tracking-widest font-mono bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-                <Building2 className="w-3.5 h-3.5" />
-                <span>About Authr</span>
-              </div>
-              <h1 className="text-4xl font-extrabold text-slate-900 font-display">
-                Protecting &amp; Monetizing Independent Creator Identity
-              </h1>
-              <p className="text-base text-slate-600 font-medium leading-relaxed">
-                Authr was founded to bridge the critical gap between rapid generative AI advancements and creator intellectual property enforcement.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-6 bg-[#f7f8fa] rounded-xl border border-[#e9eaf0] space-y-3">
-                <ShieldCheck className="w-8 h-8 text-[#0144e4]" />
-                <h3 className="text-base font-bold text-slate-900 font-display">Statutory Defense</h3>
-                <p className="text-xs text-slate-600 font-medium">Anchored in Illinois BIPA biometrics law and 17 U.S.C. § 512 statutory takedown mandates.</p>
-              </div>
-              <div className="p-6 bg-[#f7f8fa] rounded-xl border border-[#e9eaf0] space-y-3">
-                <Lock className="w-8 h-8 text-[#0144e4]" />
-                <h3 className="text-base font-bold text-slate-900 font-display">C2PA Standard</h3>
-                <p className="text-xs text-slate-600 font-medium">SHA-256 cryptographic provenance certificates signed by sovereign private keys.</p>
-              </div>
-              <div className="p-6 bg-[#f7f8fa] rounded-xl border border-[#e9eaf0] space-y-3">
-                <DollarSign className="w-8 h-8 text-[#0144e4]" />
-                <h3 className="text-base font-bold text-slate-900 font-display">Automated Payouts</h3>
-                <p className="text-xs text-slate-600 font-medium">Direct Stripe Connect settlement gates that convert web scrape hits into instant royalties.</p>
-              </div>
-            </div>
-
-            <div className="bg-white p-8 rounded-xl border border-[#e9eaf0] shadow-sm space-y-4">
-              <h3 className="text-xl font-bold text-slate-900 font-display">Our Mission Statement</h3>
-              <p className="text-sm text-slate-700 leading-relaxed font-medium">
-                Every independent artist, musician, voice actor, writer, and brand deserves total sovereignty over their biometric identity and creative outputs. Authr equips creators with institutional-grade detection, legal filing automation, and direct monetization tools.
-              </p>
-              <div className="pt-2">
-                <button 
-                  onClick={onOpenRegister}
-                  className="px-6 py-2.5 rounded-[6px] bg-[#0144e4] text-white text-xs font-bold hover:bg-[#0038c7] transition-all"
-                >
-                  Create Your Free Sovereign Vault
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 3. PRIVACY POLICY */}
-        {pageId === 'privacy' && (
-          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="space-y-2 border-b border-[#e9eaf0] pb-6">
-              <div className="text-[#0144e4] font-bold text-xs font-mono uppercase tracking-widest">
-                Legal &amp; Compliance Document
-              </div>
-              <h1 className="text-3xl font-extrabold text-slate-900 font-display">
-                Privacy Policy &amp; BIPA Biometric Disclosure
-              </h1>
-              <p className="text-xs text-slate-500 font-mono">Effective Date: July 1, 2026 • Version 3.4</p>
-            </div>
-
-            <div className="space-y-6 text-sm text-slate-700 font-medium leading-relaxed">
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
-                <h4 className="font-bold text-[#0144e4] text-xs font-mono uppercase">Illinois BIPA Section 15 Compliance Notice</h4>
-                <p className="text-xs text-slate-700">
-                  Authr converts facial landmarks into 128-node non-reversible mathematical vector hashes (`fvec_...`). Authr NEVER stores raw unhashed facial scans or unencrypted voice recordings. Vector hashes are used strictly for matching against unauthorized commercial AI scrape streams.
-                </p>
-              </div>
-
-              <section className="space-y-2">
-                <h3 className="text-lg font-bold text-slate-900 font-display">1. Information We Collect</h3>
-                <p>We collect identity verification data provided directly by you during Government ID onboarding, including name, email address, biometric hash vectors, and registered media asset signatures.</p>
-              </section>
-
-              <section className="space-y-2">
-                <h3 className="text-lg font-bold text-slate-900 font-display">2. Use of Biometric Data</h3>
-                <p>Biometric vector fingerprints are maintained solely for matching unauthorized deepfake impersonations and dispatches of 17 U.S.C. § 512 legal takedown notices. Authr will never sell, lease, or trade biometric data under any circumstances.</p>
-              </section>
-
-              <section className="space-y-2">
-                <h3 className="text-lg font-bold text-slate-900 font-display">3. Right to Erasure &amp; Hash Revocation</h3>
-                <p>Under GDPR Article 17 and CCPA, creators may permanently delete their biometric vector records and registered asset signatures at any time directly through the Vault Settings menu.</p>
-              </section>
-            </div>
-          </div>
-        )}
-
-        {/* 4. TERMS OF SERVICE */}
-        {pageId === 'terms' && (
-          <div className="max-w-4xl mx-auto space-y-8">
-            <div className="space-y-2 border-b border-[#e9eaf0] pb-6">
-              <div className="text-[#0144e4] font-bold text-xs font-mono uppercase tracking-widest">
-                Legal Contract
-              </div>
-              <h1 className="text-3xl font-extrabold text-slate-900 font-display">
-                Terms of Service &amp; Statutory Authorization
-              </h1>
-              <p className="text-xs text-slate-500 font-mono">Last Updated: June 2026</p>
-            </div>
-
-            <div className="space-y-6 text-sm text-slate-700 font-medium leading-relaxed">
-              <section className="space-y-2">
-                <h3 className="text-lg font-bold text-slate-900 font-display">1. Designated Agent Authorization</h3>
-                <p>By registering assets or biometric vectors on Authr, you appoint Authr as your authorized designated agent under 17 U.S.C. § 512(c)(2) to issue electronic DMCA statutory takedown notices and settlement demand invoices to infringing platforms.</p>
-              </section>
-
-              <section className="space-y-2">
-                <h3 className="text-lg font-bold text-slate-900 font-display">2. Royalty Settlement &amp; Stripe Payouts</h3>
-                <p>Settlement fees collected from unauthorized scrapers are processed via Stripe Connect. Authr routes 92% of statutory micro-licensing revenues directly to creator linked accounts, retaining an 8% network telemetry fee.</p>
-              </section>
-
-              <section className="space-y-2">
-                <h3 className="text-lg font-bold text-slate-900 font-display">3. Polygon L2 Ledger Verification</h3>
-                <p>All registered asset manifests generate zero-knowledge cryptographic hashes committed to Polygon L2 mainnet, establishing self-authenticating evidentiary priority for federal court proceedings.</p>
-              </section>
             </div>
           </div>
         )}

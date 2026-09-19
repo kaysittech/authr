@@ -36,8 +36,8 @@ import {
   Fingerprint,
   Radio
 } from 'lucide-react';
-import { DetectionMatch, SettlementClaim, CustomerReview, PricingPlan, TrialConfig, UserAccount, HeroStatRow } from '../types';
-import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_USERS, INITIAL_HERO_STAT_ROWS } from '../services/mockData';
+import { DetectionMatch, SettlementClaim, CustomerReview, PricingPlan, TrialConfig, UserAccount, HeroStatRow, ManagedPage, ManagedPageSection } from '../types';
+import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_USERS, INITIAL_HERO_STAT_ROWS, INITIAL_MANAGED_PAGES } from '../services/mockData';
 import { Article, BLOG_ARTICLES } from './BlogView';
 
 interface AdminPanelProps {
@@ -55,7 +55,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   onSimulateScan = () => {},
   onSwitchDemoUser
 }) => {
-  const [activeAdminTab, setActiveAdminTab] = useState<'overview' | 'pricing' | 'users' | 'matches' | 'system' | 'webservices' | 'audit' | 'reviews' | 'blog_posts'>('overview');
+  const [activeAdminTab, setActiveAdminTab] = useState<'overview' | 'pages' | 'pricing' | 'users' | 'matches' | 'system' | 'webservices' | 'audit' | 'reviews' | 'blog_posts'>('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedKycFilter, setSelectedKycFilter] = useState<string>('all');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -63,6 +63,60 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  // Managed Page Content (CMS) State
+  const [managedPagesList, setManagedPagesList] = useState<ManagedPage[]>(() => {
+    const saved = localStorage.getItem('rg_managed_pages');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return INITIAL_MANAGED_PAGES;
+  });
+
+  const [editingPageModal, setEditingPageModal] = useState<ManagedPage | null>(null);
+  const [previewPageModal, setPreviewPageModal] = useState<ManagedPage | null>(null);
+  const [pageCategoryFilter, setPageCategoryFilter] = useState<'all' | 'COMPANY' | 'FEATURES' | 'LEGAL & SECURITY'>('all');
+
+  const saveManagedPagesList = (newList: ManagedPage[]) => {
+    setManagedPagesList(newList);
+    localStorage.setItem('rg_managed_pages', JSON.stringify(newList));
+    window.dispatchEvent(new Event('rg_page_content_updated'));
+  };
+
+  const handleSavePage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingPageModal) return;
+    if (!editingPageModal.title.trim() || !editingPageModal.summary.trim()) {
+      alert('Please provide a page title and summary introduction');
+      return;
+    }
+
+    const updatedPage: ManagedPage = {
+      ...editingPageModal,
+      lastUpdated: new Date().toISOString().split('T')[0]
+    };
+
+    const updatedList = managedPagesList.map(p => p.id === updatedPage.id ? updatedPage : p);
+    saveManagedPagesList(updatedList);
+    setEditingPageModal(null);
+    showToast(`Page "${updatedPage.title}" text updated successfully!`);
+  };
+
+  const handleResetAllPages = () => {
+    if (window.confirm('Reset all 12 page texts back to default content?')) {
+      saveManagedPagesList(INITIAL_MANAGED_PAGES);
+      showToast('All 12 page texts reset to default content');
+    }
+  };
+
+  const handleResetSinglePage = (id: string) => {
+    const defaultPage = INITIAL_MANAGED_PAGES.find(p => p.id === id);
+    if (defaultPage) {
+      const updatedList = managedPagesList.map(p => p.id === id ? defaultPage : p);
+      saveManagedPagesList(updatedList);
+      showToast(`Page "${defaultPage.title}" reset to default text`);
+    }
   };
 
   // Customer Reviews State
@@ -456,6 +510,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       <div className="flex items-center space-x-2 border-b border-slate-200 pb-3 overflow-x-auto">
         {[
           { id: 'overview', label: 'Platform Overview & Ops', icon: Activity },
+          { id: 'pages', label: 'Page Content CMS (12)', icon: BookOpen },
           { id: 'pricing', label: 'Plans, Pricing & Trial Manager', icon: DollarSign },
           { id: 'users', label: 'Creator Vault & KYC Directory', icon: Users },
           { id: 'matches', label: 'Infringement Clearinghouse Queue', icon: Scale },
@@ -687,6 +742,117 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
       </div>
     )}
+
+      {/* ---------------- ADMIN TAB: PAGE CONTENT MANAGEMENT (CMS) ---------------- */}
+      {activeAdminTab === 'pages' && (
+        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+            <div>
+              <div className="flex items-center space-x-2">
+                <BookOpen className="w-5 h-5 text-amber-500" />
+                <h2 className="text-lg font-extrabold text-slate-900">Page Content & Text CMS</h2>
+              </div>
+              <p className="text-xs text-slate-500 mt-1">
+                Manage and customize page titles, subtitles, summary intros, and body text sections for all 12 public & legal pages.
+              </p>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={handleResetAllPages}
+                className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 flex items-center space-x-1.5 transition-all"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+                <span>Reset All 12 Pages to Default</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="flex items-center space-x-2 overflow-x-auto pb-2 font-mono text-xs">
+            {[
+              { id: 'all', label: `All Pages (${managedPagesList.length})` },
+              { id: 'COMPANY', label: `Company (${managedPagesList.filter(p => p.category === 'COMPANY').length})` },
+              { id: 'FEATURES', label: `Features (${managedPagesList.filter(p => p.category === 'FEATURES').length})` },
+              { id: 'LEGAL & SECURITY', label: `Legal & Security (${managedPagesList.filter(p => p.category === 'LEGAL & SECURITY').length})` }
+            ].map(filter => (
+              <button
+                key={filter.id}
+                onClick={() => setPageCategoryFilter(filter.id as any)}
+                className={`px-3.5 py-1.5 rounded-full font-bold transition-all whitespace-nowrap ${
+                  pageCategoryFilter === filter.id
+                    ? 'bg-amber-400 text-slate-950 font-black shadow-xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Pages Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {managedPagesList
+              .filter(p => pageCategoryFilter === 'all' || p.category === pageCategoryFilter)
+              .map((page) => (
+                <div key={page.id} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-amber-400 transition-all flex flex-col justify-between space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border uppercase ${
+                        page.category === 'COMPANY'
+                          ? 'bg-blue-50 text-blue-800 border-blue-200'
+                          : page.category === 'FEATURES'
+                          ? 'bg-purple-50 text-purple-800 border-purple-200'
+                          : 'bg-amber-50 text-amber-900 border-amber-200'
+                      }`}>
+                        {page.category}
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-400 font-medium">
+                        {page.sections.length} Sections
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-base font-extrabold text-slate-900 font-display line-clamp-1">{page.title}</h3>
+                      <p className="text-[11px] font-mono text-indigo-600 font-bold mt-0.5">{page.badge}</p>
+                    </div>
+
+                    <p className="text-xs text-slate-600 font-medium line-clamp-3 leading-relaxed">
+                      {page.summary}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 border-t border-slate-200/80 flex items-center justify-between gap-2">
+                    <button
+                      onClick={() => setPreviewPageModal(page)}
+                      className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200 flex items-center space-x-1"
+                    >
+                      <Eye className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Preview</span>
+                    </button>
+
+                    <div className="flex items-center space-x-1.5">
+                      <button
+                        onClick={() => handleResetSinglePage(page.id)}
+                        title="Reset text to default"
+                        className="p-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-500 border border-slate-200"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => setEditingPageModal(JSON.parse(JSON.stringify(page)))}
+                        className="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-xs flex items-center space-x-1"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                        <span>Edit Text</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
 
       {/* ---------------- ADMIN TAB: PLANS, PRICING & HERO METRICS MANAGER ---------------- */}
       {activeAdminTab === 'pricing' && (
@@ -2506,6 +2672,217 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             >
               Close Inspection Window
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Page Content Editor Modal */}
+      {editingPageModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fadeIn text-left">
+          <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-2xl space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-200">
+              <div className="flex items-center space-x-2">
+                <Edit3 className="w-5 h-5 text-amber-500" />
+                <h3 className="text-lg font-extrabold text-slate-900">
+                  Edit Page Text: {editingPageModal.title}
+                </h3>
+              </div>
+              <button onClick={() => setEditingPageModal(null)} className="text-slate-400 hover:text-slate-700">✕</button>
+            </div>
+
+            <form onSubmit={handleSavePage} className="space-y-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">Page Title</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingPageModal.title}
+                    onChange={(e) => setEditingPageModal({ ...editingPageModal, title: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700 block">Header Subtitle / Badge</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingPageModal.badge}
+                    onChange={(e) => setEditingPageModal({ ...editingPageModal, badge: e.target.value })}
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400 font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 block">Main Summary / Intro Paragraph</label>
+                <textarea
+                  rows={3}
+                  required
+                  value={editingPageModal.summary}
+                  onChange={(e) => setEditingPageModal({ ...editingPageModal, summary: e.target.value })}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs font-medium text-slate-900 focus:outline-none focus:border-amber-400 leading-relaxed"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 block">Action Button Text (Optional)</label>
+                <input
+                  type="text"
+                  value={editingPageModal.actionButtonText || ''}
+                  onChange={(e) => setEditingPageModal({ ...editingPageModal, actionButtonText: e.target.value })}
+                  placeholder="e.g. Create Your Free Sovereign Vault"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400"
+                />
+              </div>
+
+              {/* Content Sections Editor */}
+              <div className="space-y-4 pt-2">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider font-mono text-slate-800">
+                    Page Content Sections ({editingPageModal.sections.length})
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newSec: ManagedPageSection = {
+                        id: `sec_${Date.now()}`,
+                        title: 'New Section Title',
+                        content: 'Section detailed text content goes here...'
+                      };
+                      setEditingPageModal({
+                        ...editingPageModal,
+                        sections: [...editingPageModal.sections, newSec]
+                      });
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center space-x-1"
+                  >
+                    <Plus className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Add Section</span>
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {editingPageModal.sections.map((sec, idx) => (
+                    <div key={sec.id || idx} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-mono font-bold text-indigo-600">Section {idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updatedSections = editingPageModal.sections.filter((_, i) => i !== idx);
+                            setEditingPageModal({ ...editingPageModal, sections: updatedSections });
+                          }}
+                          className="text-rose-600 hover:text-rose-800 p-1 rounded hover:bg-rose-50"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-slate-600 block">Section Title</label>
+                        <input
+                          type="text"
+                          required
+                          value={sec.title}
+                          onChange={(e) => {
+                            const updatedSections = [...editingPageModal.sections];
+                            updatedSections[idx].title = e.target.value;
+                            setEditingPageModal({ ...editingPageModal, sections: updatedSections });
+                          }}
+                          className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-400"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-slate-600 block">Section Text Body</label>
+                        <textarea
+                          rows={3}
+                          required
+                          value={sec.content}
+                          onChange={(e) => {
+                            const updatedSections = [...editingPageModal.sections];
+                            updatedSections[idx].content = e.target.value;
+                            setEditingPageModal({ ...editingPageModal, sections: updatedSections });
+                          }}
+                          className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs font-medium text-slate-900 focus:outline-none focus:border-amber-400 leading-relaxed"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setEditingPageModal(null)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow-md transition-all flex items-center space-x-2"
+                >
+                  <Sparkles className="w-4 h-4 text-slate-950" />
+                  <span>Save Page Text</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Page Live Visitor View Preview Modal */}
+      {previewPageModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fadeIn text-left">
+          <div className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-2xl space-y-6">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-600 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+                ● Live Visitor View Preview
+              </span>
+              <button onClick={() => setPreviewPageModal(null)} className="text-slate-400 hover:text-slate-700">✕</button>
+            </div>
+
+            <div className="space-y-4 text-center border-b border-slate-200 pb-6">
+              <div className="inline-flex items-center space-x-2 text-[#0144e4] font-bold text-xs uppercase tracking-widest font-mono bg-blue-50 px-3.5 py-1 rounded-full border border-blue-100">
+                <span>{previewPageModal.category} • {previewPageModal.badge}</span>
+              </div>
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 font-display">
+                {previewPageModal.title}
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto">
+                {previewPageModal.summary}
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {previewPageModal.sections.map((sec, idx) => (
+                <div key={idx} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                  <h3 className="text-base font-bold text-slate-900 font-display">{sec.title}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">{sec.content}</p>
+                </div>
+              ))}
+            </div>
+
+            {previewPageModal.actionButtonText && (
+              <div className="pt-2 text-center">
+                <button className="px-6 py-3 rounded-xl bg-[#0144e4] text-white text-xs font-bold shadow-md">
+                  {previewPageModal.actionButtonText}
+                </button>
+              </div>
+            )}
+
+            <div className="pt-4 border-t border-slate-200 text-right">
+              <button
+                onClick={() => setPreviewPageModal(null)}
+                className="px-5 py-2.5 rounded-xl bg-slate-900 text-white font-extrabold text-xs"
+              >
+                Close Preview
+              </button>
+            </div>
           </div>
         </div>
       )}
