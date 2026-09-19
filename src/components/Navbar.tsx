@@ -358,14 +358,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 <button
                   onClick={() => setActiveTab('dashboard')}
-                  className="px-6 py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-semibold text-[15px] transition-all flex items-center space-x-2"
+                  className="px-5 py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-semibold text-[15px] transition-all flex items-center space-x-2"
                 >
                   <img 
                     src={currentUser.avatarUrl} 
                     alt={currentUser.fullName} 
                     className="w-5 h-5 rounded-full object-cover ring-1 ring-white" 
                   />
-                  <span>{currentUser.fullName.split(' ')[0]} Vault</span>
+                  <span>{
+                    currentUser.email === 'christiana.obafunwa@gmail.com' ? 'Christiana' :
+                    currentUser.email === 'kaysitsolutions@gmail.com' ? 'Kays' :
+                    (currentUser.fullName.startsWith('Authr') && currentUser.email ? currentUser.email.split('@')[0].split('.')[0].replace(/[^a-zA-Z]/g, '').replace(/^./, str => str.toUpperCase()) : currentUser.fullName.split(' ')[0])
+                  }</span>
                 </button>
                 <button
                   onClick={onLogout}
