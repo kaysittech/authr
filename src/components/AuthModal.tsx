@@ -451,7 +451,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               authMode === 'register' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'
             }`}
           >
-            Register Creator Vault
+            Register
           </button>
         </div>
 
