@@ -83,7 +83,7 @@ This document provides a comprehensive, step-by-step test manual for human QA te
 - **Execution Steps**:
   1. Click the tab **`Register Creator Vault`** at the top of the modal.
   2. In the **Full Legal Name** field, type `Morgan Vance`.
-  3. In the **Sovereign Handle** field, type `@mvance_official`.
+  3. In the **Authr Handle** field, type `@mvance_official`.
   4. Click the **Primary Creative Discipline Profile** dropdown.
   5. Verify two distinct `optgroups` appear:
      - `Independent Creators & Rightsholders`

@@ -574,7 +574,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">Sovereign Handle</label>
+                  <label className="text-xs font-bold text-slate-700 block mb-1">Authr Handle</label>
                   <div className="relative">
                     <AtSign className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                     <input
