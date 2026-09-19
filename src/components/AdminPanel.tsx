@@ -69,7 +69,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const [managedPagesList, setManagedPagesList] = useState<ManagedPage[]>(() => {
     const saved = localStorage.getItem('rg_managed_pages');
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
+      try {
+        const parsed: ManagedPage[] = JSON.parse(saved);
+        return parsed.map(p => p.id === 'careers' && p.title.includes('Sovereign Creator Rights') ? { ...p, title: p.title.replace('Sovereign Creator Rights', 'Creator Rights') } : p);
+      } catch (e) {}
     }
     return INITIAL_MANAGED_PAGES;
   });

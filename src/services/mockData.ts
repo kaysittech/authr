@@ -519,7 +519,7 @@ export const INITIAL_MANAGED_PAGES: ManagedPage[] = [
   },
   {
     id: 'careers',
-    title: 'Architect the Infrastructure for Sovereign Creator Rights',
+    title: 'Architect the Infrastructure for Creator Rights',
     category: 'COMPANY',
     badge: 'Join Our Engineering & Legal Team',
     summary: 'We are building the world\'s first biometric likeness registry, C2PA cryptographic watermarking engine, and automated statutory settlement gates.',

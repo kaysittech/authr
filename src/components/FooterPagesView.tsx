@@ -44,7 +44,10 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
   const [managedPages, setManagedPages] = useState<ManagedPage[]>(() => {
     const saved = localStorage.getItem('rg_managed_pages');
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
+      try {
+        const parsed: ManagedPage[] = JSON.parse(saved);
+        return parsed.map(p => p.id === 'careers' && p.title.includes('Sovereign Creator Rights') ? { ...p, title: p.title.replace('Sovereign Creator Rights', 'Creator Rights') } : p);
+      } catch (e) {}
     }
     return INITIAL_MANAGED_PAGES;
   });
@@ -53,7 +56,10 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
     const handleSync = () => {
       const saved = localStorage.getItem('rg_managed_pages');
       if (saved) {
-        try { setManagedPages(JSON.parse(saved)); } catch (e) {}
+        try {
+          const parsed: ManagedPage[] = JSON.parse(saved);
+          setManagedPages(parsed.map(p => p.id === 'careers' && p.title.includes('Sovereign Creator Rights') ? { ...p, title: p.title.replace('Sovereign Creator Rights', 'Creator Rights') } : p));
+        } catch (e) {}
       }
     };
     window.addEventListener('rg_page_content_updated', handleSync);
