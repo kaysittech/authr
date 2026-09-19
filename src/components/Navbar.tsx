@@ -121,8 +121,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Center Krazy Navigation Links (Exact Krazy Template Font, Height & Spacing) */}
-          <nav className="hidden lg:flex items-center space-x-9 text-[15px] font-medium text-slate-800">
+          {/* Right-aligned Navigation Links (Pushed right next to Get Started button) */}
+          <nav className="hidden lg:flex items-center space-x-7 text-[15px] font-medium text-slate-800 ml-auto mr-7">
             
             {/* Home */}
             <button 
