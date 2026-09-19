@@ -125,9 +125,35 @@ export const BlogView: React.FC<BlogViewProps> = ({ onOpenRegister }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeArticle, setActiveArticle] = useState<Article | null>(null);
 
-  const categories = ['All', 'Legal', 'C2PA', 'Royalties', 'Voice', 'Polygon', 'Radar'];
+  const [articles, setArticles] = useState<Article[]>(() => {
+    const saved = localStorage.getItem('rg_blog_articles');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return BLOG_ARTICLES;
+  });
 
-  const filteredArticles = BLOG_ARTICLES.filter(art => {
+  React.useEffect(() => {
+    const syncArticles = () => {
+      const saved = localStorage.getItem('rg_blog_articles');
+      if (saved) {
+        try { setArticles(JSON.parse(saved)); } catch (e) {}
+      } else {
+        setArticles(BLOG_ARTICLES);
+      }
+    };
+
+    window.addEventListener('storage', syncArticles);
+    window.addEventListener('rg_blog_articles_updated', syncArticles);
+    return () => {
+      window.removeEventListener('storage', syncArticles);
+      window.removeEventListener('rg_blog_articles_updated', syncArticles);
+    };
+  }, []);
+
+  const categories = ['All', ...Array.from(new Set(articles.map(a => a.category)))];
+
+  const filteredArticles = articles.filter(art => {
     const matchesCat = selectedCategory === 'All' || art.category === selectedCategory;
     const matchesSearch = searchQuery === '' || 
       art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
