@@ -216,6 +216,10 @@ export function App() {
               />
             )}
 
+            {activeTab === 'blog' && (
+              <BlogView onOpenRegister={() => setIsAuthModalOpen(true)} />
+            )}
+
             {activeTab === 'biometrics' && (
               <AuthGuard
                 title="Biometric & Likeness Registry Locked"
