@@ -247,23 +247,7 @@ export function App() {
           </div>
         )}
 
-        {/* Admin Superuser Quick Bar */}
-        {currentUser && (currentUser.role === 'admin' || currentUser.email === 'admin@authr.id' || currentUser.email === 'christiana.obafunwa@gmail.com' || currentUser.email === 'kaysitsolutions@gmail.com') && activeTab !== 'admin' && !currentUser.token?.includes('jwt_demo_switch_') && (
-          <div className="mb-4 p-3.5 rounded-2xl bg-slate-900 text-white border border-amber-400/30 flex items-center justify-between text-xs font-bold shadow-sm animate-fadeIn">
-            <div className="flex items-center space-x-2.5">
-              <span className="px-2.5 py-1 rounded-full bg-amber-400 text-slate-950 font-mono text-[10px] font-black uppercase">
-                ⚡ SUPERUSER ADMIN LOGGED IN
-              </span>
-              <span className="text-slate-200">Logged in as Administrator: <strong className="text-white">{currentUser.fullName}</strong> ({currentUser.email})</span>
-            </div>
-            <button
-              onClick={() => setActiveTab('admin')}
-              className="px-4 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-extrabold transition-all shadow-xs flex items-center space-x-1.5"
-            >
-              <span>Open Admin Portal</span>
-            </button>
-          </div>
-        )}
+
 
         {/* PUBLIC UNAUTHENTICATED LANDING & AUTH GUARDS */}
         {!currentUser ? (
