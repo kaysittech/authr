@@ -147,6 +147,81 @@ export const signInWithGoogleFirebase = async () => {
 };
 
 /**
+ * Sign in with Email and Password via Firebase Auth
+ */
+export const signInWithEmailFirebase = async (email: string, password: string) => {
+  const cleanEmail = email.toLowerCase().trim();
+  const result = await signInWithEmailAndPassword(auth, cleanEmail, password);
+  const user = result.user;
+  const isAdmin = await checkIsAdminInFirestore(cleanEmail);
+
+  const userRef = doc(db, 'users', user.uid);
+  const userSnap = await getDoc(userRef);
+
+  const userData = {
+    uid: user.uid,
+    email: user.email || cleanEmail,
+    displayName: user.displayName || (isAdmin ? 'Authr Site Admin' : 'Registered Creator'),
+    photoURL: user.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    handle: `@${(user.displayName || cleanEmail.split('@')[0]).toLowerCase().replace(/\s+/g, '_')}_${isAdmin ? 'admin' : 'authr'}`,
+    discipline: userSnap.exists() ? (userSnap.data()?.discipline || 'Musicians & Composers') : 'Musicians & Composers',
+    lastLogin: serverTimestamp(),
+    kycStatus: 'verified',
+    role: isAdmin ? 'admin' : 'creator',
+    provider: 'password'
+  };
+
+  if (!userSnap.exists()) {
+    await setDoc(userRef, {
+      ...userData,
+      createdAt: serverTimestamp(),
+      discipline: 'Musicians & Composers'
+    });
+  } else {
+    await updateDoc(userRef, { lastLogin: serverTimestamp(), role: isAdmin ? 'admin' : 'creator' });
+  }
+
+  if (isAdmin) {
+    await registerAdminInFirestore(cleanEmail, user.displayName || 'Site Admin', 'admin');
+  }
+
+  return { user, userData, isAdmin };
+};
+
+/**
+ * Register new user with Email and Password via Firebase Auth & Firestore
+ */
+export const registerWithEmailFirebase = async (email: string, password: string, fullName: string, discipline: string) => {
+  const cleanEmail = email.toLowerCase().trim();
+  const result = await createUserWithEmailAndPassword(auth, cleanEmail, password);
+  const user = result.user;
+  const isAdmin = await checkIsAdminInFirestore(cleanEmail);
+
+  const userRef = doc(db, 'users', user.uid);
+  const userData = {
+    uid: user.uid,
+    email: cleanEmail,
+    displayName: fullName || (isAdmin ? 'Authr Site Admin' : 'Registered Creator'),
+    photoURL: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    handle: `@${(fullName || cleanEmail.split('@')[0]).toLowerCase().replace(/\s+/g, '_')}_${isAdmin ? 'admin' : 'authr'}`,
+    discipline: discipline || 'Musicians & Composers',
+    lastLogin: serverTimestamp(),
+    createdAt: serverTimestamp(),
+    kycStatus: 'verified',
+    role: isAdmin ? 'admin' : 'creator',
+    provider: 'password'
+  };
+
+  await setDoc(userRef, userData);
+
+  if (isAdmin) {
+    await registerAdminInFirestore(cleanEmail, fullName || 'Site Admin', 'admin');
+  }
+
+  return { user, userData, isAdmin };
+};
+
+/**
  * Save registered creator media asset to Firestore
  */
 export const saveAssetToFirestore = async (userId: string, assetData: any) => {

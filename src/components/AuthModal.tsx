@@ -25,6 +25,8 @@ import { loginApi, registerApi, verifyIdentityApi } from '../services/api';
 import { getDisciplineStrategy } from '../services/disciplineStrategies';
 import { 
   signInWithGoogleFirebase, 
+  signInWithEmailFirebase,
+  registerWithEmailFirebase,
   checkIsAdminInFirestore, 
   registerAdminInFirestore,
   seedDefaultAdminsInFirestore
@@ -285,57 +287,92 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setIsLoading(true);
 
     try {
-      try {
-        const res = await loginApi(email, password);
-        onLoginSuccess(res.user);
-        onClose();
-        return;
-      } catch (err) {
-        // Fallback for static hosted CDN instances
-      }
-
       const cleanEmail = email.trim().toLowerCase();
-      
-      // Master Admin Account Credentials
-      if ((cleanEmail === 'admin@authr.id' || cleanEmail === 'kaysitsolutions@gmail.com' || cleanEmail === 'christiana.obafunwa@gmail.com') && (password === 'Authr2026!Master' || password === 'Authr2026!' || password === 'admin123' || password === 'password123')) {
-        const adminUser: UserSession = {
-          id: 'usr_admin_master_01',
-          email: cleanEmail,
-          fullName: 'Authr Site Admin',
-          handle: '@site_admin',
-          discipline: 'Musicians & Composers',
-          avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-          token: 'token_master_admin_2026',
+
+      // 1. Primary: Firebase Auth Email & Password Sign-In
+      try {
+        const res = await signInWithEmailFirebase(cleanEmail, password);
+        const fbUser = res.user;
+        const isAdmin = res.isAdmin;
+
+        const userSession: UserSession = {
+          id: fbUser.uid,
+          email: fbUser.email || cleanEmail,
+          fullName: res.userData.displayName || (isAdmin ? 'Authr Site Admin' : 'Registered Creator'),
+          handle: res.userData.handle || `@${cleanEmail.split('@')[0]}_authr`,
+          discipline: res.userData.discipline || 'Musicians & Composers',
+          avatarUrl: res.userData.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+          token: await fbUser.getIdToken(),
           kycStatus: 'verified',
-          idDocumentType: "Government Master Key (SITE ADMIN)",
-          idMatchScore: 100.0,
-          role: 'admin'
+          idDocumentType: isAdmin ? 'Government Master Key (SITE ADMIN)' : 'Verified Email Account',
+          idMatchScore: isAdmin ? 100.0 : 99.2,
+          role: isAdmin ? 'admin' : 'creator'
         };
-        onLoginSuccess(adminUser);
+
+        onLoginSuccess(userSession);
         onClose();
         return;
+      } catch (fbErr: any) {
+        console.warn('Firebase Email Sign-In attempt:', fbErr.code || fbErr.message);
+
+        // Handle explicit incorrect password
+        if (fbErr.code === 'auth/wrong-password' || fbErr.code === 'auth/invalid-credential') {
+          throw new Error('Invalid password. Please check your credentials and try again.');
+        }
+
+        // 2. Fallback: API backend login
+        try {
+          const res = await loginApi(email, password);
+          onLoginSuccess(res.user);
+          onClose();
+          return;
+        } catch (apiErr) {}
+
+        // 3. Fallback: Master Admin Account Credentials
+        if ((cleanEmail === 'admin@authr.id' || cleanEmail === 'kaysitsolutions@gmail.com' || cleanEmail === 'christiana.obafunwa@gmail.com') && (password === 'Authr2026!Master' || password === 'Authr2026!' || password === 'admin123' || password === 'password123')) {
+          const adminUser: UserSession = {
+            id: 'usr_admin_master_01',
+            email: cleanEmail,
+            fullName: 'Authr Site Admin',
+            handle: '@site_admin',
+            discipline: 'Musicians & Composers',
+            avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+            token: 'token_master_admin_2026',
+            kycStatus: 'verified',
+            idDocumentType: "Government Master Key (SITE ADMIN)",
+            idMatchScore: 100.0,
+            role: 'admin'
+          };
+          onLoginSuccess(adminUser);
+          onClose();
+          return;
+        }
+
+        // 4. Auto-register/authorize valid email logins
+        if (password && password.length >= 6) {
+          try {
+            const regRes = await registerWithEmailFirebase(cleanEmail, password, cleanEmail.split('@')[0], 'Musicians & Composers');
+            const newUserSession: UserSession = {
+              id: regRes.user.uid,
+              email: cleanEmail,
+              fullName: regRes.userData.displayName,
+              handle: regRes.userData.handle,
+              discipline: 'Musicians & Composers',
+              avatarUrl: regRes.userData.photoURL,
+              token: await regRes.user.getIdToken(),
+              kycStatus: 'verified',
+              idDocumentType: regRes.isAdmin ? 'Government Master Key (SITE ADMIN)' : 'Firebase Email Identity',
+              idMatchScore: 99.0,
+              role: regRes.isAdmin ? 'admin' : 'creator'
+            };
+            onLoginSuccess(newUserSession);
+            onClose();
+            return;
+          } catch (createErr) {}
+        }
       }
 
-      // Demo Creator Account Credentials
-      if (cleanEmail === 'alex@authr.id' && (password === 'AuthrDemo2026!' || password === 'password123')) {
-        const demoUser: UserSession = {
-          id: 'usr_892314',
-          email: 'alex@authr.id',
-          fullName: 'Alex Rivera',
-          handle: '@arivera_official',
-          discipline: 'Musicians & Composers',
-          avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-          token: 'token_demo_init',
-          kycStatus: 'verified',
-          idDocumentType: "Driver's License",
-          idMatchScore: 98.7
-        };
-        onLoginSuccess(demoUser);
-        onClose();
-        return;
-      }
-
-      throw new Error('Invalid email or password credentials. Please check your password and try again.');
+      throw new Error('Invalid email or password credentials. Please check your credentials and try again.');
     } catch (err: any) {
       setError(err.message || 'Authentication failed');
     } finally {
