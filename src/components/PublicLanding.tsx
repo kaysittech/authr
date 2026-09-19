@@ -121,7 +121,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
                   className="px-8 py-4 rounded-xl bg-[#0144e4] hover:bg-[#0035b5] text-white font-extrabold text-sm shadow-md shadow-blue-500/20 transition-all text-center flex items-center justify-center space-x-2"
                 >
                   <UserCheck className="w-4.5 h-4.5" />
-                  <span>Create Account (Government ID)</span>
+                  <span>Create Account</span>
                   <ArrowRight className="w-4.5 h-4.5" />
                 </button>
 
