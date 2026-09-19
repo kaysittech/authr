@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, 
   Mail, 
@@ -29,7 +29,10 @@ import {
   registerWithEmailFirebase,
   checkIsAdminInFirestore, 
   registerAdminInFirestore,
-  seedDefaultAdminsInFirestore
+  seedDefaultAdminsInFirestore,
+  getRegistrationConfigFromFirestore,
+  RegistrationConfig,
+  DEFAULT_REGISTRATION_CONFIG
 } from '../firebase';
 
 export interface UserSession {
@@ -59,6 +62,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 }) => {
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   
+  // System Registration & Invite-Only Config State
+  const [regConfig, setRegConfig] = useState<RegistrationConfig>(DEFAULT_REGISTRATION_CONFIG);
+  const [inviteCode, setInviteCode] = useState('');
+
+  useEffect(() => {
+    if (isOpen) {
+      getRegistrationConfigFromFirestore().then(cfg => {
+        setRegConfig(cfg);
+      });
+    }
+  }, [isOpen]);
+
   // Registration Step Control
   const [regStep, setRegStep] = useState<1 | 2>(1);
 
@@ -238,6 +253,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const handleStep1Continue = (e: React.FormEvent) => {
     e.preventDefault();
+    if (regConfig.inviteOnlyEnabled) {
+      const cleanCode = inviteCode.trim().toUpperCase();
+      if (!cleanCode) {
+        setError('A VIP invite code is required to register while invite-only beta access is active.');
+        return;
+      }
+      const isMatch = regConfig.validInviteCodes.some(c => c.trim().toUpperCase() === cleanCode);
+      if (!isMatch) {
+        setError('Invalid invite code. Access is currently by invitation only. Contact an admin to request an invite code.');
+        return;
+      }
+    }
     if (!fullName.trim()) {
       setError('Please enter your full legal name');
       return;
@@ -558,6 +585,35 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             {/* REGISTER STEP 1 */}
             {regStep === 1 && (
               <form onSubmit={handleStep1Continue} className="space-y-4">
+                
+                {/* Invite Code Requirement Banner & Field */}
+                {regConfig.inviteOnlyEnabled && (
+                  <div className="p-3.5 rounded-2xl bg-blue-50/90 border border-blue-200/80 space-y-2 text-left animate-fadeIn">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-extrabold text-[#0144e4] flex items-center space-x-1.5">
+                        <KeyRound className="w-4 h-4 text-[#0144e4]" />
+                        <span>VIP Invite Code (Required)</span>
+                      </label>
+                      <span className="text-[10px] font-bold text-[#0144e4] bg-white px-2.5 py-0.5 rounded-full border border-blue-200">
+                        🔒 Invite-Only Access
+                      </span>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        required
+                        placeholder="Enter VIP Code (e.g. VIP2026)"
+                        value={inviteCode}
+                        onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                        className="w-full bg-white border border-blue-200/90 rounded-xl px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:border-[#0144e4] focus:outline-none font-mono font-bold tracking-wider uppercase shadow-2xs"
+                      />
+                    </div>
+                    <p className="text-[11px] text-blue-900 font-medium leading-tight">
+                      Registration is currently restricted to invited creators. Contact an admin if you need an invite code.
+                    </p>
+                  </div>
+                )}
+
                 <div>
                   <label className="text-xs font-bold text-slate-700 block mb-1">Full Legal Name (Matches Govt ID)</label>
                   <div className="relative">

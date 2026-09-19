@@ -564,3 +564,45 @@ export const deleteUserFromFirestore = async (userId: string) => {
     console.warn("Firestore delete user error:", err);
   }
 };
+
+/**
+ * Invite-Only System Registration Configuration API
+ */
+export interface RegistrationConfig {
+  inviteOnlyEnabled: boolean;
+  validInviteCodes: string[];
+}
+
+export const DEFAULT_REGISTRATION_CONFIG: RegistrationConfig = {
+  inviteOnlyEnabled: true,
+  validInviteCodes: ['VIP2026', 'AUTHR-BETA', 'CREATOR-INVITE', 'WELCOME']
+};
+
+export const getRegistrationConfigFromFirestore = async (): Promise<RegistrationConfig> => {
+  try {
+    const configDocRef = doc(db, 'system_config', 'registration');
+    const snap = await getDoc(configDocRef);
+    if (snap.exists()) {
+      const data = snap.data();
+      return {
+        inviteOnlyEnabled: data.inviteOnlyEnabled !== undefined ? data.inviteOnlyEnabled : true,
+        validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes
+      };
+    }
+    await setDoc(configDocRef, DEFAULT_REGISTRATION_CONFIG);
+    return DEFAULT_REGISTRATION_CONFIG;
+  } catch (err) {
+    console.warn("Firestore fetch registration config error:", err);
+    return DEFAULT_REGISTRATION_CONFIG;
+  }
+};
+
+export const saveRegistrationConfigToFirestore = async (config: RegistrationConfig) => {
+  try {
+    const configDocRef = doc(db, 'system_config', 'registration');
+    await setDoc(configDocRef, config, { merge: true });
+  } catch (err) {
+    console.warn("Firestore save registration config error:", err);
+  }
+};
+

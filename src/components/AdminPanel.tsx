@@ -35,7 +35,9 @@ import {
   BookOpen,
   Fingerprint,
   Radio,
-  Briefcase
+  Briefcase,
+  KeyRound,
+  Copy
 } from 'lucide-react';
 import { DetectionMatch, SettlementClaim, CustomerReview, PricingPlan, TrialConfig, UserAccount, HeroStatRow, ManagedPage, ManagedPageSection, CareerOpenRole } from '../types';
 import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG, INITIAL_USERS, INITIAL_HERO_STAT_ROWS, INITIAL_MANAGED_PAGES, INITIAL_CAREER_ROLES } from '../services/mockData';
@@ -60,7 +62,11 @@ import {
   deleteBlogArticleFromFirestore,
   getUsersFromFirestore,
   saveUserToFirestore,
-  deleteUserFromFirestore
+  deleteUserFromFirestore,
+  getRegistrationConfigFromFirestore,
+  saveRegistrationConfigToFirestore,
+  RegistrationConfig,
+  DEFAULT_REGISTRATION_CONFIG
 } from '../firebase';
 
 interface AdminPanelProps {
@@ -96,6 +102,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     setTimeout(() => setToastMessage(null), 3500);
   };
 
+  // Registration & Invite-Only Config State
+  const [regConfig, setRegConfig] = useState<RegistrationConfig>(DEFAULT_REGISTRATION_CONFIG);
+  const [newInviteCode, setNewInviteCode] = useState('');
+
   // Sync state with Firebase Firestore on mount
   useEffect(() => {
     getManagedPagesFromFirestore().then(pages => setManagedPagesList(pages));
@@ -106,7 +116,54 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     getTrialConfigFromFirestore().then(config => setAdminTrialConfig(config));
     getBlogArticlesFromFirestore().then(arts => setArticlesList(arts));
     getUsersFromFirestore().then(users => setUsersList(users));
+    getRegistrationConfigFromFirestore().then(config => setRegConfig(config));
   }, []);
+
+  const handleToggleInviteOnly = async () => {
+    const updated = { ...regConfig, inviteOnlyEnabled: !regConfig.inviteOnlyEnabled };
+    setRegConfig(updated);
+    await saveRegistrationConfigToFirestore(updated);
+    showToast(updated.inviteOnlyEnabled ? 'Invite-Only Registration Mode Enabled!' : 'Open Public Registration Enabled!');
+  };
+
+  const handleAddInviteCode = async () => {
+    const clean = newInviteCode.trim().toUpperCase();
+    if (!clean) return;
+    if (regConfig.validInviteCodes.some(c => c.toUpperCase() === clean)) {
+      showToast('Invite code already exists!');
+      return;
+    }
+    const updated = {
+      ...regConfig,
+      validInviteCodes: [...regConfig.validInviteCodes, clean]
+    };
+    setRegConfig(updated);
+    setNewInviteCode('');
+    await saveRegistrationConfigToFirestore(updated);
+    showToast(`Added invite code: ${clean}`);
+  };
+
+  const handleGenerateRandomCode = async () => {
+    const randomSuffix = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const generatedCode = `AUTHR-${randomSuffix}-VIP`;
+    const updated = {
+      ...regConfig,
+      validInviteCodes: [...regConfig.validInviteCodes, generatedCode]
+    };
+    setRegConfig(updated);
+    await saveRegistrationConfigToFirestore(updated);
+    showToast(`Generated VIP Code: ${generatedCode}`);
+  };
+
+  const handleDeleteInviteCode = async (codeToDelete: string) => {
+    const updated = {
+      ...regConfig,
+      validInviteCodes: regConfig.validInviteCodes.filter(c => c !== codeToDelete)
+    };
+    setRegConfig(updated);
+    await saveRegistrationConfigToFirestore(updated);
+    showToast(`Deleted invite code: ${codeToDelete}`);
+  };
 
   // Managed Page Content (CMS) State
   const [managedPagesList, setManagedPagesList] = useState<ManagedPage[]>(() => {
@@ -1798,22 +1855,161 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
       )}
 
-      {/* ---------------- ADMIN TAB 4: SYSTEM CRAWLER NODES ---------------- */}
+      {/* ---------------- ADMIN TAB 4: SYSTEM CRAWLER NODES & ACCESS CONTROL ---------------- */}
       {activeAdminTab === 'system' && (
-        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-extrabold text-slate-900">Crawler Swarms & Node Infrastructure</h2>
-              <p className="text-xs text-slate-500 mt-0.5">Real-time status of cross-platform scraping detection nodes across social platforms and AI model datasets.</p>
+        <div className="space-y-6">
+          
+          {/* Invite-Only Registration & Access Control Panel */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+              <div>
+                <div className="flex items-center space-x-2.5">
+                  <KeyRound className="w-5 h-5 text-[#0144e4]" />
+                  <h2 className="text-lg font-extrabold text-slate-900">User Registration & Access Control</h2>
+                </div>
+                <p className="text-xs text-slate-500 mt-1">
+                  Configure whether user sign-up requires a VIP invite code or is open to everyone.
+                </p>
+              </div>
+
+              {/* Master Toggle */}
+              <div className="flex items-center space-x-3 bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
+                <div className="text-right">
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Registration Mode</div>
+                  <div className={`text-xs font-extrabold ${regConfig.inviteOnlyEnabled ? 'text-amber-600' : 'text-emerald-600'}`}>
+                    {regConfig.inviteOnlyEnabled ? '🔒 Invite Only Active' : '🌐 Open Registration Active'}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleToggleInviteOnly}
+                  className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-200 ${
+                    regConfig.inviteOnlyEnabled ? 'bg-amber-500' : 'bg-emerald-500'
+                  }`}
+                >
+                  <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-200 ${
+                    regConfig.inviteOnlyEnabled ? 'translate-x-6' : 'translate-x-0'
+                  }`} />
+                </button>
+              </div>
             </div>
-            <button
-              onClick={() => showToast('All 1,420 Crawler Swarm Nodes restarted!')}
-              className="px-4 py-2 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2"
-            >
-              <RefreshCw className="w-3.5 h-3.5 text-white" />
-              <span>Restart Swarms</span>
-            </button>
+
+            {/* Active Mode Notice */}
+            <div className={`p-4 rounded-2xl border text-xs flex items-center justify-between gap-4 ${
+              regConfig.inviteOnlyEnabled
+                ? 'bg-amber-50/80 border-amber-200 text-amber-900'
+                : 'bg-emerald-50/80 border-emerald-200 text-emerald-900'
+            }`}>
+              <div className="flex items-center space-x-3">
+                {regConfig.inviteOnlyEnabled ? (
+                  <Lock className="w-5 h-5 text-amber-600 flex-shrink-0" />
+                ) : (
+                  <Globe className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                )}
+                <div>
+                  <span className="font-extrabold">
+                    {regConfig.inviteOnlyEnabled
+                      ? 'Invite-Only Mode is currently ACTIVE'
+                      : 'Open Registration Mode is currently ACTIVE'}
+                  </span>
+                  <p className="text-[11px] opacity-80 mt-0.5">
+                    {regConfig.inviteOnlyEnabled
+                      ? 'New creators must enter a valid VIP invite code during registration. Flip the toggle switch anytime to open registration to everyone.'
+                      : 'Anyone can register an account on Authr without needing an invite code.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Invite Codes Manager */}
+            <div className="space-y-4 pt-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider">
+                  Active VIP Invite Codes ({regConfig.validInviteCodes.length})
+                </h3>
+                
+                <div className="flex items-center space-x-2">
+                  <button
+                    type="button"
+                    onClick={handleGenerateRandomCode}
+                    className="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0144e4] border border-blue-200 text-xs font-bold transition-all flex items-center space-x-1.5"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Generate VIP Code</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Add Code Form */}
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  placeholder="Enter custom code (e.g. SUMMER2026)"
+                  value={newInviteCode}
+                  onChange={(e) => setNewInviteCode(e.target.value.toUpperCase())}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddInviteCode()}
+                  className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold font-mono uppercase text-slate-900 focus:outline-none focus:border-[#0144e4]"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddInviteCode}
+                  className="px-4 py-2 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white text-xs font-bold transition-all flex items-center space-x-1"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Add Code</span>
+                </button>
+              </div>
+
+              {/* List of active codes */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {regConfig.validInviteCodes.map((code, idx) => (
+                  <div key={idx} className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between group">
+                    <div className="flex items-center space-x-2">
+                      <KeyRound className="w-3.5 h-3.5 text-[#0144e4]" />
+                      <span className="font-mono font-bold text-xs text-slate-900 tracking-wider">{code}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(code);
+                          showToast(`Copied code ${code} to clipboard!`);
+                        }}
+                        title="Copy Code"
+                        className="p-1 rounded-lg hover:bg-blue-100 text-slate-400 hover:text-[#0144e4] transition-all"
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteInviteCode(code)}
+                        title="Delete Code"
+                        className="p-1 rounded-lg hover:bg-rose-100 text-slate-400 hover:text-rose-600 transition-all"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+
+          {/* Crawler Swarms Card */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-extrabold text-slate-900">Crawler Swarms & Node Infrastructure</h2>
+                <p className="text-xs text-slate-500 mt-0.5">Real-time status of cross-platform scraping detection nodes across social platforms and AI model datasets.</p>
+              </div>
+              <button
+                onClick={() => showToast('All 1,420 Crawler Swarm Nodes restarted!')}
+                className="px-4 py-2 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2"
+              >
+                <RefreshCw className="w-3.5 h-3.5 text-white" />
+                <span>Restart Swarms</span>
+              </button>
+            </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
@@ -1838,6 +2034,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             ))}
           </div>
         </div>
+      </div>
       )}
 
       {/* ---------------- ADMIN TAB 5: BIPA & SECURITY AUDIT LOG ---------------- */}
