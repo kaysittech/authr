@@ -385,9 +385,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <span className="text-2xl font-extrabold text-slate-900 font-display">
                 Authr
               </span>
-              <span className="px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-widest bg-amber-50 text-amber-900 border border-amber-300 rounded">
-                KYC Secured
-              </span>
             </div>
             <p className="text-[11px] text-slate-500 font-medium">
               Independent Identity & Biometric Vault Access
