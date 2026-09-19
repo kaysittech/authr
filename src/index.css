@@ -9,27 +9,28 @@
   }
 }
 
-/* White Theme Cards */
+/* Krazy Theme Cards */
 .glass-panel {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  border: 1px solid #e9eaf0;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.04);
+  border-radius: 1rem;
 }
 
 .glass-panel-hover {
-  transition: all 0.25s ease-in-out;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-panel-hover:hover {
-  border-color: #f59e0b;
-  box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.12);
-  transform: translateY(-1px);
+  border-color: #0144e4;
+  box-shadow: 0 12px 30px -5px rgba(1, 68, 228, 0.12);
+  transform: translateY(-2px);
 }
 
 .glass-card-selected {
-  border-color: #f59e0b;
-  background: #fffbeb;
-  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+  border-color: #0144e4;
+  background: #f4f7ff;
+  box-shadow: 0 0 0 2px rgba(1, 68, 228, 0.2);
 }
 
 /* Custom Scrollbar */
