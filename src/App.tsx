@@ -212,6 +212,7 @@ export function App() {
               <PublicLanding
                 onOpenRegister={() => setIsAuthModalOpen(true)}
                 onOpenLogin={() => setIsAuthModalOpen(true)}
+                onNavigateToBlog={() => setActiveTab('blog')}
               />
             )}
 

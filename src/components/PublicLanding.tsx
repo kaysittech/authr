@@ -36,11 +36,13 @@ import { Footer } from './Footer';
 interface PublicLandingProps {
   onOpenRegister: () => void;
   onOpenLogin: () => void;
+  onNavigateToBlog?: () => void;
 }
 
 export const PublicLanding: React.FC<PublicLandingProps> = ({
   onOpenRegister,
-  onOpenLogin
+  onOpenLogin,
+  onNavigateToBlog
 }) => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [isTestimonialHovered, setIsTestimonialHovered] = useState(false);
@@ -607,8 +609,8 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
               </h2>
             </div>
             <button 
-              onClick={onOpenRegister}
-              className="px-6 py-3 rounded-xl bg-[#0144e4] hover:bg-[#0035b5] text-white font-bold text-xs transition-all shadow-sm"
+              onClick={onNavigateToBlog || onOpenRegister}
+              className="px-6 py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-semibold text-xs transition-all shadow-2xs"
             >
               Browse Articles
             </button>
@@ -641,7 +643,11 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
                 image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80"
               }
             ].map((post, index) => (
-              <article key={index} className="bg-white rounded-xl border border-[#e9eaf0] shadow-[0_5px_20px_0_rgba(0,0,0,0.05)] overflow-hidden flex flex-col justify-between space-y-4">
+              <article 
+                key={index} 
+                onClick={onNavigateToBlog || onOpenRegister}
+                className="bg-white rounded-2xl border border-[#e9eaf0] shadow-[0_4px_20px_0_rgba(0,0,0,0.04)] overflow-hidden flex flex-col justify-between hover:border-[#0144e4] transition-all cursor-pointer group"
+              >
                 <img 
                   src={post.image} 
                   alt={post.title} 
