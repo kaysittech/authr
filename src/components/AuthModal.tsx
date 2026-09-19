@@ -23,7 +23,12 @@ import {
 } from 'lucide-react';
 import { loginApi, registerApi, verifyIdentityApi } from '../services/api';
 import { getDisciplineStrategy } from '../services/disciplineStrategies';
-import { signInWithGoogleFirebase } from '../firebase';
+import { 
+  signInWithGoogleFirebase, 
+  checkIsAdminInFirestore, 
+  registerAdminInFirestore,
+  seedDefaultAdminsInFirestore
+} from '../firebase';
 
 export interface UserSession {
   id: string;
@@ -92,17 +97,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     try {
       const res = await signInWithGoogleFirebase();
       const fbUser = res.user;
+      const emailLower = (fbUser.email || '').toLowerCase().trim();
+      const isAdmin = res.isAdmin || await checkIsAdminInFirestore(emailLower);
+      
+      if (isAdmin) {
+        await registerAdminInFirestore(emailLower, fbUser.displayName || 'Site Admin', 'admin');
+      }
+
       const oauthUser: UserSession = {
         id: fbUser.uid,
         email: fbUser.email || 'creator.google@authr.id',
-        fullName: fbUser.displayName || 'Google Verified Creator',
-        handle: `@${(fbUser.displayName || 'creator').toLowerCase().replace(/\s+/g, '_')}_authr`,
+        fullName: emailLower === 'christiana.obafunwa@gmail.com' ? 'Christiana Obafunwa (Site Admin)' : (fbUser.displayName || 'Google Verified Creator'),
+        handle: `@${(fbUser.displayName || 'creator').toLowerCase().replace(/\s+/g, '_')}_${isAdmin ? 'admin' : 'authr'}`,
         discipline: 'Musicians & Composers',
         avatarUrl: fbUser.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
         token: await fbUser.getIdToken(),
         kycStatus: 'verified',
-        idDocumentType: 'Google OAuth 2.0 Identity Token',
-        idMatchScore: 99.8
+        idDocumentType: isAdmin ? 'Government Master Key (SITE ADMIN)' : 'Google OAuth 2.0 Identity Token',
+        idMatchScore: isAdmin ? 100.0 : 99.8,
+        role: isAdmin ? 'admin' : 'creator'
       };
       onLoginSuccess(oauthUser);
       onClose();
@@ -114,24 +127,32 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
-  const handleSelectGoogleAccount = (selectedEmail: string, selectedName: string) => {
+  const handleSelectGoogleAccount = async (selectedEmail: string, selectedName: string) => {
     setIsLoading(true);
     setShowGooglePicker(false);
     
+    const emailLower = selectedEmail.toLowerCase().trim();
+    const isAdmin = await checkIsAdminInFirestore(emailLower);
+    
+    if (isAdmin) {
+      await registerAdminInFirestore(emailLower, selectedName, 'admin');
+    }
+
     setTimeout(() => {
       const nameParts = selectedName.split(' ');
       const handleName = nameParts[0].toLowerCase();
       const oauthUser: UserSession = {
         id: `usr_google_${Math.floor(100000 + Math.random() * 900000)}`,
         email: selectedEmail,
-        fullName: selectedName,
-        handle: `@${handleName}_authr`,
+        fullName: emailLower === 'christiana.obafunwa@gmail.com' ? 'Christiana Obafunwa (Site Admin)' : selectedName,
+        handle: `@${handleName}_${isAdmin ? 'admin' : 'authr'}`,
         discipline: 'Musicians & Composers',
         avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
         token: `google_jwt_oauth_${Date.now()}`,
         kycStatus: 'verified',
-        idDocumentType: 'Google OAuth 2.0 Identity',
-        idMatchScore: 99.8
+        idDocumentType: isAdmin ? 'Government Master Key (SITE ADMIN)' : 'Google OAuth 2.0 Identity',
+        idMatchScore: isAdmin ? 100.0 : 99.8,
+        role: isAdmin ? 'admin' : 'creator'
       };
       setIsLoading(false);
       onLoginSuccess(oauthUser);

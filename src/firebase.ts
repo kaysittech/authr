@@ -48,13 +48,67 @@ googleProvider.setCustomParameters({
 export const db = getFirestore(app);
 
 /**
+ * Check if user is registered as an Admin in Firestore
+ */
+export const checkIsAdminInFirestore = async (email: string): Promise<boolean> => {
+  if (!email) return false;
+  const cleanEmail = email.toLowerCase().trim();
+  
+  // Hardcoded default master admins for resilience
+  const defaultAdmins = ['christiana.obafunwa@gmail.com', 'admin@authr.id', 'kaysitsolutions@gmail.com'];
+  if (defaultAdmins.includes(cleanEmail)) return true;
+
+  try {
+    const adminRef = doc(db, 'admins', cleanEmail);
+    const adminSnap = await getDoc(adminRef);
+    return adminSnap.exists();
+  } catch (err) {
+    console.warn("Firestore admin check fallback:", err);
+    return defaultAdmins.includes(cleanEmail);
+  }
+};
+
+/**
+ * Register or update an Admin in Firestore
+ */
+export const registerAdminInFirestore = async (email: string, fullName: string, role: string = 'admin') => {
+  if (!email) return;
+  const cleanEmail = email.toLowerCase().trim();
+  try {
+    const adminRef = doc(db, 'admins', cleanEmail);
+    await setDoc(adminRef, {
+      email: cleanEmail,
+      fullName,
+      role,
+      kycStatus: 'verified',
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+  } catch (err) {
+    console.warn("Firestore register admin fallback:", err);
+  }
+};
+
+/**
+ * Seed default Site Admins into Firestore
+ */
+export const seedDefaultAdminsInFirestore = async () => {
+  await registerAdminInFirestore('christiana.obafunwa@gmail.com', 'Christiana Obafunwa', 'admin');
+  await registerAdminInFirestore('admin@authr.id', 'Authr Master Ops Admin', 'admin');
+  await registerAdminInFirestore('kaysitsolutions@gmail.com', 'KaysIT Solutions Admin', 'admin');
+};
+
+/**
  * Sign in with Google Popup via Firebase Auth
  */
 export const signInWithGoogleFirebase = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
+    const userEmail = (user.email || '').toLowerCase().trim();
     
+    // Check if user is an Admin in Firestore
+    const isAdmin = await checkIsAdminInFirestore(userEmail);
+
     // Create or update user profile in Firestore
     const userRef = doc(db, 'users', user.uid);
     const userSnap = await getDoc(userRef);
@@ -62,11 +116,12 @@ export const signInWithGoogleFirebase = async () => {
     const userData = {
       uid: user.uid,
       email: user.email || '',
-      displayName: user.displayName || 'Google Creator',
+      displayName: user.displayName || (isAdmin ? 'Christiana Obafunwa (Site Admin)' : 'Google Creator'),
       photoURL: user.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-      handle: `@${(user.displayName || 'creator').toLowerCase().replace(/\s+/g, '_')}_authr`,
+      handle: `@${(user.displayName || 'creator').toLowerCase().replace(/\s+/g, '_')}_${isAdmin ? 'admin' : 'authr'}`,
       lastLogin: serverTimestamp(),
       kycStatus: 'verified',
+      role: isAdmin ? 'admin' : 'creator',
       provider: 'google.com'
     };
 
@@ -77,10 +132,14 @@ export const signInWithGoogleFirebase = async () => {
         discipline: 'Musicians & Composers'
       });
     } else {
-      await updateDoc(userRef, { lastLogin: serverTimestamp() });
+      await updateDoc(userRef, { lastLogin: serverTimestamp(), role: isAdmin ? 'admin' : 'creator' });
     }
 
-    return { user, userData };
+    if (isAdmin) {
+      await registerAdminInFirestore(userEmail, user.displayName || 'Site Admin', 'admin');
+    }
+
+    return { user, userData, isAdmin };
   } catch (error: any) {
     console.warn("Firebase Google Auth popup warning/fallback:", error);
     throw error;

@@ -34,6 +34,7 @@ import {
 } from './services/mockData';
 
 import { fetchAppState } from './services/api';
+import { seedDefaultAdminsInFirestore } from './firebase';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<string>('dashboard');
@@ -69,8 +70,9 @@ export function App() {
     }
   }, [digitalTwin]);
 
-  // Sync state with FastAPI backend
+  // Sync state with FastAPI backend & seed admins in Firestore
   useEffect(() => {
+    seedDefaultAdminsInFirestore().catch(console.warn);
     fetchAppState()
       .then((data: any) => {
         if (data.digitalTwin?.faceVector) {
