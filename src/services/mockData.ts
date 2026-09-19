@@ -1,4 +1,73 @@
-import { DigitalTwin, ProtectedAsset, DetectionMatch, SettlementClaim, FinancialTransaction, CustomerReview } from '../types';
+import { DigitalTwin, ProtectedAsset, DetectionMatch, SettlementClaim, FinancialTransaction, CustomerReview, PricingPlan, TrialConfig } from '../types';
+
+export const INITIAL_PRICING_PLANS: PricingPlan[] = [
+  {
+    id: 'plan_basic',
+    name: 'Basic',
+    price: 15,
+    period: '/ month',
+    popular: false,
+    features: [
+      '1 Biometric Voice & Likeness Profile',
+      'Web Scrape Detection (YouTube/TikTok)',
+      'C2PA Watermark Signing',
+      'Email Support'
+    ],
+    buttonText: 'Choose plan'
+  },
+  {
+    id: 'plan_startup',
+    name: 'Startup',
+    price: 30,
+    period: '/ month',
+    popular: false,
+    features: [
+      '3 Active Discipline Profiles',
+      'Automated DMCA Legal Notice Studio',
+      'Stripe Commercial Licensing Gate',
+      'Custom Policy Toggles'
+    ],
+    buttonText: 'Choose plan'
+  },
+  {
+    id: 'plan_pro',
+    name: 'Professional',
+    price: 75,
+    period: '/ month',
+    popular: true,
+    popularBadgeText: 'Most Popular',
+    features: [
+      'All 6 Creative Discipline Modules',
+      'Polygon L2 On-Chain Provenance',
+      'Enterprise Social API Keys',
+      '24/7 Priority Support'
+    ],
+    buttonText: 'Choose plan'
+  },
+  {
+    id: 'plan_business',
+    name: 'Business',
+    price: 100,
+    period: '/ month',
+    popular: false,
+    features: [
+      'Unlimited Brand IP Vaults',
+      'Custom API Webhooks',
+      'Dedicated Legal Counsel Sync',
+      'Bulk DMCA Court Filings'
+    ],
+    buttonText: 'Choose plan'
+  }
+];
+
+export const INITIAL_TRIAL_CONFIG: TrialConfig = {
+  topBadge: 'No credit card required',
+  title: 'Plans & Pricing',
+  subtitle: 'No risk, 30-day money back guarantee!',
+  trialDurationDays: 30,
+  requireCreditCard: false,
+  customPlanText: 'Need a Customized Plan? Please contact us.'
+};
 
 export const INITIAL_TESTIMONIALS: CustomerReview[] = [
   {

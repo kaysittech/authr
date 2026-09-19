@@ -99,3 +99,23 @@ export interface CustomerReview {
   avatar: string;
 }
 
+export interface PricingPlan {
+  id: string;
+  name: string;
+  price: number;
+  period: string;
+  popular?: boolean;
+  popularBadgeText?: string;
+  features: string[];
+  buttonText: string;
+}
+
+export interface TrialConfig {
+  topBadge: string;
+  title: string;
+  subtitle: string;
+  trialDurationDays: number;
+  requireCreditCard: boolean;
+  customPlanText: string;
+}
+

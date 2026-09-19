@@ -33,8 +33,8 @@ import {
 import { PublicHeader } from './PublicHeader';
 import { Footer } from './Footer';
 
-import { CustomerReview } from '../types';
-import { INITIAL_TESTIMONIALS } from '../services/mockData';
+import { CustomerReview, PricingPlan, TrialConfig } from '../types';
+import { INITIAL_TESTIMONIALS, INITIAL_PRICING_PLANS, INITIAL_TRIAL_CONFIG } from '../services/mockData';
 
 interface PublicLandingProps {
   onOpenRegister: () => void;
@@ -60,6 +60,22 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
     return INITIAL_TESTIMONIALS;
   });
 
+  const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>(() => {
+    const saved = localStorage.getItem('rg_pricing_plans');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return INITIAL_PRICING_PLANS;
+  });
+
+  const [trialConfig, setTrialConfig] = useState<TrialConfig>(() => {
+    const saved = localStorage.getItem('rg_trial_config');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
+    }
+    return INITIAL_TRIAL_CONFIG;
+  });
+
   useEffect(() => {
     const syncTestimonials = () => {
       const saved = localStorage.getItem('rg_testimonials');
@@ -70,11 +86,30 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
       }
     };
 
+    const syncPricing = () => {
+      const savedPlans = localStorage.getItem('rg_pricing_plans');
+      if (savedPlans) {
+        try { setPricingPlans(JSON.parse(savedPlans)); } catch (e) {}
+      } else {
+        setPricingPlans(INITIAL_PRICING_PLANS);
+      }
+      const savedTrial = localStorage.getItem('rg_trial_config');
+      if (savedTrial) {
+        try { setTrialConfig(JSON.parse(savedTrial)); } catch (e) {}
+      } else {
+        setTrialConfig(INITIAL_TRIAL_CONFIG);
+      }
+    };
+
     window.addEventListener('storage', syncTestimonials);
     window.addEventListener('rg_testimonials_updated', syncTestimonials);
+    window.addEventListener('storage', syncPricing);
+    window.addEventListener('rg_pricing_updated', syncPricing);
     return () => {
       window.removeEventListener('storage', syncTestimonials);
       window.removeEventListener('rg_testimonials_updated', syncTestimonials);
+      window.removeEventListener('storage', syncPricing);
+      window.removeEventListener('rg_pricing_updated', syncPricing);
     };
   }, []);
 
@@ -385,131 +420,69 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
         <section id="pricing" className="bg-[#f3f3f7] rounded-2xl p-8 sm:p-12 text-center space-y-10 border border-[#e9eaf0]">
           
           <div className="max-w-2xl mx-auto space-y-3">
-            <div className="text-[#0144e4] font-bold text-xs uppercase tracking-widest font-mono">
-              No credit card required
+            <div className="text-[#0144e4] font-bold text-xs uppercase tracking-widest font-mono flex items-center justify-center gap-2">
+              <span>{trialConfig.topBadge || 'No credit card required'}</span>
+              {!trialConfig.requireCreditCard && (
+                <span className="px-2 py-0.5 rounded bg-blue-100 text-[#0144e4] text-[10px] font-extrabold">
+                  {trialConfig.trialDurationDays}-Day Free Trial
+                </span>
+              )}
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display">
-              Plans &amp; Pricing
+              {trialConfig.title}
             </h2>
             <p className="text-sm text-slate-600 font-medium">
-              No risk, 30-day money back guarantee!
+              {trialConfig.subtitle}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
-            
-            {/* Basic Plan */}
-            <div className="bg-white p-8 rounded-xl border border-[#e9eaf0] shadow-xs flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="flex items-baseline space-x-1">
-                  <span className="text-sm font-bold text-[#0144e4]">$</span>
-                  <span className="text-3xl font-black text-slate-900 font-display">15</span>
-                  <span className="text-xs text-slate-500 font-mono">/ month</span>
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 font-display">Basic</h3>
-                <div className="h-0.5 w-10 bg-[#0144e4]"></div>
-                
-                <ul className="space-y-3 text-xs text-slate-600 font-medium pt-2">
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>1 Biometric Voice &amp; Likeness Profile</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Web Scrape Detection (YouTube/TikTok)</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>C2PA Watermark Signing</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Email Support</span></li>
-                </ul>
-              </div>
-
-              <button 
-                onClick={onOpenRegister}
-                className="w-full py-3 rounded-xl bg-[#0144e4] hover:bg-[#0035b5] text-white font-extrabold text-xs transition-all shadow-sm"
+            {pricingPlans.map((plan) => (
+              <div 
+                key={plan.id}
+                className={`bg-white p-8 rounded-xl flex flex-col justify-between space-y-6 ${
+                  plan.popular 
+                    ? 'border-2 border-[#0144e4] shadow-md relative' 
+                    : 'border border-[#e9eaf0] shadow-xs'
+                }`}
               >
-                Choose plan
-              </button>
-            </div>
+                {plan.popular && (
+                  <div className="absolute -top-3.5 right-6 px-3 py-1 bg-[#0144e4] text-white font-extrabold text-[10px] uppercase tracking-widest rounded font-mono">
+                    {plan.popularBadgeText || 'Most Popular'}
+                  </div>
+                )}
 
-            {/* Startup Plan */}
-            <div className="bg-white p-8 rounded-xl border border-[#e9eaf0] shadow-xs flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="flex items-baseline space-x-1">
-                  <span className="text-sm font-bold text-[#0144e4]">$</span>
-                  <span className="text-3xl font-black text-slate-900 font-display">30</span>
-                  <span className="text-xs text-slate-500 font-mono">/ month</span>
+                <div className="space-y-4">
+                  <div className="flex items-baseline space-x-1">
+                    <span className="text-sm font-bold text-[#0144e4]">$</span>
+                    <span className="text-3xl font-black text-slate-900 font-display">{plan.price}</span>
+                    <span className="text-xs text-slate-500 font-mono">{plan.period || '/ month'}</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 font-display">{plan.name}</h3>
+                  <div className="h-0.5 w-10 bg-[#0144e4]"></div>
+                  
+                  <ul className="space-y-3 text-xs text-slate-600 font-medium pt-2">
+                    {plan.features.map((feat, i) => (
+                      <li key={i} className="flex items-center space-x-2">
+                        <Check className="w-4 h-4 text-[#0144e4] flex-shrink-0" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 font-display">Startup</h3>
-                <div className="h-0.5 w-10 bg-[#0144e4]"></div>
-                
-                <ul className="space-y-3 text-xs text-slate-600 font-medium pt-2">
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>3 Active Discipline Profiles</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Automated DMCA Legal Notice Studio</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Stripe Commercial Licensing Gate</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Custom Policy Toggles</span></li>
-                </ul>
+
+                <button 
+                  onClick={onOpenRegister}
+                  className={`w-full py-3 rounded-xl font-extrabold text-xs transition-all ${
+                    plan.popular 
+                      ? 'bg-[#0144e4] hover:bg-[#0035b5] text-white shadow-md shadow-blue-500/20' 
+                      : 'bg-[#0144e4] hover:bg-[#0035b5] text-white shadow-sm'
+                  }`}
+                >
+                  {plan.buttonText || 'Choose plan'}
+                </button>
               </div>
-
-              <button 
-                onClick={onOpenRegister}
-                className="w-full py-3 rounded-xl bg-[#0144e4] hover:bg-[#0035b5] text-white font-extrabold text-xs transition-all shadow-sm"
-              >
-                Choose plan
-              </button>
-            </div>
-
-            {/* Professional Plan (Most Popular) */}
-            <div className="bg-white p-8 rounded-xl border-2 border-[#0144e4] shadow-md relative flex flex-col justify-between space-y-6">
-              <div className="absolute -top-3.5 right-6 px-3 py-1 bg-[#0144e4] text-white font-extrabold text-[10px] uppercase tracking-widest rounded font-mono">
-                Most Popular
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-baseline space-x-1">
-                  <span className="text-sm font-bold text-[#0144e4]">$</span>
-                  <span className="text-3xl font-black text-slate-900 font-display">75</span>
-                  <span className="text-xs text-slate-500 font-mono">/ month</span>
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 font-display">Professional</h3>
-                <div className="h-0.5 w-10 bg-[#0144e4]"></div>
-                
-                <ul className="space-y-3 text-xs text-slate-600 font-medium pt-2">
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>All 6 Creative Discipline Modules</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Polygon L2 On-Chain Provenance</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Enterprise Social API Keys</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>24/7 Priority Support</span></li>
-                </ul>
-              </div>
-
-              <button 
-                onClick={onOpenRegister}
-                className="w-full py-3 rounded-xl bg-[#0144e4] hover:bg-[#0035b5] text-white font-extrabold text-xs transition-all shadow-md shadow-blue-500/20"
-              >
-                Choose plan
-              </button>
-            </div>
-
-            {/* Business / Enterprise Plan */}
-            <div className="bg-white p-8 rounded-xl border border-[#e9eaf0] shadow-xs flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="flex items-baseline space-x-1">
-                  <span className="text-sm font-bold text-[#0144e4]">$</span>
-                  <span className="text-3xl font-black text-slate-900 font-display">100</span>
-                  <span className="text-xs text-slate-500 font-mono">/ month</span>
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 font-display">Business</h3>
-                <div className="h-0.5 w-10 bg-[#0144e4]"></div>
-                
-                <ul className="space-y-3 text-xs text-slate-600 font-medium pt-2">
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Unlimited Brand IP Vaults</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Custom API Webhooks</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Dedicated Legal Counsel Sync</span></li>
-                  <li className="flex items-center space-x-2"><Check className="w-4 h-4 text-[#0144e4]" /><span>Bulk DMCA Court Filings</span></li>
-                </ul>
-              </div>
-
-              <button 
-                onClick={onOpenRegister}
-                className="w-full py-3 rounded-xl bg-[#0144e4] hover:bg-[#0035b5] text-white font-extrabold text-xs transition-all shadow-sm"
-              >
-                Choose plan
-              </button>
-            </div>
-
+            ))}
           </div>
 
           <div className="pt-4">
@@ -517,7 +490,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
               onClick={onOpenRegister}
               className="px-6 py-3 rounded-xl border border-[#e9eaf0] bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs transition-all"
             >
-              Need a Customized Plan? Please contact us.
+              {trialConfig.customPlanText || 'Need a Customized Plan? Please contact us.'}
             </button>
           </div>
 
