@@ -209,6 +209,39 @@ export function App() {
 
       {/* Main Canvas View */}
       <main className="flex-1 p-4 sm:p-8 max-w-7xl mx-auto w-full overflow-x-hidden">
+        {/* Admin Demo Simulator Notification Bar */}
+        {currentUser && currentUser.token?.includes('jwt_demo_switch_') && (
+          <div className="mb-4 p-3.5 rounded-2xl bg-slate-900 text-white border border-slate-800 flex items-center justify-between text-xs font-bold shadow-sm animate-fadeIn">
+            <div className="flex items-center space-x-2.5">
+              <span className="px-2.5 py-1 rounded-full bg-amber-400 text-slate-950 font-mono text-[10px] font-black uppercase">
+                ⚡ ADMIN DEMO MODE ACTIVE
+              </span>
+              <span className="text-slate-200">Testing Vault Profile: <strong className="text-white">{currentUser.fullName}</strong> ({currentUser.handle})</span>
+            </div>
+            <button
+              onClick={() => {
+                handleLoginSuccess({
+                  id: 'usr_admin_master_01',
+                  email: 'admin@authr.id',
+                  fullName: 'Authr Site Admin',
+                  handle: '@site_admin',
+                  discipline: 'Musicians & Composers',
+                  avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+                  token: 'token_master_admin_2026',
+                  kycStatus: 'verified',
+                  idDocumentType: "Government Master Key (SITE ADMIN)",
+                  idMatchScore: 100.0,
+                  role: 'admin'
+                });
+                setActiveTab('admin');
+              }}
+              className="px-3.5 py-1.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-xs font-black transition-all shadow-xs"
+            >
+              Return to Admin Panel
+            </button>
+          </div>
+        )}
+
         {/* PUBLIC UNAUTHENTICATED LANDING & AUTH GUARDS */}
         {!currentUser ? (
           <>
@@ -357,6 +390,10 @@ export function App() {
                 claims={claims}
                 onResolveMatch={(id) => {
                   setMatches(matches.map(m => m.id === id ? { ...m, status: 'resolved' } : m));
+                }}
+                onSwitchDemoUser={(demoUserSession) => {
+                  handleLoginSuccess(demoUserSession);
+                  setActiveTab('dashboard');
                 }}
               />
             )}

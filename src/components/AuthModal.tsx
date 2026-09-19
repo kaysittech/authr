@@ -844,49 +844,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <p className="text-xs text-slate-500">Select a Google Account to proceed to <span className="font-extrabold text-slate-900">Authr</span></p>
             </div>
 
-            {/* Account List */}
-            <div className="space-y-2.5">
-              <button
-                onClick={() => handleSelectGoogleAccount('admin@authr.id', 'Authr Master Admin')}
-                className="w-full p-3.5 rounded-2xl bg-amber-50/80 hover:bg-amber-100/80 border border-amber-200 hover:border-amber-400 text-left flex items-center space-x-3 transition-all group"
-              >
-                <div className="w-10 h-10 rounded-full bg-slate-900 text-amber-400 flex items-center justify-center font-extrabold text-sm border border-slate-700 shadow-sm">
-                  SA
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-extrabold text-slate-900 group-hover:text-[#0144e4]">Site Admin Account</div>
-                  <div className="text-[11px] text-slate-600 truncate font-mono">admin@authr.id</div>
-                </div>
-                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-slate-900 text-amber-400 border border-slate-700">Site Admin</span>
-              </button>
-
-              <button
-                onClick={() => handleSelectGoogleAccount('alex.rivera.creator@gmail.com', 'Alex Rivera')}
-                className="w-full p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200 hover:border-blue-300 text-left flex items-center space-x-3 transition-all group"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80"
-                  alt="Alex Rivera"
-                  className="w-10 h-10 rounded-full object-cover border border-slate-200"
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-extrabold text-slate-900 group-hover:text-[#0144e4]">Alex Rivera</div>
-                  <div className="text-[11px] text-slate-500 truncate font-mono">alex.rivera.creator@gmail.com</div>
-                </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Verified</span>
-              </button>
-            </div>
-
-            {/* Custom Google Email Entry */}
-            <div className="pt-3 border-t border-slate-200 space-y-2">
-              <label className="text-[11px] font-bold text-slate-600 block">Or enter your Google Email address:</label>
+            {/* Google Email Entry */}
+            <div className="pt-2 space-y-3">
+              <label className="text-xs font-bold text-slate-700 block">Enter your Google Account Email:</label>
               <div className="flex space-x-2">
                 <input
                   type="email"
-                  placeholder="your.name@gmail.com"
+                  placeholder="name@gmail.com or company@google.com"
                   value={customGoogleEmail}
                   onChange={(e) => setCustomGoogleEmail(e.target.value)}
-                  className="flex-1 px-3.5 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:border-blue-500"
+                  className="flex-1 px-3.5 py-2.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-[#0144e4] font-mono text-slate-900"
                 />
                 <button
                   onClick={() => {
@@ -896,11 +863,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       handleSelectGoogleAccount(customGoogleEmail.trim(), formattedName);
                     }
                   }}
-                  className="px-4 py-2 bg-[#0144e4] text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-all shadow-xs"
+                  className="px-5 py-2.5 bg-[#0144e4] text-white text-xs font-extrabold rounded-xl hover:bg-blue-700 transition-all shadow-xs"
                 >
-                  Continue
+                  Continue with Google
                 </button>
               </div>
+              <p className="text-[11px] text-slate-500 font-mono text-center">
+                Authenticated securely via Google Identity Services & Firebase Auth
+              </p>
             </div>
 
           </div>
