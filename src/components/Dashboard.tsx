@@ -296,8 +296,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
       </div>
 
       {/* Creative Discipline Workspace Bar */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-100">
+      <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <div className="p-2.5 rounded-xl bg-blue-50 text-[#0144e4] border border-blue-100 flex-shrink-0">
               <Layers className="w-5 h-5" />
@@ -362,40 +362,6 @@ export const Dashboard: React.FC<DashboardProps> = ({
             );
           })()}
         </div>
-
-        {/* Active Strategy & Rights Monitored */}
-        {selectedDiscipline !== 'all' && (() => {
-          const mapDisciplineNames: Record<string, string> = {
-            likeness: 'Likeness & Voice Protection',
-            musicians: 'Musicians & Composers',
-            artists: 'Visual & Fine Artists',
-            creators: 'Video Creators & Podcasters',
-            authors: 'Authors & Literary Writers',
-            businesses: 'Commercial Brands & Agencies'
-          };
-          const fullDisciplineName = mapDisciplineNames[selectedDiscipline];
-          const strategy = getDisciplineStrategy(fullDisciplineName);
-
-          return (
-            <div className="flex items-center justify-between flex-wrap gap-3 text-xs">
-              <div className="flex items-center space-x-2">
-                <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-blue-50 text-[#0144e4] border border-blue-200/60">
-                  {strategy.shortLabel}
-                </span>
-                <span className="font-bold text-slate-800">{strategy.primaryMonetization}</span>
-              </div>
-
-              <div className="flex items-center space-x-2 flex-wrap gap-1.5">
-                <span className="text-slate-400 font-semibold text-[11px]">Monitored Rights:</span>
-                {strategy.rightsMonitored.map((right, idx) => (
-                  <span key={idx} className="px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/80 text-slate-700 text-[11px] font-semibold">
-                    ✓ {right}
-                  </span>
-                ))}
-              </div>
-            </div>
-          );
-        })()}
       </div>
 
       {/* Main Grid Section: Live Scrape Feed (2/3) & Creator Vault (1/3) */}
