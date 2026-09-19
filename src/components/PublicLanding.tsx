@@ -147,10 +147,6 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
                 </span>
                 <span className="flex items-center gap-1.5 font-semibold">
                   <CheckCircle2 className="w-4 h-4 text-[#0144e4]" />
-                  BIPA Compliant
-                </span>
-                <span className="flex items-center gap-1.5 font-semibold">
-                  <CheckCircle2 className="w-4 h-4 text-[#0144e4]" />
                   Stripe Payout Gateway
                 </span>
               </div>
@@ -169,7 +165,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
                     </div>
                     <div>
                       <h4 className="text-sm font-extrabold text-slate-900">Likeness & Voice Registry</h4>
-                      <p className="text-[11px] text-slate-400 font-mono">ID Verified • BIPA Compliant</p>
+                      <p className="text-[11px] text-slate-400 font-mono">ID Verified</p>
                     </div>
                   </div>
                   <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full font-mono">
