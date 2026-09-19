@@ -258,14 +258,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               onMouseEnter={() => setActiveDropdown('vault_menu')}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors text-[#0144e4] font-bold">
-                <Layers className="w-4 h-4 text-[#0144e4]" />
+              <button className={`relative flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors ${
+                appSubmenus.some(sub => sub.id === activeTab) ? 'text-[#0144e4] font-semibold' : ''
+              }`}>
+                <Layers className="w-4 h-4" />
                 <span>Modules</span>
                 <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
                 {pendingClaimsCount > 0 && (
                   <span className="px-1.5 py-0.2 text-[10px] font-extrabold bg-rose-500 text-white rounded-full">
                     {pendingClaimsCount}
                   </span>
+                )}
+                {appSubmenus.some(sub => sub.id === activeTab) && (
+                  <span className="absolute bottom-[-4px] left-0 right-0 h-[2.5px] bg-[#0144e4] rounded-full" />
                 )}
               </button>
 
