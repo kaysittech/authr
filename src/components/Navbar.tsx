@@ -23,7 +23,8 @@ import {
   Layers,
   Sliders,
   BarChart3,
-  BookOpen
+  BookOpen,
+  X
 } from 'lucide-react';
 import { PolicyMode } from '../types';
 import { UserSession } from './AuthModal';
@@ -120,14 +121,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Center Krazy Navigation Links (Exact Screenshot Menu) */}
-          <nav className="hidden lg:flex items-center space-x-8 text-sm font-bold text-slate-700">
+          {/* Center Krazy Navigation Links (Exact Krazy Template Font, Height & Spacing) */}
+          <nav className="hidden lg:flex items-center space-x-9 text-[15px] font-medium text-slate-800">
             
+            {/* Home */}
             <button 
               onClick={() => setActiveTab('dashboard')}
-              className={`hover:text-[#0144e4] transition-colors py-2 ${activeTab === 'dashboard' ? 'text-[#0144e4]' : ''}`}
+              className={`relative py-2 transition-colors hover:text-[#0144e4] ${
+                activeTab === 'dashboard' ? 'text-[#0144e4] font-semibold' : ''
+              }`}
             >
-              Home
+              <span>Home</span>
+              {activeTab === 'dashboard' && (
+                <span className="absolute bottom-[-4px] left-0 right-0 h-[2.5px] bg-[#0144e4] rounded-full" />
+              )}
             </button>
 
             {/* Features Dropdown */}
@@ -136,13 +143,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               onMouseEnter={() => setActiveDropdown('features')}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <button className="flex items-center space-x-1 hover:text-[#0144e4] transition-colors">
+              <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors">
                 <span>Features</span>
-                <ChevronDown className="w-4 h-4 text-[#0144e4]" />
+                <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
               </button>
 
               {activeDropdown === 'features' && (
-                <div className="absolute top-full left-0 w-64 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2 space-y-1 z-50 animate-fadeIn text-left">
+                <div className="absolute top-full left-0 w-64 bg-white border border-[#e9eaf0] rounded-lg shadow-xl p-2 space-y-1 z-50 animate-fadeIn text-left">
                   {[
                     { label: 'Biometric & Likeness Vault', desc: '128-node face & voice prints' },
                     { label: 'C2PA Watermarking', desc: 'SHA-256 cryptographic provenance' },
@@ -155,7 +162,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       key={feat.label}
                       href="#features"
                       onClick={() => setActiveTab('dashboard')}
-                      className="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
+                      className="block px-3 py-2 rounded-md text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
                     >
                       <div className="font-bold text-slate-900">{feat.label}</div>
                       <div className="text-[10px] text-slate-400 font-mono font-medium">{feat.desc}</div>
@@ -171,10 +178,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               onMouseEnter={() => setActiveDropdown('vault_menu')}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors text-[#0144e4] font-extrabold">
-                <Layers className="w-4 h-4" />
+              <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors text-[#0144e4] font-bold">
+                <Layers className="w-4 h-4 text-[#0144e4]" />
                 <span>Vault Modules</span>
-                <ChevronDown className="w-4 h-4 text-[#0144e4]" />
+                <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
                 {pendingClaimsCount > 0 && (
                   <span className="px-1.5 py-0.2 text-[10px] font-extrabold bg-rose-500 text-white rounded-full">
                     {pendingClaimsCount}
@@ -183,7 +190,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
 
               {activeDropdown === 'vault_menu' && (
-                <div className="absolute top-full left-0 w-72 bg-white border border-[#e9eaf0] rounded-2xl shadow-xl p-2.5 space-y-1 z-50 animate-fadeIn text-left">
+                <div className="absolute top-full left-0 w-72 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2.5 space-y-1 z-50 animate-fadeIn text-left">
                   <div className="px-3 py-1 text-[9px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">
                     Select Vault Module
                   </div>
@@ -197,9 +204,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           setActiveTab(item.id);
                           setActiveDropdown(null);
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between transition-all ${
+                        className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-between transition-all ${
                           isActive
-                            ? 'bg-[#0144e4] text-white shadow-xs'
+                            ? 'bg-[#0144e4] text-white shadow-2xs'
                             : 'text-slate-700 hover:bg-blue-50 hover:text-[#0144e4]'
                         }`}
                       >
@@ -224,12 +231,26 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
-            <a href="#pricing" onClick={() => setActiveTab('dashboard')} className="hover:text-[#0144e4] transition-colors py-2">Pricing</a>
+            {/* Pricing */}
+            <a 
+              href="#pricing" 
+              onClick={() => setActiveTab('dashboard')} 
+              className="hover:text-[#0144e4] transition-colors py-2"
+            >
+              Pricing
+            </a>
+
+            {/* Blog */}
             <button 
               onClick={() => setActiveTab('blog')} 
-              className={`hover:text-[#0144e4] transition-colors py-2 ${activeTab === 'blog' ? 'text-[#0144e4] font-extrabold' : ''}`}
+              className={`relative py-2 transition-colors hover:text-[#0144e4] ${
+                activeTab === 'blog' ? 'text-[#0144e4] font-semibold' : ''
+              }`}
             >
-              Blog
+              <span>Blog</span>
+              {activeTab === 'blog' && (
+                <span className="absolute bottom-[-4px] left-0 right-0 h-[2.5px] bg-[#0144e4] rounded-full" />
+              )}
             </button>
 
             {/* About Dropdown */}
@@ -238,13 +259,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               onMouseEnter={() => setActiveDropdown('about')}
               onMouseLeave={() => setActiveDropdown(null)}
             >
-              <button className="flex items-center space-x-1 hover:text-[#0144e4] transition-colors">
+              <button className="flex items-center space-x-1.5 hover:text-[#0144e4] transition-colors">
                 <span>About</span>
-                <ChevronDown className="w-4 h-4 text-[#0144e4]" />
+                <ChevronDown className="w-3.5 h-3.5 text-[#0144e4] stroke-[2.5]" />
               </button>
 
               {activeDropdown === 'about' && (
-                <div className="absolute top-full left-0 w-56 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2 space-y-1 z-50 animate-fadeIn text-left">
+                <div className="absolute top-full left-0 w-56 bg-white border border-[#e9eaf0] rounded-lg shadow-xl p-2 space-y-1 z-50 animate-fadeIn text-left">
                   {[
                     { label: 'Statutory Compliance', desc: 'BIPA & DMCA 17 U.S.C. § 512' },
                     { label: 'Developer API', desc: 'FastAPI REST Telemetry' },
@@ -254,7 +275,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       key={item.label}
                       href="#about"
                       onClick={() => setActiveTab('dashboard')}
-                      className="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
+                      className="block px-3 py-2 rounded-md text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
                     >
                       <div className="font-bold text-slate-900">{item.label}</div>
                       <div className="text-[10px] text-slate-400 font-mono font-medium">{item.desc}</div>
@@ -263,7 +284,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {currentUser?.role === 'admin' && (
                     <a
                       href="?portal=admin"
-                      className="block px-3 py-2 rounded-lg text-xs font-bold text-[#0144e4] bg-blue-50 hover:bg-blue-100 transition-all border border-blue-100"
+                      className="block px-3 py-2 rounded-md text-xs font-bold text-[#0144e4] bg-blue-50 hover:bg-blue-100 transition-all border border-blue-100"
                     >
                       🚀 Launch admin.authr.id
                     </a>
@@ -275,14 +296,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Right Header Actions (Exact Krazy Button & Search Icon Layout) */}
-          <div className="flex items-center space-x-4 flex-shrink-0">
+          <div className="flex items-center space-x-6 flex-shrink-0">
             
             {/* Policy Toggle Pill (Authenticated) */}
             {currentUser && (
-              <div className="hidden xl:flex items-center p-1 bg-slate-100 border border-[#e9eaf0] rounded-xl space-x-1">
+              <div className="hidden xl:flex items-center p-1 bg-slate-100 border border-[#e9eaf0] rounded-lg space-x-1">
                 <button
                   onClick={() => setPolicyMode('strict_privacy')}
-                  className={`flex items-center space-x-1 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                  className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
                     policyMode === 'strict_privacy'
                       ? 'bg-rose-500 text-white shadow-2xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -294,7 +315,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={() => setPolicyMode('micro_monetization')}
-                  className={`flex items-center space-x-1 px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                  className={`flex items-center space-x-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all ${
                     policyMode === 'micro_monetization'
                       ? 'bg-[#0144e4] text-white shadow-2xs'
                       : 'text-slate-600 hover:text-slate-900'
@@ -307,12 +328,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             )}
 
-            {/* Primary Action Button (Exact Krazy 'Get Started' button shape/color) */}
+            {/* Primary 'Get Started' Blue Button (Exact match: rounded-[6px], vibrant royal blue) */}
             {currentUser ? (
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setActiveTab('dashboard')}
-                  className="px-5 py-2.5 rounded-xl bg-[#0144e4] hover:bg-[#0035b5] text-white font-extrabold text-xs shadow-md shadow-blue-500/20 transition-all flex items-center space-x-2"
+                  className="px-6 py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-semibold text-[15px] transition-all flex items-center space-x-2"
                 >
                   <img 
                     src={currentUser.avatarUrl} 
@@ -323,7 +344,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
                 <button
                   onClick={onLogout}
-                  className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors"
+                  className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
                   title="Sign Out"
                 >
                   <LogOut className="w-4.5 h-4.5" />
@@ -332,36 +353,37 @@ export const Navbar: React.FC<NavbarProps> = ({
             ) : (
               <button
                 onClick={onOpenAuthModal}
-                className="px-6 py-3 rounded-xl bg-[#0144e4] hover:bg-[#0035b5] text-white font-extrabold text-xs shadow-md shadow-blue-500/20 transition-all"
+                className="px-7 py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-semibold text-[15px] transition-all shadow-2xs"
               >
                 Get Started
               </button>
             )}
 
-            {/* Search Toggle Icon */}
-            <div className="relative">
+            {/* Search Toggle Icon (Solid Blue Magnifying Glass) */}
+            <div className="relative flex items-center">
               {isSearchOpen ? (
                 <div className="flex items-center space-x-2 animate-fadeIn">
                   <input
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search..."
-                    className="px-3 py-1.5 text-xs border border-[#e9eaf0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0144e4] w-36 sm:w-44"
+                    placeholder="Search Vault..."
+                    className="px-3 py-1.5 text-xs border border-[#e9eaf0] rounded-md focus:outline-none focus:ring-2 focus:ring-[#0144e4] w-36 sm:w-44"
                     autoFocus
                   />
                   <button 
                     onClick={() => setIsSearchOpen(false)}
-                    className="text-xs text-slate-400 hover:text-slate-600 font-bold"
+                    className="p-1 text-slate-400 hover:text-slate-600"
                   >
-                    ✕
+                    <X className="w-4 h-4" />
                   </button>
                 </div>
               ) : (
                 <button
                   onClick={() => setIsSearchOpen(true)}
-                  className="p-2 text-[#0144e4] hover:text-[#0035b5] transition-colors"
-                  title="Search site"
+                  className="p-1 text-[#0144e4] hover:text-[#0038c7] transition-colors"
+                  title="Search"
+                  aria-label="Search"
                 >
                   <Search className="w-5 h-5 stroke-[2.5]" />
                 </button>
