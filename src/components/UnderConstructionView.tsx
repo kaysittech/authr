@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Lock, AlertTriangle, Sparkles } from 'lucide-react';
+import { ShieldCheck, Lock } from 'lucide-react';
 
 interface UnderConstructionViewProps {
   onGoogleSignIn: () => void;
@@ -7,33 +7,32 @@ interface UnderConstructionViewProps {
 
 export const UnderConstructionView: React.FC<UnderConstructionViewProps> = ({ onGoogleSignIn }) => {
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center p-4 font-sans relative overflow-hidden selection:bg-blue-500 selection:text-white">
-      {/* Subtle Background Glow Elements */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center justify-center p-4 font-sans relative overflow-hidden selection:bg-blue-100 selection:text-blue-900">
+      {/* Background Decorative Blur */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 max-w-xl w-full text-center space-y-8 p-8 sm:p-12 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-2xl backdrop-blur-md">
+      <div className="relative z-10 max-w-xl w-full text-center space-y-8 p-8 sm:p-12 rounded-3xl bg-white border border-[#e9eaf0] shadow-xl">
         
         {/* Brand Logo */}
         <div className="flex items-center justify-center space-x-3 cursor-default">
-          <div className="w-12 h-12 rounded-2xl bg-[#0144e4] text-white flex items-center justify-center font-bold shadow-lg shadow-blue-600/30">
+          <div className="w-12 h-12 rounded-2xl bg-[#0144e4] text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20">
             <ShieldCheck className="w-7 h-7 stroke-[2.5]" />
           </div>
-          <span className="text-3xl font-extrabold tracking-tight text-white font-display">Authr</span>
+          <span className="text-3xl font-extrabold tracking-tight text-slate-900 font-display">Authr</span>
         </div>
 
         {/* Status Badge */}
-        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-extrabold font-mono uppercase tracking-wider">
-          <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-extrabold font-mono uppercase tracking-wider">
+          <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
           <span>🚧 Site Under Construction</span>
         </div>
 
         {/* Main Headings */}
         <div className="space-y-3">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-display">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-display">
             Platform Maintenance In Progress
           </h1>
-          <p className="text-sm sm:text-base text-slate-400 font-medium leading-relaxed max-w-md mx-auto">
+          <p className="text-sm sm:text-base text-slate-600 font-medium leading-relaxed max-w-md mx-auto">
             Authr is currently undergoing scheduled system upgrades. Public access is temporarily restricted.
           </p>
         </div>
@@ -42,7 +41,7 @@ export const UnderConstructionView: React.FC<UnderConstructionViewProps> = ({ on
         <div className="pt-4 pb-2 space-y-4 max-w-xs mx-auto">
           <button
             onClick={onGoogleSignIn}
-            className="w-full py-3.5 px-6 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-sm transition-all shadow-xl hover:shadow-2xl flex items-center justify-center space-x-3 group cursor-pointer border border-slate-200"
+            className="w-full py-3.5 px-6 rounded-2xl bg-white hover:bg-blue-50/50 text-slate-800 hover:text-[#0144e4] font-extrabold text-sm transition-all shadow-xs hover:shadow-md flex items-center justify-center space-x-3 group cursor-pointer border border-slate-300 hover:border-[#0144e4]"
           >
             <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
               <path
@@ -66,13 +65,13 @@ export const UnderConstructionView: React.FC<UnderConstructionViewProps> = ({ on
           </button>
 
           <p className="text-[11px] text-slate-500 font-mono font-medium flex items-center justify-center space-x-1">
-            <Lock className="w-3 h-3 text-slate-500" />
+            <Lock className="w-3 h-3 text-slate-400" />
             <span>Admin &amp; Authorized Staff Access Only</span>
           </p>
         </div>
 
         {/* Footer Note */}
-        <div className="pt-4 border-t border-slate-800/80 text-[11px] text-slate-500 font-mono">
+        <div className="pt-4 border-t border-slate-100 text-[11px] text-slate-400 font-mono font-medium">
           © 2026 Authr Platform System Status: Scheduled Maintenance
         </div>
 

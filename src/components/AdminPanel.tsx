@@ -1917,22 +1917,22 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
             
             {/* Under Construction & Site Status Master Card */}
-            <div className="p-5 rounded-2xl bg-slate-900 text-white border border-slate-800 space-y-4">
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center space-x-2.5">
-                    <Construction className="w-5 h-5 text-amber-400" />
-                    <h3 className="text-base font-extrabold text-white">Under Construction Mode</h3>
+                    <Construction className="w-5 h-5 text-amber-600" />
+                    <h3 className="text-base font-extrabold text-slate-900">Under Construction Mode</h3>
                   </div>
-                  <p className="text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
+                  <p className="text-xs text-slate-500 mt-1 max-w-xl leading-relaxed">
                     Place the site under construction. Public visitors will see a restricted maintenance view displaying <strong>ONLY the Google Sign-In button</strong> for admin/staff access.
                   </p>
                 </div>
 
-                <div className="flex items-center space-x-3 bg-slate-800/90 p-3 rounded-2xl border border-slate-700 flex-shrink-0 self-start sm:self-auto">
+                <div className="flex items-center space-x-3 bg-white p-3 rounded-2xl border border-slate-200 shadow-2xs flex-shrink-0 self-start sm:self-auto">
                   <div className="text-right">
                     <div className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">Site Status</div>
-                    <div className={`text-xs font-extrabold font-mono ${regConfig.underConstructionMode ? 'text-amber-400 animate-pulse' : 'text-emerald-400'}`}>
+                    <div className={`text-xs font-extrabold font-mono ${regConfig.underConstructionMode ? 'text-amber-600 animate-pulse' : 'text-emerald-600'}`}>
                       {regConfig.underConstructionMode ? '🚧 UNDER CONSTRUCTION' : '🟢 NORMAL LIVE MODE'}
                     </div>
                   </div>
@@ -1940,7 +1940,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     type="button"
                     onClick={handleToggleUnderConstruction}
                     className={`w-14 h-7 flex items-center rounded-full p-1 transition-colors duration-200 cursor-pointer ${
-                      regConfig.underConstructionMode ? 'bg-amber-500' : 'bg-slate-700'
+                      regConfig.underConstructionMode ? 'bg-amber-500' : 'bg-slate-300'
                     }`}
                   >
                     <div className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform duration-200 ${
@@ -1951,12 +1951,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
 
               {regConfig.underConstructionMode ? (
-                <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold flex items-center space-x-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold flex items-center space-x-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
                   <span>Under Construction Mode is ACTIVE. Unauthenticated visitors are restricted to Google Login.</span>
                 </div>
               ) : (
-                <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-medium">
+                <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-medium">
                   Site is running normally. Public visitors can access all landing pages, documentation, and features.
                 </div>
               )}
