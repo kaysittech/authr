@@ -4,15 +4,25 @@ import { ShieldCheck, Search, ChevronDown, Lock } from 'lucide-react';
 interface PublicHeaderProps {
   onOpenRegister: () => void;
   onOpenLogin: () => void;
+  onSelectTab?: (tab: string) => void;
 }
 
 export const PublicHeader: React.FC<PublicHeaderProps> = ({
   onOpenRegister,
-  onOpenLogin
+  onOpenLogin,
+  onSelectTab
 }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  const handleNav = (tab: string) => {
+    if (onSelectTab) {
+      onSelectTab(tab);
+    } else {
+      window.location.hash = tab;
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[#e9eaf0] shadow-2xs font-sans">
@@ -83,14 +93,18 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
 
               {activeDropdown === 'about' && (
                 <div className="absolute top-full left-0 w-52 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2 space-y-1 animate-fadeIn">
-                  {['Statutory Compliance', 'Developer API', 'Contact Rights Counsel'].map((item) => (
-                    <a
-                      key={item}
-                      href="#about"
-                      className="block px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
+                  {[
+                    { label: 'Statutory Compliance', tab: 'legal' },
+                    { label: 'Developer API', tab: 'webservices' },
+                    { label: 'Contact Rights Counsel', tab: 'legal' }
+                  ].map((item) => (
+                    <button
+                      key={item.label}
+                      onClick={() => { setActiveDropdown(null); handleNav(item.tab); }}
+                      className="w-full text-left block px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
                     >
-                      {item}
-                    </a>
+                      {item.label}
+                    </button>
                   ))}
                 </div>
               )}

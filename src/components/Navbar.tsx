@@ -594,19 +594,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {activeDropdown === 'about' && (
                     <div className="absolute top-full left-0 w-56 bg-white border border-[#e9eaf0] rounded-lg shadow-xl p-2 space-y-1 z-50 animate-fadeIn text-left">
                       {[
-                        { label: 'Statutory Compliance', desc: 'BIPA & DMCA 17 U.S.C. § 512' },
-                        { label: 'Developer API', desc: 'FastAPI REST Telemetry' },
-                        { label: 'Contact Counsel', desc: '24/7 Legal rights support' }
+                        { label: 'Statutory Compliance', desc: 'BIPA & DMCA 17 U.S.C. § 512', tab: 'legal' },
+                        { label: 'Developer API', desc: 'FastAPI REST Telemetry', tab: 'webservices' },
+                        { label: 'Contact Counsel', desc: '24/7 Legal rights support', tab: 'legal' }
                       ].map((item) => (
-                        <a
+                        <button
                           key={item.label}
-                          href="#about"
-                          onClick={() => handleTabSelect('dashboard')}
-                          className="block px-3 py-2 rounded-md text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
+                          onClick={() => handleTabSelect(item.tab)}
+                          className="w-full text-left block px-3 py-2 rounded-md text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
                         >
                           <div className="font-bold text-slate-900">{item.label}</div>
                           <div className="text-[10px] text-slate-400 font-mono font-medium">{item.desc}</div>
-                        </a>
+                        </button>
                       ))}
                     </div>
                   )}
