@@ -560,17 +560,19 @@ export const Navbar: React.FC<NavbarProps> = ({
     );
   }
 
+  const isPublicMainWebsite = activeTab === 'landing' || activeTab === 'public_landing' || ['blog', 'compliance', 'developers', 'counsel'].includes(activeTab);
+
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[#e9eaf0] shadow-2xs font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Single Krazy Header Row */}
+        {/* Header Row */}
         <div className="flex items-center justify-between h-20">
           
           {/* Logo */}
           <div 
             className="flex items-center space-x-3 cursor-pointer flex-shrink-0" 
-            onClick={() => handleTabSelect('dashboard')}
+            onClick={() => handleTabSelect(isPublicMainWebsite ? 'landing' : 'dashboard')}
           >
             <div className="w-10 h-10 rounded-xl bg-[#0144e4] text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20">
               <ShieldCheck className="w-6 h-6 stroke-[2.5]" />
@@ -582,12 +584,12 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Right-aligned Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-7 text-[15px] font-medium text-slate-800 ml-auto mr-7">
-            {!currentUser ? (
+            {isPublicMainWebsite ? (
               <>
                 {/* Home */}
                 <button 
-                  onClick={() => handleTabSelect('dashboard')}
-                  className="hover:text-[#0144e4] transition-colors py-2"
+                  onClick={() => handleTabSelect('landing')}
+                  className="hover:text-[#0144e4] transition-colors py-2 font-semibold"
                 >
                   <span>Home</span>
                 </button>
@@ -616,7 +618,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         <a
                           key={feat.label}
                           href="#features"
-                          onClick={() => handleTabSelect('dashboard')}
+                          onClick={() => handleTabSelect('landing')}
                           className="block px-3 py-2 rounded-md text-xs font-semibold text-slate-700 hover:bg-blue-50 hover:text-[#0144e4] transition-all"
                         >
                           <div className="font-bold text-slate-900">{feat.label}</div>
@@ -630,7 +632,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {/* Pricing */}
                 <a 
                   href="#pricing" 
-                  onClick={() => handleTabSelect('dashboard')} 
+                  onClick={() => handleTabSelect('landing')} 
                   className="hover:text-[#0144e4] transition-colors py-2"
                 >
                   Pricing
