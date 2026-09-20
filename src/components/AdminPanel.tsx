@@ -131,7 +131,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     const isCurrentlyOn = Boolean(regConfig.underConstructionMode);
     const updated = { ...regConfig, underConstructionMode: !isCurrentlyOn };
     setRegConfig(updated);
-    localStorage.setItem('rg_under_construction_mode', JSON.stringify(updated.underConstructionMode));
     await saveRegistrationConfigToFirestore(updated);
     window.dispatchEvent(new Event('rg_site_status_updated'));
     showToast(updated.underConstructionMode ? '🚧 Site placed under Construction Mode! Public access restricted to Google Sign-In.' : '🟢 Site restored to Normal Live Mode!');

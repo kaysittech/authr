@@ -34,8 +34,9 @@ import {
   INITIAL_TRANSACTIONS 
 } from './services/mockData';
 
+import { onAuthStateChanged } from 'firebase/auth';
 import { fetchAppState } from './services/api';
-import { seedDefaultAdminsInFirestore, getRegistrationConfigFromFirestore, subscribeRegistrationConfigFromFirestore, signInWithGoogleFirebase } from './firebase';
+import { auth, seedDefaultAdminsInFirestore, getRegistrationConfigFromFirestore, subscribeRegistrationConfigFromFirestore, signOutUserFromFirebase, signInWithGoogleFirebase } from './firebase';
 
 const getTabFromHash = () => {
   if (typeof window === 'undefined') return 'dashboard';
@@ -73,73 +74,62 @@ export function App() {
   }, []);
 
   // State Management
-  const [digitalTwin, setDigitalTwin] = useState<DigitalTwin>(() => {
-    const saved = localStorage.getItem('rg_digital_twin');
-    if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
-    }
-    return INITIAL_DIGITAL_TWIN;
-  });
+  // State Management
+  const [digitalTwin, setDigitalTwin] = useState<DigitalTwin>(INITIAL_DIGITAL_TWIN);
   const [assets, setAssets] = useState<ProtectedAsset[]>(INITIAL_PROTECTED_ASSETS);
   const [matches, setMatches] = useState<DetectionMatch[]>(INITIAL_DETECTION_MATCHES);
   const [claims, setClaims] = useState<SettlementClaim[]>(INITIAL_SETTLEMENT_CLAIMS);
   const [transactions, setTransactions] = useState<FinancialTransaction[]>(INITIAL_TRANSACTIONS);
 
-  // Authentication State
+  // Authentication & System State (Managed 100% via Firebase Auth & Cloud Firestore)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<UserSession | null>(() => {
-    const saved = localStorage.getItem('rg_user_session');
-    if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
-    }
-    return null;
-  });
+  const [currentUser, setCurrentUser] = useState<UserSession | null>(null);
+  const [isUnderConstruction, setIsUnderConstruction] = useState<boolean>(false);
 
-  // Under Construction Site Status State
-  const [isUnderConstruction, setIsUnderConstruction] = useState<boolean>(() => {
-    const saved = localStorage.getItem('rg_under_construction_mode');
-    return saved ? JSON.parse(saved) === true : false;
-  });
-
+  // Real-time Firebase Firestore Registration & Under Construction Config Subscription
   useEffect(() => {
-    // Real-time sync across domains (authrnet.com) and browser sessions
-    const unsubscribe = subscribeRegistrationConfigFromFirestore((cfg) => {
-      const mode = Boolean(cfg.underConstructionMode);
-      setIsUnderConstruction(mode);
-      localStorage.setItem('rg_under_construction_mode', JSON.stringify(mode));
+    const unsubscribeConfig = subscribeRegistrationConfigFromFirestore((cfg) => {
+      setIsUnderConstruction(Boolean(cfg.underConstructionMode));
     });
+    return () => unsubscribeConfig();
+  }, []);
 
-    const handleStatusSync = () => {
-      getRegistrationConfigFromFirestore().then(cfg => {
-        const mode = Boolean(cfg.underConstructionMode);
-        setIsUnderConstruction(mode);
-        localStorage.setItem('rg_under_construction_mode', JSON.stringify(mode));
-      });
-    };
-    window.addEventListener('rg_site_status_updated', handleStatusSync);
-    return () => {
-      unsubscribe();
-      window.removeEventListener('rg_site_status_updated', handleStatusSync);
-    };
+  // Real-time Firebase Auth Session Observer
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, async (fbUser) => {
+      if (fbUser) {
+        const userEmail = fbUser.email || '';
+        const cleanEmail = userEmail.toLowerCase().trim();
+        const isMasterAdmin = ['admin@authr.id', 'christiana.obafunwa@gmail.com', 'kaysitsolutions@gmail.com'].includes(cleanEmail);
+        const userSession: UserSession = {
+          id: fbUser.uid,
+          email: userEmail || 'user@authr.id',
+          fullName: fbUser.displayName || userEmail.split('@')[0] || 'Authr User',
+          handle: `@${(userEmail.split('@')[0] || 'user').toLowerCase().replace(/[^a-z0-9_]/g, '')}`,
+          discipline: 'Musicians & Composers',
+          avatarUrl: fbUser.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+          token: await fbUser.getIdToken().catch(() => 'firebase_auth_token'),
+          kycStatus: 'verified',
+          idDocumentType: isMasterAdmin ? "Government Master Key (SITE ADMIN)" : "Verified ID",
+          idMatchScore: 99.8,
+          role: isMasterAdmin ? 'admin' : 'creator'
+        };
+        setCurrentUser(userSession);
+      } else {
+        setCurrentUser(null);
+      }
+    });
+    return () => unsubscribeAuth();
   }, []);
 
   const isAdminUser = currentUser && (
     currentUser.role === 'admin' ||
-    currentUser.email === 'admin@authr.id' ||
-    currentUser.email === 'christiana.obafunwa@gmail.com' ||
-    currentUser.email === 'kaysitsolutions@gmail.com' ||
+    ['admin@authr.id', 'christiana.obafunwa@gmail.com', 'kaysitsolutions@gmail.com'].includes(currentUser.email.toLowerCase()) ||
     currentUser.handle === '@site_admin' ||
     Boolean(currentUser.token && currentUser.token.includes('admin'))
   );
 
-  // Persist digitalTwin changes locally
-  useEffect(() => {
-    if (digitalTwin) {
-      localStorage.setItem('rg_digital_twin', JSON.stringify(digitalTwin));
-    }
-  }, [digitalTwin]);
-
-  // Sync state with FastAPI backend & seed admins in Firestore
+  // Sync state with backend & seed admins in Firestore
   useEffect(() => {
     seedDefaultAdminsInFirestore().catch(console.warn);
     fetchAppState()
@@ -152,16 +142,11 @@ export function App() {
         if (data.claims?.length) setClaims(data.claims);
         if (data.transactions?.length) setTransactions(data.transactions);
       })
-      .catch(() => {
-        // Keeps initial state if offline
-      });
+      .catch(() => {});
   }, []);
 
   const handleLoginSuccess = (user: UserSession) => {
     setCurrentUser(user);
-    localStorage.removeItem('rg_logged_out');
-    localStorage.setItem('rg_user_session', JSON.stringify(user));
-
     setDigitalTwin({
       userId: user.id,
       userName: user.fullName,
@@ -182,9 +167,8 @@ export function App() {
   };
 
   const handleLogout = () => {
+    signOutUserFromFirebase().catch(console.warn);
     setCurrentUser(null);
-    localStorage.removeItem('rg_user_session');
-    localStorage.setItem('rg_logged_out', 'true');
   };
 
   const handleAddAsset = (newAsset: ProtectedAsset) => {
@@ -254,7 +238,6 @@ export function App() {
     if (currentUser) {
       const updated = { ...currentUser, discipline: newDiscipline };
       setCurrentUser(updated);
-      localStorage.setItem('rg_user_session', JSON.stringify(updated));
     }
   };
 

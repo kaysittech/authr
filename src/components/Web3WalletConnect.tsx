@@ -6,18 +6,14 @@ interface Web3WalletConnectProps {
 }
 
 export const Web3WalletConnect: React.FC<Web3WalletConnectProps> = ({ onWalletConnected }) => {
-  const [walletAddress, setWalletAddress] = useState<string | null>(() => {
-    return localStorage.getItem('rg_web3_wallet');
-  });
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
 
   const handleConnectWallet = (providerName: string) => {
     setIsConnecting(true);
     setTimeout(() => {
-      // Generate realistic Web3 wallet address
       const dummyAddress = `0x71C7656EC7ab88b${Math.floor(Math.random() * 899999 + 100000)}B5f6d8976F`;
       setWalletAddress(dummyAddress);
-      localStorage.setItem('rg_web3_wallet', dummyAddress);
       setIsConnecting(false);
       if (onWalletConnected) {
         onWalletConnected(dummyAddress);
@@ -27,7 +23,6 @@ export const Web3WalletConnect: React.FC<Web3WalletConnectProps> = ({ onWalletCo
 
   const handleDisconnect = () => {
     setWalletAddress(null);
-    localStorage.removeItem('rg_web3_wallet');
   };
 
   return (
