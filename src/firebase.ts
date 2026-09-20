@@ -590,32 +590,13 @@ export const getRegistrationConfigFromFirestore = async (): Promise<Registration
     }
   } catch (e) {}
 
+  // 1. Direct REST API fetch to Firestore (100% unauthenticated cross-domain friendly)
   try {
-    const configDocRef = doc(db, 'system_config', 'registration');
-    const snap = await getDoc(configDocRef);
-    if (snap.exists()) {
-      const data = snap.data();
-      const ucMode = Boolean(data.underConstructionMode);
-      try {
-        localStorage.setItem('rg_under_construction_mode', String(ucMode));
-      } catch (e) {}
-      return {
-        inviteOnlyEnabled: data.inviteOnlyEnabled !== undefined ? data.inviteOnlyEnabled : true,
-        validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes,
-        underConstructionMode: ucMode
-      };
-    }
-  } catch (err) {
-    console.warn("Firestore fetch registration config error:", err);
-  }
-
-  // Fallback check on public_config/status
-  try {
-    const pubSnap = await getDoc(doc(db, 'public_config', 'status'));
-    if (pubSnap.exists()) {
-      const pubData = pubSnap.data();
-      if (pubData.underConstructionMode !== undefined) {
-        const ucMode = Boolean(pubData.underConstructionMode);
+    const restRes = await fetch("https://firestore.googleapis.com/v1/projects/authr-506803/databases/(default)/documents/public_status/site", { cache: "no-store" });
+    if (restRes.ok) {
+      const restData = await restRes.json();
+      if (restData.fields?.underConstructionMode?.booleanValue !== undefined) {
+        const ucMode = Boolean(restData.fields.underConstructionMode.booleanValue);
         try {
           localStorage.setItem('rg_under_construction_mode', String(ucMode));
         } catch (e) {}
@@ -623,6 +604,20 @@ export const getRegistrationConfigFromFirestore = async (): Promise<Registration
       }
     }
   } catch (e) {}
+
+  // 2. Firestore SDK Fallback
+  try {
+    const configDocRef = doc(db, 'public_status', 'site');
+    const snap = await getDoc(configDocRef);
+    if (snap.exists()) {
+      const data = snap.data();
+      const ucMode = Boolean(data.underConstructionMode);
+      try {
+        localStorage.setItem('rg_under_construction_mode', String(ucMode));
+      } catch (e) {}
+      return { ...DEFAULT_REGISTRATION_CONFIG, underConstructionMode: ucMode };
+    }
+  } catch (err) {}
 
   return { ...DEFAULT_REGISTRATION_CONFIG, underConstructionMode: localUC };
 };
@@ -641,17 +636,22 @@ export const saveRegistrationConfigToFirestore = async (config: RegistrationConf
     updatedAt: serverTimestamp()
   };
 
+  // Direct REST API PATCH for instant Firestore update across all origins
+  try {
+    fetch("https://firestore.googleapis.com/v1/projects/authr-506803/databases/(default)/documents/public_status/site?updateMask.fieldPaths=underConstructionMode", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fields: { underConstructionMode: { booleanValue: ucValue } } })
+    }).catch(() => {});
+  } catch (e) {}
+
   try {
     await setDoc(doc(db, 'public_status', 'site'), { underConstructionMode: ucValue, updatedAt: serverTimestamp() }, { merge: true });
-  } catch (err) {
-    console.warn("Firestore save public_status error:", err);
-  }
+  } catch (err) {}
 
   try {
     await setDoc(doc(db, 'system_config', 'registration'), payload, { merge: true });
-  } catch (err) {
-    console.warn("Firestore save system_config error:", err);
-  }
+  } catch (err) {}
 };
 
 export const subscribeRegistrationConfigFromFirestore = (onUpdate: (config: RegistrationConfig) => void): (() => void) => {

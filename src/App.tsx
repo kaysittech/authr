@@ -84,7 +84,13 @@ export function App() {
   // Authentication & System State (Managed 100% via Firebase Auth & Cloud Firestore)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<UserSession | null>(null);
-  const [isUnderConstruction, setIsUnderConstruction] = useState<boolean>(false);
+  const [isUnderConstruction, setIsUnderConstruction] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('rg_under_construction_mode') === 'true';
+    } catch (e) {
+      return false;
+    }
+  });
 
   // Real-time Firebase Firestore Registration & Under Construction Config Subscription
   useEffect(() => {
