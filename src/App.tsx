@@ -311,16 +311,24 @@ export function App() {
               <span className="px-2.5 py-1 rounded-full bg-amber-500 text-slate-950 font-mono text-[10px] font-black uppercase flex-shrink-0">
                 🚧 UNDER CONSTRUCTION ACTIVE
               </span>
-              <span>Public visitors see ONLY the Google Login screen. As Admin, you are viewing the live website.</span>
+              <span>Public visitors see ONLY the Google Login screen. As Admin, you have full access.</span>
             </div>
             <div className="flex items-center space-x-2 flex-shrink-0 flex-wrap gap-y-1">
+              <button
+                onClick={() => setActiveTab('landing')}
+                className={`px-3 py-1.5 rounded-xl font-extrabold text-xs transition-all shadow-2xs cursor-pointer border ${
+                  activeTab === 'landing' || activeTab === 'public_landing' ? 'bg-amber-600 text-white border-amber-700' : 'bg-white hover:bg-amber-100 text-amber-950 border-amber-300'
+                }`}
+              >
+                🌐 Main Website Landing
+              </button>
               <button
                 onClick={() => setActiveTab('dashboard')}
                 className={`px-3 py-1.5 rounded-xl font-extrabold text-xs transition-all shadow-2xs cursor-pointer border ${
                   activeTab === 'dashboard' ? 'bg-amber-600 text-white border-amber-700' : 'bg-white hover:bg-amber-100 text-amber-950 border-amber-300'
                 }`}
               >
-                🌐 Main Website
+                📊 Creator Vault
               </button>
               <button
                 onClick={() => setActiveTab('admin')}
@@ -329,12 +337,6 @@ export function App() {
                 }`}
               >
                 🛡️ Admin Panel
-              </button>
-              <button
-                onClick={() => setIsPreviewingPublic(!isPreviewingPublic)}
-                className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-all shadow-2xs cursor-pointer"
-              >
-                👁️ Preview Public Landing
               </button>
             </div>
           </div>
@@ -372,12 +374,10 @@ export function App() {
           </div>
         )}
 
-
-
-        {/* PUBLIC UNAUTHENTICATED LANDING & AUTH GUARDS */}
-        {!currentUser ? (
+        {/* PUBLIC UNAUTHENTICATED LANDING & LANDING PREVIEW */}
+        {(activeTab === 'landing' || activeTab === 'public_landing' || !currentUser) ? (
           <>
-            {activeTab === 'dashboard' && (
+            {(activeTab === 'landing' || activeTab === 'public_landing' || activeTab === 'dashboard') && (
               <PublicLanding
                 onOpenRegister={() => setIsAuthModalOpen(true)}
                 onOpenLogin={() => setIsAuthModalOpen(true)}
@@ -393,10 +393,10 @@ export function App() {
             {(['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search', 'get_started', 'detection', 'biometrics', 'assets', 'settlement', 'legal', 'financials', 'provenance', 'compliance', 'developers', 'webservices', 'counsel', 'pricing'].includes(activeTab) || activeTab.startsWith('page_')) && (
               <FooterPagesView 
                 pageId={activeTab === 'webservices' ? 'developers' : activeTab} 
-                onNavigateHome={() => setActiveTab('dashboard')} 
+                onNavigateHome={() => setActiveTab('landing')} 
                 onOpenRegister={() => setIsAuthModalOpen(true)} 
                 onNavigateToTab={(tab) => setActiveTab(tab)}
-                isLoggedIn={false}
+                isLoggedIn={Boolean(currentUser)}
               />
             )}
           </>

@@ -241,11 +241,19 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <div className="border-t border-[#e9eaf0] pt-1 space-y-1">
               <button
+                onClick={() => handleTabSelect('landing')}
+                className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-between"
+              >
+                <span>🌐 Main Public Website</span>
+                <Globe className="w-3.5 h-3.5 text-slate-400" />
+              </button>
+
+              <button
                 onClick={() => handleTabSelect('dashboard')}
                 className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-between"
               >
-                <span>Main Website & Dashboard</span>
-                <Globe className="w-3.5 h-3.5 text-slate-400" />
+                <span>⚡ Creator Vault Application</span>
+                <Zap className="w-3.5 h-3.5 text-[#0144e4]" />
               </button>
 
               {isAdminUser && (
@@ -253,7 +261,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleTabSelect('admin')}
                   className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-[#0144e4] hover:bg-blue-50 transition-colors flex items-center justify-between"
                 >
-                  <span>Admin Ops Portal</span>
+                  <span>🛡️ Admin Ops Portal</span>
                   <ShieldCheck className="w-3.5 h-3.5 text-[#0144e4]" />
                 </button>
               )}

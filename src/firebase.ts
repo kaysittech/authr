@@ -593,7 +593,8 @@ export const getRegistrationConfigFromFirestore = async (): Promise<Registration
         underConstructionMode: data.underConstructionMode !== undefined ? data.underConstructionMode : false
       };
     }
-    await setDoc(configDocRef, DEFAULT_REGISTRATION_CONFIG);
+    // Only set initial document if snap does not exist at all, merging safely
+    await setDoc(configDocRef, DEFAULT_REGISTRATION_CONFIG, { merge: true }).catch(() => {});
     return DEFAULT_REGISTRATION_CONFIG;
   } catch (err) {
     console.warn("Firestore fetch registration config error:", err);
