@@ -1507,6 +1507,37 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       {activeAdminTab === 'users' && (
         <div className="space-y-6 animate-fadeIn">
           
+          {/* Invite-Only Registration Status & Quick Management Banner */}
+          <div className="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center space-x-3.5">
+              <div className={`p-3 rounded-2xl border ${regConfig.inviteOnlyEnabled ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}`}>
+                <KeyRound className="w-5.5 h-5.5" />
+              </div>
+              <div>
+                <div className="flex items-center space-x-2.5">
+                  <span className="text-sm font-extrabold text-slate-900">User Sign-Up Mode:</span>
+                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-black font-mono border uppercase ${
+                    regConfig.inviteOnlyEnabled ? 'bg-amber-50 text-amber-900 border-amber-300' : 'bg-emerald-50 text-emerald-900 border-emerald-300'
+                  }`}>
+                    {regConfig.inviteOnlyEnabled ? '🔒 Invite-Only Active' : '🌐 Open Public Registration Active'}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-500 mt-1">
+                  {regConfig.inviteOnlyEnabled
+                    ? `New creators must enter a valid VIP code. ${regConfig.validInviteCodes.length} active invite codes configured in Firestore.`
+                    : 'Anyone can register an account on Authr without an invite code.'}
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setActiveAdminTab('system')}
+              className="px-4 py-2.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs shadow-xs transition-all flex items-center space-x-2 whitespace-nowrap self-start sm:self-auto"
+            >
+              <KeyRound className="w-4 h-4 text-white" />
+              <span>Configure Invite-Only Rules & VIP Codes</span>
+            </button>
+          </div>
+
           {/* User Stats Overview Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
