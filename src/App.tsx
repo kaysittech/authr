@@ -321,38 +321,12 @@ export function App() {
 
         {/* Under Construction Admin Active Banner */}
         {isUnderConstruction && isAdminUser && !isPreviewingPublic && (
-          <div className="mb-4 p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs font-bold shadow-xs animate-fadeIn">
+          <div className="mb-4 p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 flex items-center justify-between text-xs font-bold shadow-xs animate-fadeIn">
             <div className="flex items-center space-x-2.5">
               <span className="px-2.5 py-1 rounded-full bg-amber-500 text-slate-950 font-mono text-[10px] font-black uppercase flex-shrink-0">
                 🚧 UNDER CONSTRUCTION ACTIVE
               </span>
               <span>Public visitors see ONLY the Google Login screen. As Admin, you have full access.</span>
-            </div>
-            <div className="flex items-center space-x-2 flex-shrink-0 flex-wrap gap-y-1">
-              <button
-                onClick={() => setActiveTab('landing')}
-                className={`px-3 py-1.5 rounded-xl font-extrabold text-xs transition-all shadow-2xs cursor-pointer border ${
-                  activeTab === 'landing' || activeTab === 'public_landing' ? 'bg-amber-600 text-white border-amber-700' : 'bg-white hover:bg-amber-100 text-amber-950 border-amber-300'
-                }`}
-              >
-                🌐 Main Website Landing
-              </button>
-              <button
-                onClick={() => setActiveTab('dashboard')}
-                className={`px-3 py-1.5 rounded-xl font-extrabold text-xs transition-all shadow-2xs cursor-pointer border ${
-                  activeTab === 'dashboard' ? 'bg-amber-600 text-white border-amber-700' : 'bg-white hover:bg-amber-100 text-amber-950 border-amber-300'
-                }`}
-              >
-                📊 Creator Vault
-              </button>
-              <button
-                onClick={() => setActiveTab('admin')}
-                className={`px-3 py-1.5 rounded-xl font-extrabold text-xs transition-all shadow-2xs cursor-pointer border ${
-                  activeTab === 'admin' ? 'bg-amber-600 text-white border-amber-700' : 'bg-white hover:bg-amber-100 text-amber-950 border-amber-300'
-                }`}
-              >
-                🛡️ Admin Panel
-              </button>
             </div>
           </div>
         )}
