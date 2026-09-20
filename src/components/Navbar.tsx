@@ -450,14 +450,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </div>
                     {[
                       { id: 'users', label: 'Creator Vault & Directory', icon: Users, desc: 'Accounts & KYC approvals' },
-                      { id: 'system', label: 'Invite-Only & Access Rules', icon: KeyRound, desc: 'VIP codes & crawler nodes' },
+                      { id: 'system', label: 'Crawler & Swarm Nodes', icon: Server, desc: '1,420 distributed scrapers' },
+                      { id: 'system', label: 'Invite-Only & Access Control', icon: KeyRound, desc: 'VIP codes & sign-up mode' },
                       { id: 'webservices', label: 'Web Services Telemetry', icon: Radar, desc: 'API endpoints & diagnostics' }
                     ].map((item) => {
                       const Icon = item.icon;
                       const isActive = currentAdminTab === item.id;
                       return (
                         <button
-                          key={item.id}
+                          key={item.label}
                           onClick={() => {
                             if (setActiveAdminTab) setActiveAdminTab(item.id);
                             setActiveDropdown(null);
