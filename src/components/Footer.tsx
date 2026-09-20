@@ -62,22 +62,22 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
             <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Features</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
-                <button onClick={() => handleSelect('detection')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('page_detection')} className="hover:text-[#0144e4] transition-colors text-left">
                   AI Radar &amp; Scrape Monitor
                 </button>
               </li>
               <li>
-                <button onClick={() => handleSelect('biometrics')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('page_biometrics')} className="hover:text-[#0144e4] transition-colors text-left">
                   Biometric Likeness Registry
                 </button>
               </li>
               <li>
-                <button onClick={() => handleSelect('assets')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('page_assets')} className="hover:text-[#0144e4] transition-colors text-left">
                   C2PA Vault &amp; Watermarking
                 </button>
               </li>
               <li>
-                <button onClick={() => handleSelect('settlement')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('page_settlement')} className="hover:text-[#0144e4] transition-colors text-left">
                   Royalty Settlement Portal
                 </button>
               </li>
@@ -89,12 +89,12 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
             <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider font-display">Legal &amp; Security</h4>
             <ul className="space-y-2 text-xs text-slate-600 font-medium">
               <li>
-                <button onClick={() => handleSelect('legal')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('page_legal')} className="hover:text-[#0144e4] transition-colors text-left">
                   DMCA &amp; Takedown Studio
                 </button>
               </li>
               <li>
-                <button onClick={() => handleSelect('financials')} className="hover:text-[#0144e4] transition-colors text-left">
+                <button onClick={() => handleSelect('page_financials')} className="hover:text-[#0144e4] transition-colors text-left">
                   Statutory Earnings Ledger
                 </button>
               </li>

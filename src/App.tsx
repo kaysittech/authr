@@ -293,11 +293,13 @@ export function App() {
               <BlogView onOpenRegister={() => setIsAuthModalOpen(true)} />
             )}
 
-            {['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search', 'get_started', 'detection', 'biometrics', 'assets', 'settlement', 'legal', 'financials', 'provenance', 'compliance', 'developers', 'counsel', 'pricing'].includes(activeTab) && (
+            {(['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search', 'get_started', 'detection', 'biometrics', 'assets', 'settlement', 'legal', 'financials', 'provenance', 'compliance', 'developers', 'counsel', 'pricing'].includes(activeTab) || activeTab.startsWith('page_')) && (
               <FooterPagesView 
                 pageId={activeTab} 
                 onNavigateHome={() => setActiveTab('dashboard')} 
                 onOpenRegister={() => setIsAuthModalOpen(true)} 
+                onNavigateToTab={(tab) => setActiveTab(tab)}
+                isLoggedIn={false}
               />
             )}
           </>
@@ -391,11 +393,13 @@ export function App() {
               <BlogView onOpenRegister={() => setIsAuthModalOpen(true)} />
             )}
 
-            {['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search', 'get_started'].includes(activeTab) && (
+            {(['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search', 'get_started', 'provenance', 'compliance', 'developers', 'counsel', 'pricing'].includes(activeTab) || activeTab.startsWith('page_')) && (
               <FooterPagesView 
                 pageId={activeTab} 
                 onNavigateHome={() => setActiveTab('dashboard')} 
                 onOpenRegister={() => setIsAuthModalOpen(true)} 
+                onNavigateToTab={(tab) => setActiveTab(tab)}
+                isLoggedIn={true}
               />
             )}
           </>

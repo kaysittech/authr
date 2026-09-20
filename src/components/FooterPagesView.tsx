@@ -34,12 +34,16 @@ interface FooterPagesViewProps {
   pageId: string;
   onNavigateHome: () => void;
   onOpenRegister: () => void;
+  onNavigateToTab?: (tab: string) => void;
+  isLoggedIn?: boolean;
 }
 
 export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
   pageId,
   onNavigateHome,
-  onOpenRegister
+  onOpenRegister,
+  onNavigateToTab,
+  isLoggedIn = false
 }) => {
   const sanitizePages = (pages: ManagedPage[]): ManagedPage[] => {
     return pages.map(p => {
@@ -116,7 +120,8 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
     return () => window.removeEventListener('rg_career_roles_updated', handleSyncRoles);
   }, []);
 
-  const activeManagedPage = managedPages.find(p => p.id === pageId);
+  const cleanId = pageId.replace(/^page_/, '');
+  const activeManagedPage = managedPages.find(p => p.id === pageId || p.id === cleanId);
 
   // Local states for forms
   const [emailNotifs, setEmailNotifs] = useState({
@@ -203,7 +208,13 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
             {activeManagedPage.actionButtonText && pageId !== 'careers' && (
               <div className="pt-2 text-center">
                 <button
-                  onClick={onOpenRegister}
+                  onClick={() => {
+                    if (isLoggedIn && onNavigateToTab) {
+                      onNavigateToTab(cleanId);
+                    } else {
+                      onOpenRegister();
+                    }
+                  }}
                   className="px-6 py-3 rounded-[6px] bg-[#0144e4] text-white text-xs font-bold hover:bg-[#0038c7] transition-all shadow-md"
                 >
                   {activeManagedPage.actionButtonText}
