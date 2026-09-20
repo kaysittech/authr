@@ -582,31 +582,49 @@ export const DEFAULT_REGISTRATION_CONFIG: RegistrationConfig = {
 };
 
 export const getRegistrationConfigFromFirestore = async (): Promise<RegistrationConfig> => {
+  let localUC = false;
+  try {
+    const savedLocal = localStorage.getItem('rg_under_construction_mode');
+    if (savedLocal !== null) {
+      localUC = savedLocal === 'true';
+    }
+  } catch (e) {}
+
   try {
     const configDocRef = doc(db, 'system_config', 'registration');
     const snap = await getDoc(configDocRef);
     if (snap.exists()) {
       const data = snap.data();
+      const ucMode = data.underConstructionMode !== undefined ? Boolean(data.underConstructionMode) : localUC;
+      try {
+        localStorage.setItem('rg_under_construction_mode', String(ucMode));
+      } catch (e) {}
       return {
         inviteOnlyEnabled: data.inviteOnlyEnabled !== undefined ? data.inviteOnlyEnabled : true,
         validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes,
-        underConstructionMode: data.underConstructionMode === true
+        underConstructionMode: ucMode
       };
     }
-    return DEFAULT_REGISTRATION_CONFIG;
+    return { ...DEFAULT_REGISTRATION_CONFIG, underConstructionMode: localUC };
   } catch (err) {
     console.warn("Firestore fetch registration config error:", err);
-    return DEFAULT_REGISTRATION_CONFIG;
+    return { ...DEFAULT_REGISTRATION_CONFIG, underConstructionMode: localUC };
   }
 };
 
 export const saveRegistrationConfigToFirestore = async (config: RegistrationConfig) => {
+  const ucValue = Boolean(config.underConstructionMode);
+  try {
+    localStorage.setItem('rg_under_construction_mode', String(ucValue));
+    localStorage.setItem('rg_registration_config', JSON.stringify(config));
+  } catch (e) {}
+
   try {
     const configDocRef = doc(db, 'system_config', 'registration');
     const payload = {
       inviteOnlyEnabled: Boolean(config.inviteOnlyEnabled),
       validInviteCodes: Array.isArray(config.validInviteCodes) ? config.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes,
-      underConstructionMode: Boolean(config.underConstructionMode),
+      underConstructionMode: ucValue,
       updatedAt: serverTimestamp()
     };
     await setDoc(configDocRef, payload, { merge: true });
@@ -621,10 +639,21 @@ export const subscribeRegistrationConfigFromFirestore = (onUpdate: (config: Regi
     return onSnapshot(configDocRef, (snap) => {
       if (snap.exists()) {
         const data = snap.data();
+        let localUC = false;
+        try {
+          const savedLocal = localStorage.getItem('rg_under_construction_mode');
+          if (savedLocal !== null) localUC = savedLocal === 'true';
+        } catch (e) {}
+
+        const ucMode = data.underConstructionMode !== undefined ? Boolean(data.underConstructionMode) : localUC;
+        try {
+          localStorage.setItem('rg_under_construction_mode', String(ucMode));
+        } catch (e) {}
+
         const cfg: RegistrationConfig = {
           inviteOnlyEnabled: data.inviteOnlyEnabled !== undefined ? data.inviteOnlyEnabled : true,
           validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes,
-          underConstructionMode: data.underConstructionMode === true
+          underConstructionMode: ucMode
         };
         onUpdate(cfg);
       }
