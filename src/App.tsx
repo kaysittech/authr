@@ -256,21 +256,33 @@ export function App() {
 
   const pendingClaimsCount = claims.filter(c => c.status === 'pending').length;
 
-  const [isPreviewingConstruction, setIsPreviewingConstruction] = useState<boolean>(false);
+  const [isPreviewingPublic, setIsPreviewingPublic] = useState<boolean>(false);
 
-  if ((isUnderConstruction && !isAdminUser) || isPreviewingConstruction) {
+  useEffect(() => {
+    const handlePreviewTrigger = () => setIsPreviewingPublic(true);
+    window.addEventListener('rg_trigger_preview_public', handlePreviewTrigger);
+    return () => window.removeEventListener('rg_trigger_preview_public', handlePreviewTrigger);
+  }, []);
+
+  const effectiveUser = isPreviewingPublic ? null : currentUser;
+  const effectiveIsAdmin = isPreviewingPublic ? false : isAdminUser;
+
+  if (isUnderConstruction && !effectiveIsAdmin) {
     return (
       <>
-        {isPreviewingConstruction && (
-          <div className="bg-amber-500 text-slate-950 px-4 py-2 text-xs font-black font-mono flex items-center justify-between shadow-md z-50 relative">
-            <div className="flex items-center space-x-2">
-              <span>👁️ ADMIN PREVIEW MODE: Viewing Public Under Construction Screen</span>
+        {isPreviewingPublic && (
+          <div className="sticky top-0 z-50 bg-slate-900 text-white border-b border-slate-800 px-4 py-2.5 shadow-xl flex items-center justify-between text-xs font-mono">
+            <div className="flex items-center space-x-2.5 font-bold">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping flex-shrink-0" />
+              <span className="text-amber-400 font-extrabold uppercase tracking-wider">👁️ PUBLIC PREVIEW MODE:</span>
+              <span className="text-slate-200">Viewing site as an unauthenticated guest (Under Construction View Active)</span>
             </div>
             <button
-              onClick={() => setIsPreviewingConstruction(false)}
-              className="px-3 py-1 bg-slate-900 text-white rounded-lg font-bold text-xs hover:bg-slate-800 transition-all cursor-pointer"
+              onClick={() => setIsPreviewingPublic(false)}
+              className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl font-black text-xs transition-all shadow-sm cursor-pointer flex items-center space-x-1.5"
             >
-              Exit Preview ✕
+              <span>Exit Preview & Return to Admin</span>
+              <span className="text-sm">✕</span>
             </button>
           </div>
         )}
@@ -296,7 +308,7 @@ export function App() {
         policyMode={policyMode}
         setPolicyMode={setPolicyMode}
         pendingClaimsCount={pendingClaimsCount}
-        currentUser={currentUser}
+        currentUser={effectiveUser}
         onOpenAuthModal={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
         onSelectDiscipline={handleSelectDiscipline}
@@ -304,8 +316,25 @@ export function App() {
 
       {/* Main Canvas View */}
       <main className="flex-1 p-4 sm:p-8 max-w-7xl mx-auto w-full overflow-x-hidden">
+        {/* Admin Public Preview Bar */}
+        {isPreviewingPublic && (
+          <div className="mb-4 p-3.5 rounded-2xl bg-slate-900 text-white border border-slate-800 flex items-center justify-between text-xs font-mono shadow-md z-40 animate-fadeIn">
+            <div className="flex items-center space-x-2.5 font-bold">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping flex-shrink-0" />
+              <span className="text-amber-400 font-extrabold uppercase tracking-wider">👁️ PUBLIC PREVIEW MODE:</span>
+              <span className="text-slate-200">Viewing live site as an unauthenticated guest</span>
+            </div>
+            <button
+              onClick={() => setIsPreviewingPublic(false)}
+              className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl font-black text-xs transition-all shadow-sm cursor-pointer"
+            >
+              Exit Preview & Return to Admin ✕
+            </button>
+          </div>
+        )}
+
         {/* Under Construction Admin Active Banner */}
-        {isUnderConstruction && isAdminUser && (
+        {isUnderConstruction && isAdminUser && !isPreviewingPublic && (
           <div className="mb-4 p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs font-bold shadow-xs animate-fadeIn">
             <div className="flex items-center space-x-2.5">
               <span className="px-2.5 py-1 rounded-full bg-amber-500 text-slate-950 font-mono text-[10px] font-black uppercase flex-shrink-0">
@@ -331,7 +360,7 @@ export function App() {
                 🛡️ Admin Panel
               </button>
               <button
-                onClick={() => setIsPreviewingConstruction(true)}
+                onClick={() => setIsPreviewingPublic(true)}
                 className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-all shadow-2xs cursor-pointer"
               >
                 👁️ Preview Public Screen

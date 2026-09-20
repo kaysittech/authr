@@ -1951,13 +1951,29 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               </div>
 
               {regConfig.underConstructionMode ? (
-                <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold flex items-center space-x-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
-                  <span>Under Construction Mode is ACTIVE. Unauthenticated visitors are restricted to Google Login.</span>
+                <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center space-x-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                    <span>Under Construction Mode is ACTIVE. Unauthenticated visitors are restricted to Google Login.</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => window.dispatchEvent(new Event('rg_trigger_preview_public'))}
+                    className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-all shadow-2xs cursor-pointer flex-shrink-0 self-start sm:self-auto flex items-center space-x-1.5"
+                  >
+                    <span>👁️ Preview Public Screen</span>
+                  </button>
                 </div>
               ) : (
-                <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-medium">
-                  Site is running normally. Public visitors can access all landing pages, documentation, and features.
+                <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-medium flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <span>Site is running normally. Public visitors can access all landing pages, documentation, and features.</span>
+                  <button
+                    type="button"
+                    onClick={() => window.dispatchEvent(new Event('rg_trigger_preview_public'))}
+                    className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-all shadow-2xs cursor-pointer flex-shrink-0 self-start sm:self-auto flex items-center space-x-1.5"
+                  >
+                    <span>👁️ Preview Public Screen</span>
+                  </button>
                 </div>
               )}
             </div>
