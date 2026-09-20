@@ -116,7 +116,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab, onOpenRegister }) =
 
       {/* Bottom Full Width Royal Blue Bar */}
       <div className="bg-[#0144e4] text-white py-4 px-4 text-center text-xs font-semibold font-mono">
-        © 2026 All Rights Reserved and Powered by Authr Platform Engine
+        © 2026 All Rights Reserved Authr Platform
       </div>
     </footer>
   );
