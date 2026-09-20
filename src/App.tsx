@@ -256,9 +256,24 @@ export function App() {
 
   const pendingClaimsCount = claims.filter(c => c.status === 'pending').length;
 
-  if (isUnderConstruction && !isAdminUser) {
+  const [isPreviewingConstruction, setIsPreviewingConstruction] = useState<boolean>(false);
+
+  if ((isUnderConstruction && !isAdminUser) || isPreviewingConstruction) {
     return (
       <>
+        {isPreviewingConstruction && (
+          <div className="bg-amber-500 text-slate-950 px-4 py-2 text-xs font-black font-mono flex items-center justify-between shadow-md z-50 relative">
+            <div className="flex items-center space-x-2">
+              <span>👁️ ADMIN PREVIEW MODE: Viewing Public Under Construction Screen</span>
+            </div>
+            <button
+              onClick={() => setIsPreviewingConstruction(false)}
+              className="px-3 py-1 bg-slate-900 text-white rounded-lg font-bold text-xs hover:bg-slate-800 transition-all cursor-pointer"
+            >
+              Exit Preview ✕
+            </button>
+          </div>
+        )}
         <UnderConstructionView onGoogleSignIn={() => setIsAuthModalOpen(true)} />
         <AuthModal
           isOpen={isAuthModalOpen}
@@ -291,12 +306,20 @@ export function App() {
       <main className="flex-1 p-4 sm:p-8 max-w-7xl mx-auto w-full overflow-x-hidden">
         {/* Under Construction Admin Active Banner */}
         {isUnderConstruction && isAdminUser && (
-          <div className="mb-4 p-3.5 rounded-2xl bg-amber-950 text-amber-100 border border-amber-800/80 flex items-center justify-between text-xs font-bold shadow-sm animate-fadeIn">
+          <div className="mb-4 p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-bold shadow-xs animate-fadeIn">
             <div className="flex items-center space-x-2.5">
               <span className="px-2.5 py-1 rounded-full bg-amber-500 text-slate-950 font-mono text-[10px] font-black uppercase">
                 🚧 UNDER CONSTRUCTION MODE ACTIVE
               </span>
-              <span>Public visitors see only the Google Login screen. Admin access is active.</span>
+              <span>Public visitors see ONLY the Google Login screen. Admin access is active.</span>
+            </div>
+            <div className="flex items-center space-x-2 flex-shrink-0">
+              <button
+                onClick={() => setIsPreviewingConstruction(true)}
+                className="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs transition-all shadow-2xs cursor-pointer"
+              >
+                👁️ Preview Public Screen
+              </button>
             </div>
           </div>
         )}
