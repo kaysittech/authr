@@ -94,9 +94,9 @@ export const PublicHeader: React.FC<PublicHeaderProps> = ({
               {activeDropdown === 'about' && (
                 <div className="absolute top-full left-0 w-52 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-2 space-y-1 animate-fadeIn">
                   {[
-                    { label: 'Statutory Compliance', tab: 'legal' },
-                    { label: 'Developer API', tab: 'webservices' },
-                    { label: 'Contact Rights Counsel', tab: 'legal' }
+                    { label: 'Statutory Compliance', tab: 'compliance' },
+                    { label: 'Developer API', tab: 'developers' },
+                    { label: 'Contact Rights Counsel', tab: 'counsel' }
                   ].map((item) => (
                     <button
                       key={item.label}

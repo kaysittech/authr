@@ -594,9 +594,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {activeDropdown === 'about' && (
                     <div className="absolute top-full left-0 w-56 bg-white border border-[#e9eaf0] rounded-lg shadow-xl p-2 space-y-1 z-50 animate-fadeIn text-left">
                       {[
-                        { label: 'Statutory Compliance', desc: 'BIPA & DMCA 17 U.S.C. § 512', tab: 'legal' },
-                        { label: 'Developer API', desc: 'FastAPI REST Telemetry', tab: 'webservices' },
-                        { label: 'Contact Counsel', desc: '24/7 Legal rights support', tab: 'legal' }
+                        { label: 'Statutory Compliance', desc: 'BIPA & DMCA 17 U.S.C. § 512', tab: 'compliance' },
+                        { label: 'Developer API', desc: 'FastAPI REST Telemetry', tab: 'developers' },
+                        { label: 'Contact Counsel', desc: '24/7 Legal rights support', tab: 'counsel' }
                       ].map((item) => (
                         <button
                           key={item.label}

@@ -293,13 +293,9 @@ export function App() {
               <BlogView onOpenRegister={() => setIsAuthModalOpen(true)} />
             )}
 
-            {activeTab === 'webservices' && (
-              <WebServicesDashboard />
-            )}
-
-            {(['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search', 'get_started', 'detection', 'biometrics', 'assets', 'settlement', 'legal', 'financials', 'provenance', 'compliance', 'developers', 'counsel', 'pricing'].includes(activeTab) || activeTab.startsWith('page_')) && (
+            {(['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search', 'get_started', 'detection', 'biometrics', 'assets', 'settlement', 'legal', 'financials', 'provenance', 'compliance', 'developers', 'webservices', 'counsel', 'pricing'].includes(activeTab) || activeTab.startsWith('page_')) && (
               <FooterPagesView 
-                pageId={activeTab} 
+                pageId={activeTab === 'webservices' ? 'developers' : activeTab} 
                 onNavigateHome={() => setActiveTab('dashboard')} 
                 onOpenRegister={() => setIsAuthModalOpen(true)} 
                 onNavigateToTab={(tab) => setActiveTab(tab)}
