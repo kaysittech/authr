@@ -560,7 +560,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     );
   }
 
-  const isPublicMainWebsite = activeTab === 'landing' || activeTab === 'public_landing' || ['blog', 'compliance', 'developers', 'counsel'].includes(activeTab);
+  const isPublicMainWebsite = !currentUser || activeTab === 'landing' || activeTab === 'public_landing' || ['blog', 'compliance', 'developers', 'counsel', 'pricing'].includes(activeTab);
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[#e9eaf0] shadow-2xs font-sans">
