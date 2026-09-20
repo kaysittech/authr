@@ -642,38 +642,34 @@ export const saveRegistrationConfigToFirestore = async (config: RegistrationConf
   };
 
   try {
-    await setDoc(doc(db, 'system_config', 'registration'), payload, { merge: true });
+    await setDoc(doc(db, 'public_status', 'site'), { underConstructionMode: ucValue, updatedAt: serverTimestamp() }, { merge: true });
   } catch (err) {
-    console.warn("Firestore save system_config error:", err);
+    console.warn("Firestore save public_status error:", err);
   }
 
   try {
-    await setDoc(doc(db, 'public_config', 'status'), { underConstructionMode: ucValue, updatedAt: serverTimestamp() }, { merge: true });
+    await setDoc(doc(db, 'system_config', 'registration'), payload, { merge: true });
   } catch (err) {
-    console.warn("Firestore save public_config error:", err);
+    console.warn("Firestore save system_config error:", err);
   }
 };
 
 export const subscribeRegistrationConfigFromFirestore = (onUpdate: (config: RegistrationConfig) => void): (() => void) => {
   try {
-    const configDocRef = doc(db, 'system_config', 'registration');
+    const configDocRef = doc(db, 'public_status', 'site');
     return onSnapshot(configDocRef, (snap) => {
       if (snap.exists()) {
         const data = snap.data();
-        const ucMode = Boolean(data.underConstructionMode);
-        try {
-          localStorage.setItem('rg_under_construction_mode', String(ucMode));
-        } catch (e) {}
-
-        const cfg: RegistrationConfig = {
-          inviteOnlyEnabled: data.inviteOnlyEnabled !== undefined ? data.inviteOnlyEnabled : true,
-          validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes,
-          underConstructionMode: ucMode
-        };
-        onUpdate(cfg);
+        if (data.underConstructionMode !== undefined) {
+          const ucMode = Boolean(data.underConstructionMode);
+          try {
+            localStorage.setItem('rg_under_construction_mode', String(ucMode));
+          } catch (e) {}
+          onUpdate({ ...DEFAULT_REGISTRATION_CONFIG, underConstructionMode: ucMode });
+        }
       }
     }, (err) => {
-      console.warn("Firestore onSnapshot error:", err);
+      console.warn("Firestore onSnapshot warning on public_status:", err);
     });
   } catch (e) {
     console.warn("Failed to subscribe to registration config:", e);
