@@ -1958,10 +1958,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   </div>
                   <button
                     type="button"
-                    onClick={() => window.dispatchEvent(new Event('rg_trigger_preview_public'))}
-                    className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-all shadow-2xs cursor-pointer flex-shrink-0 self-start sm:self-auto flex items-center space-x-1.5"
+                    onClick={() => {
+                      window.dispatchEvent(new CustomEvent('rg_navigate_tab', { detail: 'dashboard' }));
+                      window.dispatchEvent(new Event('rg_trigger_preview_public'));
+                    }}
+                    className="px-3.5 py-1.5 rounded-xl bg-[#0144e4] hover:bg-[#0038c7] text-white font-extrabold text-xs transition-all shadow-2xs cursor-pointer flex-shrink-0 self-start sm:self-auto flex items-center space-x-1.5"
                   >
-                    <span>👁️ Preview Public Screen</span>
+                    <span>🌐 View / Preview Main Website</span>
                   </button>
                 </div>
               ) : (
@@ -1969,10 +1972,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   <span>Site is running normally. Public visitors can access all landing pages, documentation, and features.</span>
                   <button
                     type="button"
-                    onClick={() => window.dispatchEvent(new Event('rg_trigger_preview_public'))}
+                    onClick={() => {
+                      window.dispatchEvent(new CustomEvent('rg_navigate_tab', { detail: 'dashboard' }));
+                      window.dispatchEvent(new Event('rg_trigger_preview_public'));
+                    }}
                     className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-all shadow-2xs cursor-pointer flex-shrink-0 self-start sm:self-auto flex items-center space-x-1.5"
                   >
-                    <span>👁️ Preview Public Screen</span>
+                    <span>👁️ Preview Public Landing</span>
                   </button>
                 </div>
               )}

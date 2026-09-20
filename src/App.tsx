@@ -264,28 +264,10 @@ export function App() {
     return () => window.removeEventListener('rg_trigger_preview_public', handlePreviewTrigger);
   }, []);
 
-  const effectiveUser = isPreviewingPublic ? null : currentUser;
-  const effectiveIsAdmin = isPreviewingPublic ? false : isAdminUser;
-
-  if (isUnderConstruction && !effectiveIsAdmin) {
+  // Public non-admin visitors are locked out to UnderConstructionView when mode is active
+  if (isUnderConstruction && !isAdminUser) {
     return (
       <>
-        {isPreviewingPublic && (
-          <div className="sticky top-0 z-50 bg-slate-900 text-white border-b border-slate-800 px-4 py-2.5 shadow-xl flex items-center justify-between text-xs font-mono">
-            <div className="flex items-center space-x-2.5 font-bold">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping flex-shrink-0" />
-              <span className="text-amber-400 font-extrabold uppercase tracking-wider">👁️ PUBLIC PREVIEW MODE:</span>
-              <span className="text-slate-200">Viewing site as an unauthenticated guest (Under Construction View Active)</span>
-            </div>
-            <button
-              onClick={() => setIsPreviewingPublic(false)}
-              className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl font-black text-xs transition-all shadow-sm cursor-pointer flex items-center space-x-1.5"
-            >
-              <span>Exit Preview & Return to Admin</span>
-              <span className="text-sm">✕</span>
-            </button>
-          </div>
-        )}
         <UnderConstructionView onGoogleSignIn={() => setIsAuthModalOpen(true)} />
         <AuthModal
           isOpen={isAuthModalOpen}
@@ -295,6 +277,8 @@ export function App() {
       </>
     );
   }
+
+  const effectiveUser = isPreviewingPublic ? null : currentUser;
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col antialiased selection:bg-blue-100 selection:text-blue-900">
@@ -322,7 +306,7 @@ export function App() {
             <div className="flex items-center space-x-2.5 font-bold">
               <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping flex-shrink-0" />
               <span className="text-amber-400 font-extrabold uppercase tracking-wider">👁️ PUBLIC PREVIEW MODE:</span>
-              <span className="text-slate-200">Viewing live site as an unauthenticated guest</span>
+              <span className="text-slate-200">Viewing main website as a public guest</span>
             </div>
             <button
               onClick={() => setIsPreviewingPublic(false)}
@@ -340,7 +324,7 @@ export function App() {
               <span className="px-2.5 py-1 rounded-full bg-amber-500 text-slate-950 font-mono text-[10px] font-black uppercase flex-shrink-0">
                 🚧 UNDER CONSTRUCTION ACTIVE
               </span>
-              <span>Public visitors see ONLY the Google Login screen. Admin access is active.</span>
+              <span>Public visitors see ONLY the Google Login screen. As Admin, you are viewing the live website.</span>
             </div>
             <div className="flex items-center space-x-2 flex-shrink-0 flex-wrap gap-y-1">
               <button
@@ -360,10 +344,10 @@ export function App() {
                 🛡️ Admin Panel
               </button>
               <button
-                onClick={() => setIsPreviewingPublic(true)}
+                onClick={() => setIsPreviewingPublic(!isPreviewingPublic)}
                 className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-all shadow-2xs cursor-pointer"
               >
-                👁️ Preview Public Screen
+                👁️ Preview Public Landing
               </button>
             </div>
           </div>
