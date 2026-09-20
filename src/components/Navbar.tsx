@@ -30,7 +30,8 @@ import {
   Activity,
   Users,
   MessageSquare,
-  KeyRound
+  KeyRound,
+  Globe
 } from 'lucide-react';
 import { PolicyMode } from '../types';
 import { UserSession } from './AuthModal';
@@ -243,8 +244,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleTabSelect('dashboard')}
                 className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-between"
               >
-                <span>Dashboard</span>
-                <Zap className="w-3.5 h-3.5 text-slate-400" />
+                <span>Main Website & Dashboard</span>
+                <Globe className="w-3.5 h-3.5 text-slate-400" />
               </button>
 
               {isAdminUser && (
@@ -252,7 +253,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleTabSelect('admin')}
                   className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-[#0144e4] hover:bg-blue-50 transition-colors flex items-center justify-between"
                 >
-                  <span>Admin Portal</span>
+                  <span>Admin Ops Portal</span>
                   <ShieldCheck className="w-3.5 h-3.5 text-[#0144e4]" />
                 </button>
               )}
