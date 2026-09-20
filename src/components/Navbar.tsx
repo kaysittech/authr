@@ -131,9 +131,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const renderUserProfileDropdown = () => {
     if (!currentUser) return null;
-    const userFirstName = currentUser.email === 'christiana.obafunwa@gmail.com' ? 'Christiana' :
-      currentUser.email === 'kaysitsolutions@gmail.com' ? 'Kays' :
-      (currentUser.fullName.startsWith('Authr') && currentUser.email ? currentUser.email.split('@')[0].split('.')[0].replace(/[^a-zA-Z]/g, '').replace(/^./, str => str.toUpperCase()) : currentUser.fullName.split(' ')[0]);
+
+    const userFirstName = currentUser.fullName ? currentUser.fullName.split(' ')[0] : 'Account';
 
     return (
       <div 
@@ -144,58 +143,151 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setActiveDropdown(activeDropdown === 'user_menu' ? null : 'user_menu')}
-            className="px-5 py-2.5 rounded-[6px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-semibold text-[15px] transition-all flex items-center space-x-2 shadow-2xs"
+            className="px-5 py-2.5 rounded-[12px] bg-[#0144e4] hover:bg-[#0038c7] text-white font-bold text-[15px] transition-all flex items-center space-x-2.5 shadow-md hover:shadow-lg cursor-pointer"
           >
             <img 
               src={currentUser.avatarUrl} 
               alt={currentUser.fullName} 
-              className="w-5 h-5 rounded-full object-cover ring-1 ring-white" 
+              className="w-6 h-6 rounded-full object-cover ring-2 ring-white/50" 
             />
             <span>{userFirstName}</span>
-            <ChevronDown className="w-3.5 h-3.5 text-white/90 stroke-[2.5]" />
+            <ChevronDown className="w-4 h-4 text-white/90 stroke-[2.5]" />
           </button>
 
           <button
             onClick={onLogout}
-            className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+            className="p-2.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
             title="Sign Out"
           >
             <LogOut className="w-4.5 h-4.5" />
           </button>
         </div>
 
-        {/* User Profile & Licensing Policy Options Dropdown */}
+        {/* User Profile Dropdown Menu */}
         {activeDropdown === 'user_menu' && (
-          <div className="absolute top-full right-0 w-72 bg-white border border-[#e9eaf0] rounded-xl shadow-xl p-3 space-y-3 z-50 animate-fadeIn text-left mt-1">
+          <div className="absolute top-full right-0 w-80 bg-white border border-[#e9eaf0] rounded-2xl shadow-2xl p-3.5 space-y-3.5 z-50 animate-fadeIn text-left mt-1.5">
             
-            {/* User Profile Brief */}
-            <div className="flex items-center space-x-3 pb-2.5 border-b border-[#e9eaf0]">
+            {/* User Profile Header */}
+            <div className="flex items-center space-x-3 pb-3 border-b border-[#e9eaf0]">
               <img 
                 src={currentUser.avatarUrl} 
                 alt={currentUser.fullName} 
-                className="w-10 h-10 rounded-full object-cover ring-2 ring-[#0144e4]/30" 
+                className="w-11 h-11 rounded-full object-cover ring-2 ring-[#0144e4]/30" 
               />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-extrabold text-slate-900 truncate">{currentUser.fullName}</p>
-                <p className="text-[10px] text-slate-400 font-mono truncate">{currentUser.handle}</p>
+                <p className="text-sm font-extrabold text-slate-900 truncate">{currentUser.fullName}</p>
+                <p className="text-[11px] text-slate-400 font-mono truncate">{currentUser.handle}</p>
               </div>
               {isAdminUser && (
-                <span className="px-1.5 py-0.5 rounded bg-blue-50 text-[#0144e4] font-mono text-[9px] font-black uppercase flex-shrink-0 border border-blue-200">
+                <span className="px-2 py-0.5 rounded-md bg-blue-50 text-[#0144e4] font-mono text-[10px] font-extrabold uppercase flex-shrink-0 border border-blue-200">
                   ADMIN
                 </span>
               )}
             </div>
 
-            {/* Licensing Policy Options */}
+            {/* Portal Navigation Section */}
             <div className="space-y-1.5">
-              <div className="px-1 text-[9px] font-extrabold uppercase tracking-wider text-slate-400 font-mono">
+              <div className="px-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 font-mono">
+                Portal Navigation
+              </div>
+
+              {/* 1. Main Website */}
+              <button
+                onClick={() => {
+                  handleTabSelect('landing');
+                  setActiveDropdown(null);
+                }}
+                className={`w-full p-2.5 rounded-xl text-left transition-all border flex items-center justify-between group cursor-pointer ${
+                  activeTab === 'landing' || activeTab === 'public_landing'
+                    ? 'bg-blue-50/80 border-[#0144e4] text-[#0144e4] shadow-2xs font-extrabold'
+                    : 'bg-slate-50/60 border-slate-200 text-slate-700 hover:bg-blue-50/50 hover:border-blue-300 hover:text-[#0144e4]'
+                }`}
+              >
+                <div className="flex items-center space-x-2.5">
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
+                    activeTab === 'landing' || activeTab === 'public_landing' ? 'bg-[#0144e4] text-white' : 'bg-white border border-slate-200 text-slate-600 group-hover:border-blue-300 group-hover:text-[#0144e4]'
+                  }`}>
+                    <Globe className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold leading-none">🌐 Main Website</p>
+                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">Public Landing & Features</p>
+                  </div>
+                </div>
+                {(activeTab === 'landing' || activeTab === 'public_landing') && (
+                  <Check className="w-4 h-4 text-[#0144e4] stroke-[3]" />
+                )}
+              </button>
+
+              {/* 2. Application */}
+              <button
+                onClick={() => {
+                  handleTabSelect('dashboard');
+                  setActiveDropdown(null);
+                }}
+                className={`w-full p-2.5 rounded-xl text-left transition-all border flex items-center justify-between group cursor-pointer ${
+                  activeTab === 'dashboard'
+                    ? 'bg-blue-50/80 border-[#0144e4] text-[#0144e4] shadow-2xs font-extrabold'
+                    : 'bg-slate-50/60 border-slate-200 text-slate-700 hover:bg-blue-50/50 hover:border-blue-300 hover:text-[#0144e4]'
+                }`}
+              >
+                <div className="flex items-center space-x-2.5">
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
+                    activeTab === 'dashboard' ? 'bg-[#0144e4] text-white' : 'bg-white border border-slate-200 text-slate-600 group-hover:border-blue-300 group-hover:text-[#0144e4]'
+                  }`}>
+                    <Zap className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold leading-none">⚡ Creator Vault App</p>
+                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">Telemetry & Works Dashboard</p>
+                  </div>
+                </div>
+                {activeTab === 'dashboard' && (
+                  <Check className="w-4 h-4 text-[#0144e4] stroke-[3]" />
+                )}
+              </button>
+
+              {/* 3. Admin Portal (if Admin) */}
+              {isAdminUser && (
+                <button
+                  onClick={() => {
+                    handleTabSelect('admin');
+                    setActiveDropdown(null);
+                  }}
+                  className={`w-full p-2.5 rounded-xl text-left transition-all border flex items-center justify-between group cursor-pointer ${
+                    activeTab === 'admin'
+                      ? 'bg-blue-50/80 border-[#0144e4] text-[#0144e4] shadow-2xs font-extrabold'
+                      : 'bg-slate-50/60 border-slate-200 text-slate-700 hover:bg-blue-50/50 hover:border-blue-300 hover:text-[#0144e4]'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2.5">
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
+                      activeTab === 'admin' ? 'bg-[#0144e4] text-white' : 'bg-white border border-slate-200 text-slate-600 group-hover:border-blue-300 group-hover:text-[#0144e4]'
+                    }`}>
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold leading-none">🛡️ Admin Ops Portal</p>
+                      <p className="text-[10px] text-slate-400 font-mono mt-0.5">Under Construction & Controls</p>
+                    </div>
+                  </div>
+                  {activeTab === 'admin' && (
+                    <Check className="w-4 h-4 text-[#0144e4] stroke-[3]" />
+                  )}
+                </button>
+              )}
+            </div>
+
+            {/* Licensing Policy Mode */}
+            <div className="space-y-1.5 border-t border-[#e9eaf0] pt-2.5">
+              <div className="px-1 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 font-mono">
                 Licensing Policy Mode
               </div>
 
               {/* Strict Privacy Option */}
               <button
                 onClick={() => setPolicyMode('strict_privacy')}
-                className={`w-full p-2.5 rounded-lg text-left transition-all border ${
+                className={`w-full p-2 rounded-lg text-left transition-all border cursor-pointer ${
                   policyMode === 'strict_privacy'
                     ? 'bg-rose-50 border-rose-300 text-rose-950 shadow-2xs'
                     : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
@@ -218,7 +310,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* Royalty Licensing Option */}
               <button
                 onClick={() => setPolicyMode('micro_monetization')}
-                className={`w-full p-2.5 rounded-lg text-left transition-all border ${
+                className={`w-full p-2 rounded-lg text-left transition-all border cursor-pointer ${
                   policyMode === 'micro_monetization'
                     ? 'bg-blue-50 border-blue-300 text-blue-950 shadow-2xs'
                     : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
@@ -239,47 +331,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             </div>
 
-            <div className="border-t border-[#e9eaf0] pt-1 space-y-1">
-              <button
-                onClick={() => handleTabSelect('landing')}
-                className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-between"
-              >
-                <span>🌐 Main Public Website</span>
-                <Globe className="w-3.5 h-3.5 text-slate-400" />
-              </button>
-
-              <button
-                onClick={() => handleTabSelect('dashboard')}
-                className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-between"
-              >
-                <span>⚡ Creator Vault Application</span>
-                <Zap className="w-3.5 h-3.5 text-[#0144e4]" />
-              </button>
-
-              {isAdminUser && (
-                <button
-                  onClick={() => handleTabSelect('admin')}
-                  className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-[#0144e4] hover:bg-blue-50 transition-colors flex items-center justify-between"
-                >
-                  <span>🛡️ Admin Ops Portal</span>
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#0144e4]" />
-                </button>
-              )}
-            </div>
-
-            <div className="border-t border-[#e9eaf0] pt-1">
+            {/* Sign Out Button */}
+            <div className="border-t border-[#e9eaf0] pt-2">
               <button
                 onClick={() => {
                   onLogout();
                   setActiveDropdown(null);
                 }}
-                className="w-full text-left px-3 py-2 rounded-md text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors flex items-center justify-between"
+                className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors flex items-center justify-between cursor-pointer"
               >
                 <span>Sign Out</span>
                 <LogOut className="w-3.5 h-3.5 text-rose-500" />
               </button>
             </div>
-
           </div>
         )}
       </div>
@@ -293,37 +357,18 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             
-            {/* Left: Quick Navigation Buttons to Main Website & Application Vault */}
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => handleTabSelect('landing')}
-                className="px-3.5 py-2 rounded-xl border border-slate-300 hover:border-[#0144e4] bg-white hover:bg-blue-50/50 text-slate-800 hover:text-[#0144e4] font-bold text-xs transition-all flex items-center space-x-1.5 shadow-2xs group cursor-pointer"
-                title="View Main Public Website Landing Page"
-              >
-                <Globe className="w-3.5 h-3.5 text-slate-600 group-hover:text-[#0144e4]" />
-                <span>🌐 Main Website</span>
-              </button>
-
-              <button
-                onClick={() => handleTabSelect('dashboard')}
-                className="px-3.5 py-2 rounded-xl border border-slate-300 hover:border-[#0144e4] bg-white hover:bg-blue-50/50 text-slate-800 hover:text-[#0144e4] font-bold text-xs transition-all flex items-center space-x-1.5 shadow-2xs group cursor-pointer"
-                title="View Creator Vault Application Dashboard"
-              >
-                <Zap className="w-3.5 h-3.5 text-slate-600 group-hover:text-[#0144e4]" />
-                <span>⚡ Application</span>
-              </button>
-
-              <div className="h-6 w-[1px] bg-slate-200 hidden sm:block mx-1" />
-
-              <div className="hidden sm:flex items-center space-x-2 cursor-pointer" onClick={() => handleTabSelect('admin')}>
-                <div className="w-8 h-8 rounded-lg bg-[#0144e4] text-white flex items-center justify-center font-bold shadow-xs">
-                  <ShieldCheck className="w-5 h-5 stroke-[2.5]" />
-                </div>
-                <span className="text-xl font-extrabold text-slate-900 tracking-tight font-display flex items-center space-x-1.5">
-                  <span>Authr</span>
-                  <span className="text-[#0144e4] text-xs font-bold px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 font-sans">Admin</span>
-                </span>
+            {/* Left: Clean Authr Admin Logo */}
+            <div 
+              className="flex items-center space-x-2.5 cursor-pointer" 
+              onClick={() => handleTabSelect('admin')}
+            >
+              <div className="w-9 h-9 rounded-xl bg-[#0144e4] text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20">
+                <ShieldCheck className="w-5.5 h-5.5 stroke-[2.5]" />
               </div>
+              <span className="text-xl font-extrabold text-slate-900 tracking-tight font-display flex items-center space-x-1.5">
+                <span>Authr</span>
+                <span className="text-[#0144e4] text-xs font-bold px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 font-sans">Admin</span>
+              </span>
             </div>
 
             {/* Middle: 3 Grouped Top Menu Bar Dropdowns matching Home Page Header Style */}
