@@ -36,15 +36,40 @@ import {
 import { fetchAppState } from './services/api';
 import { seedDefaultAdminsInFirestore } from './firebase';
 
+const getTabFromHash = () => {
+  if (typeof window === 'undefined') return 'dashboard';
+  const hash = window.location.hash.replace(/^#\/?/, '').trim();
+  return hash || 'dashboard';
+};
+
 export function App() {
-  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  const [activeTab, setActiveTab] = useState<string>(getTabFromHash);
   const [activeAdminTab, setActiveAdminTab] = useState<string>('overview');
   const [policyMode, setPolicyMode] = useState<PolicyMode>('micro_monetization');
 
-  // Scroll to top of page on activeTab change
+  // Scroll to top and sync URL hash on activeTab change
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (activeTab === 'dashboard') {
+      if (window.location.hash) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+    } else {
+      if (window.location.hash !== `#${activeTab}`) {
+        window.location.hash = activeTab;
+      }
+    }
   }, [activeTab]);
+
+  // Listen to browser hash changes (Direct links, back/forward buttons)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const tab = getTabFromHash();
+      setActiveTab(tab);
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   // State Management
   const [digitalTwin, setDigitalTwin] = useState<DigitalTwin>(() => {
@@ -268,7 +293,7 @@ export function App() {
               <BlogView onOpenRegister={() => setIsAuthModalOpen(true)} />
             )}
 
-            {['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search', 'get_started', 'detection', 'biometrics', 'assets', 'settlement', 'legal', 'financials'].includes(activeTab) && (
+            {['careers', 'about', 'privacy', 'terms', 'email_preferences', 'unsubscribe', 'security', 'search', 'get_started', 'detection', 'biometrics', 'assets', 'settlement', 'legal', 'financials', 'provenance', 'compliance', 'developers', 'counsel', 'pricing'].includes(activeTab) && (
               <FooterPagesView 
                 pageId={activeTab} 
                 onNavigateHome={() => setActiveTab('dashboard')} 
