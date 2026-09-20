@@ -35,7 +35,7 @@ import {
 } from './services/mockData';
 
 import { fetchAppState } from './services/api';
-import { seedDefaultAdminsInFirestore, getRegistrationConfigFromFirestore, signInWithGoogleFirebase } from './firebase';
+import { seedDefaultAdminsInFirestore, getRegistrationConfigFromFirestore, subscribeRegistrationConfigFromFirestore, signInWithGoogleFirebase } from './firebase';
 
 const getTabFromHash = () => {
   if (typeof window === 'undefined') return 'dashboard';
@@ -102,7 +102,8 @@ export function App() {
   });
 
   useEffect(() => {
-    getRegistrationConfigFromFirestore().then(cfg => {
+    // Real-time sync across domains (authrnet.com) and browser sessions
+    const unsubscribe = subscribeRegistrationConfigFromFirestore((cfg) => {
       const mode = Boolean(cfg.underConstructionMode);
       setIsUnderConstruction(mode);
       localStorage.setItem('rg_under_construction_mode', JSON.stringify(mode));
@@ -116,7 +117,10 @@ export function App() {
       });
     };
     window.addEventListener('rg_site_status_updated', handleStatusSync);
-    return () => window.removeEventListener('rg_site_status_updated', handleStatusSync);
+    return () => {
+      unsubscribe();
+      window.removeEventListener('rg_site_status_updated', handleStatusSync);
+    };
   }, []);
 
   const isAdminUser = currentUser && (

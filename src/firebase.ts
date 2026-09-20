@@ -22,7 +22,8 @@ import {
   query, 
   where, 
   orderBy, 
-  serverTimestamp 
+  serverTimestamp,
+  onSnapshot
 } from 'firebase/firestore';
 
 import { 
@@ -633,6 +634,32 @@ export const saveRegistrationConfigToFirestore = async (config: RegistrationConf
     await setDoc(configDocRef, config, { merge: true });
   } catch (err) {
     console.warn("Firestore save registration config error:", err);
+  }
+};
+
+export const subscribeRegistrationConfigFromFirestore = (onUpdate: (config: RegistrationConfig) => void): (() => void) => {
+  try {
+    const configDocRef = doc(db, 'system_config', 'registration');
+    return onSnapshot(configDocRef, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        const cfg: RegistrationConfig = {
+          inviteOnlyEnabled: data.inviteOnlyEnabled !== undefined ? data.inviteOnlyEnabled : true,
+          validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes,
+          underConstructionMode: data.underConstructionMode !== undefined ? data.underConstructionMode : false
+        };
+        try {
+          localStorage.setItem('rg_registration_config', JSON.stringify(cfg));
+          localStorage.setItem('rg_under_construction_mode', JSON.stringify(Boolean(cfg.underConstructionMode)));
+        } catch (e) {}
+        onUpdate(cfg);
+      }
+    }, (err) => {
+      console.warn("Firestore snapshot subscription error:", err);
+    });
+  } catch (e) {
+    console.warn("Failed to subscribe to registration config:", e);
+    return () => {};
   }
 };
 
