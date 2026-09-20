@@ -581,26 +581,53 @@ export const DEFAULT_REGISTRATION_CONFIG: RegistrationConfig = {
 };
 
 export const getRegistrationConfigFromFirestore = async (): Promise<RegistrationConfig> => {
+  let localFallback: RegistrationConfig = DEFAULT_REGISTRATION_CONFIG;
+  try {
+    const savedConfig = localStorage.getItem('rg_registration_config');
+    if (savedConfig) {
+      localFallback = { ...DEFAULT_REGISTRATION_CONFIG, ...JSON.parse(savedConfig) };
+    } else {
+      const savedUnderConst = localStorage.getItem('rg_under_construction_mode');
+      if (savedUnderConst !== null) {
+        localFallback = { ...DEFAULT_REGISTRATION_CONFIG, underConstructionMode: JSON.parse(savedUnderConst) === true };
+      }
+    }
+  } catch (e) {
+    console.warn("Failed to parse local registration config", e);
+  }
+
   try {
     const configDocRef = doc(db, 'system_config', 'registration');
     const snap = await getDoc(configDocRef);
     if (snap.exists()) {
       const data = snap.data();
-      return {
-        inviteOnlyEnabled: data.inviteOnlyEnabled !== undefined ? data.inviteOnlyEnabled : true,
-        validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes,
-        underConstructionMode: data.underConstructionMode !== undefined ? data.underConstructionMode : false
+      const merged: RegistrationConfig = {
+        inviteOnlyEnabled: data.inviteOnlyEnabled !== undefined ? data.inviteOnlyEnabled : localFallback.inviteOnlyEnabled,
+        validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : localFallback.validInviteCodes,
+        underConstructionMode: data.underConstructionMode !== undefined ? data.underConstructionMode : localFallback.underConstructionMode
       };
+      try {
+        localStorage.setItem('rg_registration_config', JSON.stringify(merged));
+        localStorage.setItem('rg_under_construction_mode', JSON.stringify(Boolean(merged.underConstructionMode)));
+      } catch (e) {}
+      return merged;
     }
-    await setDoc(configDocRef, DEFAULT_REGISTRATION_CONFIG);
-    return DEFAULT_REGISTRATION_CONFIG;
+    await setDoc(configDocRef, localFallback, { merge: true }).catch(() => {});
+    return localFallback;
   } catch (err) {
-    console.warn("Firestore fetch registration config error:", err);
-    return DEFAULT_REGISTRATION_CONFIG;
+    console.warn("Firestore fetch registration config error, falling back to local storage:", err);
+    return localFallback;
   }
 };
 
 export const saveRegistrationConfigToFirestore = async (config: RegistrationConfig) => {
+  try {
+    localStorage.setItem('rg_registration_config', JSON.stringify(config));
+    localStorage.setItem('rg_under_construction_mode', JSON.stringify(Boolean(config.underConstructionMode)));
+  } catch (e) {
+    console.warn("localStorage save error:", e);
+  }
+
   try {
     const configDocRef = doc(db, 'system_config', 'registration');
     await setDoc(configDocRef, config, { merge: true });
