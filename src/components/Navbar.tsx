@@ -293,19 +293,29 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             
-            {/* Left: Back to Site Pill Button & Logo */}
-            <div className="flex items-center space-x-4">
+            {/* Left: Quick Navigation Buttons to Main Website & Application Vault */}
+            <div className="flex items-center space-x-2">
               <button
-                onClick={() => handleTabSelect('dashboard')}
-                className="px-4 py-2 rounded-full border border-slate-300 hover:border-[#0144e4] bg-white hover:bg-blue-50/50 text-slate-800 hover:text-[#0144e4] font-bold text-xs transition-all flex items-center space-x-1.5 shadow-2xs group"
+                onClick={() => handleTabSelect('landing')}
+                className="px-3.5 py-2 rounded-xl border border-slate-300 hover:border-[#0144e4] bg-white hover:bg-blue-50/50 text-slate-800 hover:text-[#0144e4] font-bold text-xs transition-all flex items-center space-x-1.5 shadow-2xs group cursor-pointer"
+                title="View Main Public Website Landing Page"
               >
-                <ArrowLeft className="w-3.5 h-3.5 text-slate-600 group-hover:text-[#0144e4] group-hover:-translate-x-0.5 transition-transform" />
-                <span>Back to Site</span>
+                <Globe className="w-3.5 h-3.5 text-slate-600 group-hover:text-[#0144e4]" />
+                <span>🌐 Main Website</span>
               </button>
 
-              <div className="h-6 w-[1px] bg-slate-200 hidden sm:block" />
+              <button
+                onClick={() => handleTabSelect('dashboard')}
+                className="px-3.5 py-2 rounded-xl border border-slate-300 hover:border-[#0144e4] bg-white hover:bg-blue-50/50 text-slate-800 hover:text-[#0144e4] font-bold text-xs transition-all flex items-center space-x-1.5 shadow-2xs group cursor-pointer"
+                title="View Creator Vault Application Dashboard"
+              >
+                <Zap className="w-3.5 h-3.5 text-slate-600 group-hover:text-[#0144e4]" />
+                <span>⚡ Application</span>
+              </button>
 
-              <div className="hidden sm:flex items-center space-x-2">
+              <div className="h-6 w-[1px] bg-slate-200 hidden sm:block mx-1" />
+
+              <div className="hidden sm:flex items-center space-x-2 cursor-pointer" onClick={() => handleTabSelect('admin')}>
                 <div className="w-8 h-8 rounded-lg bg-[#0144e4] text-white flex items-center justify-center font-bold shadow-xs">
                   <ShieldCheck className="w-5 h-5 stroke-[2.5]" />
                 </div>
