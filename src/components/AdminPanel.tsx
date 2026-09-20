@@ -635,36 +635,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
       </div>
 
-      {/* Admin Section Quick Switcher Bar */}
-      <div className="bg-white p-2.5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-2 overflow-x-auto text-xs font-bold">
-        {[
-          { id: 'overview', label: 'Overview & Ops', icon: Activity },
-          { id: 'system', label: 'Crawler & Swarm Nodes', icon: Server },
-          { id: 'system', label: regConfig.inviteOnlyEnabled ? '🔒 Invite-Only & Access Rules' : '🌐 Registration & Access Rules', icon: KeyRound },
-          { id: 'users', label: 'Creator Vault & Directory', icon: Users },
-          { id: 'pages', label: 'Page Content CMS', icon: BookOpen },
-          { id: 'pricing', label: 'Plans & Pricing', icon: DollarSign },
-          { id: 'matches', label: 'Infringements & DMCA', icon: Scale },
-          { id: 'audit', label: 'Audit & BIPA Logs', icon: Lock }
-        ].map((tab, idx) => {
-          const Icon = tab.icon;
-          const isActive = activeAdminTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveAdminTab(tab.id as any)}
-              className={`px-3.5 py-2 rounded-xl transition-all flex items-center space-x-2 whitespace-nowrap ${
-                isActive
-                  ? 'bg-[#0144e4] text-white font-extrabold shadow-2xs'
-                  : 'bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-[#0144e4] border border-slate-200/80'
-              }`}
-            >
-              <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-[#0144e4]'}`} />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
 
       {/* ---------------- ADMIN TAB 1: OVERVIEW & SYSTEM OPS ---------------- */}
       {activeAdminTab === 'overview' && (
