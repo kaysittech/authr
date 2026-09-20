@@ -571,11 +571,13 @@ export const deleteUserFromFirestore = async (userId: string) => {
 export interface RegistrationConfig {
   inviteOnlyEnabled: boolean;
   validInviteCodes: string[];
+  underConstructionMode?: boolean;
 }
 
 export const DEFAULT_REGISTRATION_CONFIG: RegistrationConfig = {
   inviteOnlyEnabled: true,
-  validInviteCodes: ['VIP2026', 'AUTHR-BETA', 'CREATOR-INVITE', 'WELCOME']
+  validInviteCodes: ['VIP2026', 'AUTHR-BETA', 'CREATOR-INVITE', 'WELCOME'],
+  underConstructionMode: false
 };
 
 export const getRegistrationConfigFromFirestore = async (): Promise<RegistrationConfig> => {
@@ -586,7 +588,8 @@ export const getRegistrationConfigFromFirestore = async (): Promise<Registration
       const data = snap.data();
       return {
         inviteOnlyEnabled: data.inviteOnlyEnabled !== undefined ? data.inviteOnlyEnabled : true,
-        validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes
+        validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes,
+        underConstructionMode: data.underConstructionMode !== undefined ? data.underConstructionMode : false
       };
     }
     await setDoc(configDocRef, DEFAULT_REGISTRATION_CONFIG);

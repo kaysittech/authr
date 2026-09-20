@@ -15,6 +15,7 @@ import { WebServicesDashboard } from './components/WebServicesDashboard';
 import { BlogView } from './components/BlogView';
 import { FooterPagesView } from './components/FooterPagesView';
 import { Footer } from './components/Footer';
+import { UnderConstructionView } from './components/UnderConstructionView';
 
 import { 
   DigitalTwin, 
@@ -34,7 +35,7 @@ import {
 } from './services/mockData';
 
 import { fetchAppState } from './services/api';
-import { seedDefaultAdminsInFirestore } from './firebase';
+import { seedDefaultAdminsInFirestore, getRegistrationConfigFromFirestore, signInWithGoogleFirebase } from './firebase';
 
 const getTabFromHash = () => {
   if (typeof window === 'undefined') return 'dashboard';
@@ -93,6 +94,39 @@ export function App() {
     }
     return null;
   });
+
+  // Under Construction Site Status State
+  const [isUnderConstruction, setIsUnderConstruction] = useState<boolean>(() => {
+    const saved = localStorage.getItem('rg_under_construction_mode');
+    return saved ? JSON.parse(saved) === true : false;
+  });
+
+  useEffect(() => {
+    getRegistrationConfigFromFirestore().then(cfg => {
+      const mode = Boolean(cfg.underConstructionMode);
+      setIsUnderConstruction(mode);
+      localStorage.setItem('rg_under_construction_mode', JSON.stringify(mode));
+    });
+
+    const handleStatusSync = () => {
+      getRegistrationConfigFromFirestore().then(cfg => {
+        const mode = Boolean(cfg.underConstructionMode);
+        setIsUnderConstruction(mode);
+        localStorage.setItem('rg_under_construction_mode', JSON.stringify(mode));
+      });
+    };
+    window.addEventListener('rg_site_status_updated', handleStatusSync);
+    return () => window.removeEventListener('rg_site_status_updated', handleStatusSync);
+  }, []);
+
+  const isAdminUser = currentUser && (
+    currentUser.role === 'admin' ||
+    currentUser.email === 'admin@authr.id' ||
+    currentUser.email === 'christiana.obafunwa@gmail.com' ||
+    currentUser.email === 'kaysitsolutions@gmail.com' ||
+    currentUser.handle === '@site_admin' ||
+    Boolean(currentUser.token && currentUser.token.includes('admin'))
+  );
 
   // Persist digitalTwin changes locally
   useEffect(() => {
@@ -222,6 +256,19 @@ export function App() {
 
   const pendingClaimsCount = claims.filter(c => c.status === 'pending').length;
 
+  if (isUnderConstruction && !isAdminUser) {
+    return (
+      <>
+        <UnderConstructionView onGoogleSignIn={() => setIsAuthModalOpen(true)} />
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+          onLoginSuccess={handleLoginSuccess}
+        />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col antialiased selection:bg-blue-100 selection:text-blue-900">
       
@@ -242,6 +289,17 @@ export function App() {
 
       {/* Main Canvas View */}
       <main className="flex-1 p-4 sm:p-8 max-w-7xl mx-auto w-full overflow-x-hidden">
+        {/* Under Construction Admin Active Banner */}
+        {isUnderConstruction && isAdminUser && (
+          <div className="mb-4 p-3.5 rounded-2xl bg-amber-950 text-amber-100 border border-amber-800/80 flex items-center justify-between text-xs font-bold shadow-sm animate-fadeIn">
+            <div className="flex items-center space-x-2.5">
+              <span className="px-2.5 py-1 rounded-full bg-amber-500 text-slate-950 font-mono text-[10px] font-black uppercase">
+                🚧 UNDER CONSTRUCTION MODE ACTIVE
+              </span>
+              <span>Public visitors see only the Google Login screen. Admin access is active.</span>
+            </div>
+          </div>
+        )}
         {/* Admin Demo Simulator Notification Bar */}
         {currentUser && currentUser.token?.includes('jwt_demo_switch_') && (
           <div className="mb-4 p-3.5 rounded-2xl bg-slate-900 text-white border border-slate-800 flex items-center justify-between text-xs font-bold shadow-sm animate-fadeIn">
