@@ -829,16 +829,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   )}
                 </div>
 
-                {/* Admin Menu Item (Visible when logged in as Admin) */}
-                {isAdminUser && (
-                  <button 
-                    onClick={() => handleTabSelect('admin')}
-                    className="hover:text-[#0144e4] transition-colors py-2 flex items-center space-x-1.5"
-                  >
-                    <ShieldCheck className="w-4 h-4 text-[#0144e4]" />
-                    <span>Admin</span>
-                  </button>
-                )}
+                {/* End of Application Vault Header Nav */}
               </>
             )}
           </nav>
