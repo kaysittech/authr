@@ -66,6 +66,7 @@ import {
   deleteUserFromFirestore,
   getRegistrationConfigFromFirestore,
   saveRegistrationConfigToFirestore,
+  subscribeRegistrationConfigFromFirestore,
   RegistrationConfig,
   DEFAULT_REGISTRATION_CONFIG
 } from '../firebase';
@@ -117,7 +118,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     getTrialConfigFromFirestore().then(config => setAdminTrialConfig(config));
     getBlogArticlesFromFirestore().then(arts => setArticlesList(arts));
     getUsersFromFirestore().then(users => setUsersList(users));
+    
     getRegistrationConfigFromFirestore().then(config => setRegConfig(config));
+    const unsubReg = subscribeRegistrationConfigFromFirestore((cfg) => {
+      setRegConfig(cfg);
+    });
+    return () => unsubReg();
   }, []);
 
   const handleToggleInviteOnly = async () => {

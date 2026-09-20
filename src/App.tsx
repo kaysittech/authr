@@ -88,10 +88,25 @@ export function App() {
 
   // Real-time Firebase Firestore Registration & Under Construction Config Subscription
   useEffect(() => {
+    const syncConfig = async () => {
+      try {
+        const cfg = await getRegistrationConfigFromFirestore();
+        setIsUnderConstruction(Boolean(cfg.underConstructionMode));
+      } catch (e) {}
+    };
+    syncConfig();
+
     const unsubscribeConfig = subscribeRegistrationConfigFromFirestore((cfg) => {
       setIsUnderConstruction(Boolean(cfg.underConstructionMode));
     });
-    return () => unsubscribeConfig();
+
+    const handleCustomUpdate = () => syncConfig();
+    window.addEventListener('rg_site_status_updated', handleCustomUpdate);
+
+    return () => {
+      unsubscribeConfig();
+      window.removeEventListener('rg_site_status_updated', handleCustomUpdate);
+    };
   }, []);
 
   // Real-time Firebase Auth Session Observer

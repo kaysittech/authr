@@ -590,11 +590,9 @@ export const getRegistrationConfigFromFirestore = async (): Promise<Registration
       return {
         inviteOnlyEnabled: data.inviteOnlyEnabled !== undefined ? data.inviteOnlyEnabled : true,
         validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes,
-        underConstructionMode: data.underConstructionMode !== undefined ? data.underConstructionMode : false
+        underConstructionMode: data.underConstructionMode === true
       };
     }
-    // Only set initial document if snap does not exist at all, merging safely
-    await setDoc(configDocRef, DEFAULT_REGISTRATION_CONFIG, { merge: true }).catch(() => {});
     return DEFAULT_REGISTRATION_CONFIG;
   } catch (err) {
     console.warn("Firestore fetch registration config error:", err);
@@ -605,7 +603,13 @@ export const getRegistrationConfigFromFirestore = async (): Promise<Registration
 export const saveRegistrationConfigToFirestore = async (config: RegistrationConfig) => {
   try {
     const configDocRef = doc(db, 'system_config', 'registration');
-    await setDoc(configDocRef, config, { merge: true });
+    const payload = {
+      inviteOnlyEnabled: Boolean(config.inviteOnlyEnabled),
+      validInviteCodes: Array.isArray(config.validInviteCodes) ? config.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes,
+      underConstructionMode: Boolean(config.underConstructionMode),
+      updatedAt: serverTimestamp()
+    };
+    await setDoc(configDocRef, payload, { merge: true });
   } catch (err) {
     console.warn("Firestore save registration config error:", err);
   }
@@ -620,10 +624,12 @@ export const subscribeRegistrationConfigFromFirestore = (onUpdate: (config: Regi
         const cfg: RegistrationConfig = {
           inviteOnlyEnabled: data.inviteOnlyEnabled !== undefined ? data.inviteOnlyEnabled : true,
           validInviteCodes: Array.isArray(data.validInviteCodes) ? data.validInviteCodes : DEFAULT_REGISTRATION_CONFIG.validInviteCodes,
-          underConstructionMode: data.underConstructionMode !== undefined ? data.underConstructionMode : false
+          underConstructionMode: data.underConstructionMode === true
         };
         onUpdate(cfg);
       }
+    }, (err) => {
+      console.warn("Firestore onSnapshot error:", err);
     });
   } catch (e) {
     console.warn("Failed to subscribe to registration config:", e);
