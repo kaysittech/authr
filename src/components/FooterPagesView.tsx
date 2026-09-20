@@ -181,10 +181,6 @@ export const FooterPagesView: React.FC<FooterPagesViewProps> = ({
         {activeManagedPage && (
           <div className="space-y-10 max-w-4xl mx-auto">
             <div className="space-y-4 text-center border-b border-[#e9eaf0] pb-8">
-              <div className="inline-flex items-center space-x-2 text-[#0144e4] font-bold text-xs uppercase tracking-widest font-mono bg-blue-50 px-3.5 py-1 rounded-full border border-blue-100">
-                <Building2 className="w-3.5 h-3.5" />
-                <span>{activeManagedPage.category} • {activeManagedPage.badge}</span>
-              </div>
               <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 font-display">
                 {activeManagedPage.title}
               </h1>
