@@ -639,13 +639,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       <div className="bg-white p-2.5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-2 overflow-x-auto text-xs font-bold">
         {[
           { id: 'overview', label: 'Overview & Ops', icon: Activity },
+          { id: 'system', label: 'Crawler & Swarm Nodes', icon: Server },
           { id: 'system', label: regConfig.inviteOnlyEnabled ? '🔒 Invite-Only & Access Rules' : '🌐 Registration & Access Rules', icon: KeyRound },
           { id: 'users', label: 'Creator Vault & Directory', icon: Users },
           { id: 'pages', label: 'Page Content CMS', icon: BookOpen },
           { id: 'pricing', label: 'Plans & Pricing', icon: DollarSign },
           { id: 'matches', label: 'Infringements & DMCA', icon: Scale },
           { id: 'audit', label: 'Audit & BIPA Logs', icon: Lock }
-        ].map((tab) => {
+        ].map((tab, idx) => {
           const Icon = tab.icon;
           const isActive = activeAdminTab === tab.id;
           return (

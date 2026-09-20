@@ -450,9 +450,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </div>
                     {[
                       { id: 'users', label: 'Creator Vault & Directory', icon: Users, desc: 'Accounts & KYC approvals' },
+                      { id: 'system', label: 'Crawler & Swarm Nodes', icon: Server, desc: '1,420 distributed scrapers' },
                       { id: 'system', label: 'Invite-Only & Access Control', icon: KeyRound, desc: 'VIP codes & sign-up mode' },
                       { id: 'webservices', label: 'Web Services Telemetry', icon: Radar, desc: 'API endpoints & diagnostics' }
-                    ].map((item) => {
+                    ].map((item, idx) => {
                       const Icon = item.icon;
                       const isActive = currentAdminTab === item.id;
                       return (
